@@ -1,0 +1,9 @@
+<h1>Biblioteca de Archivos</h1>
+<ul>
+    {% for documento in documentos %}
+        <li>
+            <a href="{{ documento.archivo.url }}">{{ documento.titulo }}</a> - {{ documento.tipo }}
+            <p>{{ documento.descripcion }}</p>
+        </li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,63 @@
+{% extends 'biblioteca/base.html' %}
+
+{% block content %}
+            <div class="library-container"></div>
+            <h1 class="mb-4">Biblioteca de Archivos</h1>
+            
+            {% if archivos %}
+            <div class="table-responsive"></div>
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+            <tr>
+                <th>Tipo</th>
+                <th>Categoría</th>
+                <th>Título</th>
+                <th>Documento</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for archivo in archivos %}
+                <tr>
+                    <td>{{ archivo.tipo|default:"Sin Tipo" }}</td>
+                        <td>{{ archivo.categoria|default:"Sin Categoría" }}</td>
+                        <td>{{ archivo.titulo_documento|default:"Sin Título" }}</td>
+                <td>
+                    {% if archivo.tipo in 'pdf,jpg,jpeg,png' %}
+                    <!-- Previsualización -->
+                    <a href="{{ archivo.documento.url }}" target="_blank">Previsualizar</a>
+                        {% else %}
+                        <!-- Solo opción de descarga -->
+                    <a href="{{ archivo.documento.url }}" download class="btn btn-sm btn-info">Descargar</a>
+                    {% endif %}
+                    
+                </td>
+                <td>
+                    <a href="{% url 'biblioteca:eliminar_archivo' archivo.id %}" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este archivo?');">Eliminar</a>
+                </td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        {% else %}
+        <div class="alert alert-warning" role="alert">
+            <p>No hay archivos disponibles.</p>
+        </div>
+            
+        {% endif %}
+    </div>
+            <!-- Botón para subir un archivo -->
+            <a href="{% url 'biblioteca:subir_archivo' %}" class="btn btn-primary">Subir Archivo</a>
+        {% endblock %}
+
+
+<!--
+        <td>
+            Descarga directa 
+            <a href="{% url 'biblioteca:descargar_archivo' archivo.id %}" class="btn btn-sm btn-warning">Descargar</a>
+        </td>
+        <a href="{% url 'biblioteca:subir_archivo' %}" class="btn btn-success mb-3">Subir Nuevo Archivo</a>       
+
+-->
+        

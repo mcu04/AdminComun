@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<main class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center display-3 py-5">Seguimientos Actualizados</h1>
+
+            <!-- Botón de regreso a la página principal -->
+            <div class="text-center mb-4">
+                <a href="/" class="btn btn-primary btn-lg">Regresar a la Página Principal</a>
+            </div>
+
+            <!-- Tabla de Seguimientos -->
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Categoría</th>
+                        <th scope="col">Título</th>
+                        <th scope="col">Existe</th>
+                        <th scope="col">Observación</th>
+                        <th scope="col">Fecha Actualizado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for seguimiento in seguimiento %}
+                    <tr>
+                        <td><a class="list-group-item" href="{% url 'seguimientodocumentos:detalle_seguimiento' seguimiento.id %}">{{ seguimiento.documentacion.tipo|default:"Sin Tipo" }}</a></td>
+                        <td><a class="list-group-item" href="{% url 'seguimientodocumentos:detalle_seguimiento' seguimiento.id %}">{{ seguimiento.documentacion.categoria|default:"Sin Categoría" }}</a></td>
+                        <td><a class="list-group-item" href="{% url 'seguimientodocumentos:detalle_seguimiento' seguimiento.id %}">{{ seguimiento.documentacion.titulo_documento|default:"Sin Título" }}</a></td>
+                        <td>{{ seguimiento.existe }}</td>
+                        <td>{{ seguimiento.observaciones|default:"Sin Observación" }}</td>
+                        <td>{{ seguimiento.fecha_actualizado|default:"No Actualizado" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">No hay seguimientos disponibles.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

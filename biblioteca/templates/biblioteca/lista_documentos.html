@@ -1,0 +1,27 @@
+<h2>Biblioteca de Archivos</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Estado</th>
+            <th>Última Descarga</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for documento in documentos %}
+        <tr>
+            <td>{{ documento.titulo }}</td>
+            <td>{{ documento.estado }}</td>
+            <td>{{ documento.fecha_descarga }}</td>
+            <td>
+                {% if documento.archivo %}
+                <a href="{{ documento.archivo.url }}" download>Descargar</a>
+                {% else %}
+                <a href="{% url 'descargar_manual' documento.id %}">Intentar Descarga</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

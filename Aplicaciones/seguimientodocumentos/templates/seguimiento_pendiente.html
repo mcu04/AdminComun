@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <main class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-1">
+                <h1 class="text-center dispaly-3 py-5">Seguimientos Pendientes</h1>
+
+                <!-- Botón de regreso a la página principal -->
+            <div class="text-center mb-4">
+                <a href="/" class="btn btn-primary btn-lg">Regresar a la Página Principal</a>
+            </div>
+            
+                <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Típo</th>
+                    <th scope="col">Categoria</th>  
+                    <th scope="col">Título</th>
+                    <th scope="col">Existe</th>
+                    <th scope="col">Observación</th>
+                    <th scope="col">Fecha Registrado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for seguimiento in seguimientos %}
+                <tr>
+                    <td><p><a class="list-group-item" href="{% url 'seguimientodocumentos:detalle_seguimiento' seguimiento.id %}">{{ seguimiento.documentacion.tipo}}</a></p></td>
+                    <td><p><a class="list-group-item" href="{% url 'seguimientodocumentos:detalle_seguimiento' seguimiento.id %}">{{ seguimiento.documentacion.categoria }}</a></p></td>
+                    <td><p><a class="list-group-item" href="{% url 'seguimientodocumentos:detalle_seguimiento' seguimiento.id %}">{{ seguimiento.documentacion.titulo_documento }}</a></p></td>
+                    <td><p>{{ seguimiento.existe }}</p></td>
+                    <td><p>{{ seguimiento.observaciones }}</p></td>
+                    <td><p>{{ seguimiento.fecha_registrado }}</p></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+{% endblock %}

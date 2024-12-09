@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="container">
+    <h1 class="text-center py-5">{{ archivo.titulo_documento }}</h1>
+    <p><strong>Tipo:</strong> {{ archivo.tipo }}</p>
+    <p><strong>Categoría:</strong> {{ archivo.categoria }}</p>
+    <p><strong>Descripción:</strong> {{ archivo.descripcion }}</p>
+
+    <div class="text-center">
+        <a href="{{ archivo.documento.url }}" target="_blank" class="btn btn-primary">Ver Documento</a>
+    </div>
+
+    <div class="text-center mt-4">
+        <!-- Botón para regresar a la Biblioteca de Archivos -->
+        <a href="{% url 'seguimientodocumentos:biblioteca_archivos' %}" class="btn btn-secondary">Regresar a la Biblioteca</a>
+    </div>
+</main>
+{% endblock %}

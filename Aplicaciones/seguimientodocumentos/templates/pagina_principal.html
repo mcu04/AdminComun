@@ -1,0 +1,16 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Página Principal</title>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Bienvenido</h1>
+        <p><a href="{% url 'seguimientodocumentos:iniciar_sesion' %}">Iniciar Sesión</a></p>
+        <p><a href="{% url 'seguimientodocumentos:registrarse' %}">Registrarse</a></p>
+    </div>
+</body>
+</html>

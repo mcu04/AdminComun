@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Biblioteca de Archivos{% endblock %}
+
+{% block content %}
+<h1>Biblioteca de Archivos</h1>
+<p>Aquí puedes encontrar y descargar documentos importantes.</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Tipo</th>
+            <th>Fecha de subida</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for documento in documentos %}
+        <tr>
+            <td>{{ documento.titulo }}</td>
+            <td>{{ documento.descripcion }}</td>
+            <td>{{ documento.tipo }}</td>
+            <td>{{ documento.fecha_subida|date:"d-m-Y H:i" }}</td>
+            <td>
+                <a href="{{ documento.archivo.url }}" download>Descargar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No hay documentos disponibles.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

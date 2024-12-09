@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="text-secondary text-center mb-4"">{{ seguimiento.documentacion }}</h1>
+
+            {% if error %}
+            <div class="alert alert-danger text-center"">{{ error }}</div>
+        {% endif %}
+
+            <!-- Formulario para actualizar -->
+            <form action="{% url 'seguimientodocumentos:detalle_seguimiento' seguimiento_instance.id  %}" method="POST">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button class="btn btn-primary w-99" >Actualizar</button>
+            </form> 
+
+            <!-- Formulario para eliminar -->
+            <div class="mt-5 d-flex text-center">
+                <form action="{% url 'seguimientodocumentos:eliminar_seguimiento' seguimiento_instance.id %}" method="POST"
+                onsubmit="return confirm('¿Estás seguro de que deseas eliminar este seguimiento?');">
+                    {% csrf_token %} 
+                    <button class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
