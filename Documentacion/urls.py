@@ -20,7 +20,7 @@ from Aplicaciones.seguimientodocumentos import views
 from django.conf import settings
 from django.conf.urls.static import static
 from main.views import home
-from Aplicaciones.seguimientodocumentos.views import pagina_inicio
+from Aplicaciones.seguimientodocumentos.views import pagina_principal
 from main import views as main_views
 
 
@@ -28,7 +28,7 @@ from main import views as main_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', pagina_inicio, name='pagina_inicio'),  # Ahora la raíz apunta a esta vista
+    path('', pagina_principal, name='pagina_principal'),  # Ahora la raíz apunta a esta vista
     path("seguimiento/", include("Aplicaciones.seguimientodocumentos.urls")),  # Incluye las rutas de seguimiento
     path("auth/", include("Aplicaciones.seguimientodocumentos.autenticacion.urls")),  # Incluye las rutas de autenticación
     path('biblioteca/', include('biblioteca.urls')),   # Incluir URLs de la biblioteca

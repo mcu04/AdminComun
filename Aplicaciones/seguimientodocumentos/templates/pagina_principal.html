@@ -9,7 +9,7 @@
 <body>
     <div class="form-container">
         <h1>Bienvenido</h1>
-        <p><a href="{% url 'seguimientodocumentos:iniciar_sesion' %}">Iniciar Sesión</a></p>
+        <p><a href="{% url 'seguimientodocumentos:iniciar_sesion' %}?next=seguimientodocumentos:pagina_inicio">Iniciar Sesión</a></p>
         <p><a href="{% url 'seguimientodocumentos:registrarse' %}">Registrarse</a></p>
     </div>
 </body>

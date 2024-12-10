@@ -86,20 +86,23 @@ WSGI_APPLICATION = 'Documentacion.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config (
-       default='postgresql://postgres:postgres@localhost:5432/mysite',
-        conn_max_age=600 
-   )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'Documentacion',
+        'USER': 'postgres',
+        'PASSWORD': 'mario04',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+        
+        
+       #default='postgresql://postgres:postgres@localhost:5432/mysite',
+        #conn_max_age=600 
+    }
 }
 #Esta cadena de conexión asume que tiene PostgreSQL ejecutándose en localhost, en el puerto 5432, con una base de datos llamada mysite y un usuario llamado postgres con la contraseña postgres.
 
 
-        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        #'NAME': 'Documentacion',
-        #'USER': 'postgres',
-        #'PASSWORD': 'mario04',
-        #'HOST': '127.0.0.1',
-        #'DATEBASE_PORT': '5432'
+        
 
 
 # Password validation
@@ -137,15 +140,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Se define siempre
 
 if not DEBUG:
-    # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
-    # and renames the files with unique names for each version to support long-term caching
+    # Configuraciones adicionales para producción
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    
-STATICFILES_DIRS = [BASE_DIR / "static"]
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
 LOGIN_URL = 'iniciar sesion/'
 LOGIN_REDIRECT_URL = 'seguimientodocumentos:listar_seguimiento'
 LOGOUT_REDIRECT_URL = '/'
