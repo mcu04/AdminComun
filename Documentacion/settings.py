@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-import dj_database_url
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -95,8 +95,7 @@ DATABASES = {
         'PORT': '5432',
         
         
-       #default='postgresql://postgres:postgres@localhost:5432/mysite',
-        #conn_max_age=600 
+       
     }
 }
 #Esta cadena de conexión asume que tiene PostgreSQL ejecutándose en localhost, en el puerto 5432, con una base de datos llamada mysite y un usuario llamado postgres con la contraseña postgres.
