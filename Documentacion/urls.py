@@ -28,12 +28,11 @@ from main import views as main_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', pagina_principal, name='pagina_principal'),  # Ahora la raíz apunta a esta vista
     path("seguimiento/", include("Aplicaciones.seguimientodocumentos.urls")),  # Incluye las rutas de seguimiento
     path("auth/", include("Aplicaciones.seguimientodocumentos.autenticacion.urls")),  # Incluye las rutas de autenticación
     path('biblioteca/', include('biblioteca.urls')),   # Incluir URLs de la biblioteca
     path('main/', main_views.home, name='home'),  # Página principal
-    
+    path('', pagina_principal, name='pagina_principal'),  # Ahora la raíz apunta a esta vista
 ]
 
 if settings.DEBUG:

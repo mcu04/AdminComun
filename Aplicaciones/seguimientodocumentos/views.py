@@ -1,6 +1,5 @@
 # from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import seguimiento, documentacion
 from django.views.generic import ListView
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
@@ -13,30 +12,20 @@ from .forms import RegistroForm
 from django.contrib import messages
 from urllib.parse import urlencode
 from django.urls import reverse
-
-
+import pandas as pd
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import Table, TableStyle
+from reportlab.lib import colors
+from Aplicaciones.seguimientodocumentos.models import seguimiento,documentacion
+from django.http import HttpResponseRedirect
 
 
     # Create your views here.
 
-
 def home(request):
     return render(request, "home.html")
-
-
-def registrarse(request):
-    if request.method == 'POST':
-        form = RegistroForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)  # Inicia sesión automáticamente después del registro
-            messages.success(request, "¡Registro exitoso! Bienvenido a la plataforma.")
-            return redirect('seguimientodocumentos:pagina_inicio')
-        else:
-            messages.error(request, "Por favor, corrige los errores a continuación.")
-    else:
-        form = RegistroForm()
-    return render(request, 'seguimientodocumentos/registrarse.html', {'form': form})
 
 @login_required
 def detallesseguimiento(request, seguimiento_id):
@@ -149,38 +138,153 @@ def cerrar_sesion(request):
 
 def iniciar_sesion(request):
     if request.method == "POST":
-        user = authenticate(
-            request,
-            username=request.POST["Usuario"],
-            password=request.POST["password"],
-        )
-        if user is None:
-            return render(request, "iniciar_sesion.html", {
-                "error": 'Usuario o Contraseña es incorrecta'
-            })
-        else:
+        username = request.POST.get('Usuario')  # El nombre del input del formulario debe coincidir
+        password = request.POST.get('password')
+        remember_me = request.POST.get("remember")  # Para "recordarme" la sesión
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
             login(request, user)
-            remember_me = request.POST.get("remember")
+
+            # Configurar la expiración de la sesión
             if not remember_me:
-                request.session.set_expiry(0)
+                request.session.set_expiry(0)  # Cerrar sesión al cerrar el navegador
             else:
                 request.session.set_expiry(1209600)  # 2 semanas
-            return redirect(request.POST.get("next", "home"))
-    else:
-        return render(request, "iniciar_sesion.html")
 
+            # Redireccionar a la URL siguiente o a la página de inicio
+            next_url = request.POST.get("next", "home")
+            return redirect(next_url)
+        else:
+            # Si la autenticación falla
+            return render(request, "iniciar_sesion.html", {
+                'error': 'Usuario o contraseña incorrecta'
+            })
+
+    # Si el método es GET, renderizar la plantilla de inicio de sesión
+    return render(request, "iniciar_sesion.html")
 def pagina_inicio(request):
         return render(request, 'inicio.html')  # Cambia a tu plantilla deseada
     
 def pagina_principal(request):
     return render(request, 'pagina_principal.html')
+
+
+
+def exportar_excel(request):
+    # Recupera datos del modelo
+    seguimientos = seguimiento.objects.select_related('documentacion').all().values(
+        'documentacion__tipo',  # Accede a 'tipo' de documentacion
+        'documentacion__categoria',  # Accede a 'categoria' de documentacion
+        'documentacion__titulo_documento',  # Accede a 'titulo_documento' de documentacion
+        'existe', 
+        'observaciones', 
+        'fecha_actualizado'
+    )
+
+    # Convierte los datos a DataFrame
+    df = pd.DataFrame(list(seguimientos))
+
+    # Crea la respuesta HTTP con el archivo Excel
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="seguimientos_actualizados.xlsx"'
+
+    # Escribe el DataFrame en el archivo
+    df.to_excel(response, index=False)
+
+    return response
+
+def importar_excel(request):
+    if request.method == 'POST' and request.FILES.get('archivo_excel'):
+        archivo_excel = request.FILES['archivo_excel']
+
+        try:
+            # Lee el archivo Excel en un DataFrame
+            df = pd.read_excel(archivo_excel)
+
+            # Renombra columnas si es necesario
+            df = df.rename(columns={
+                'documentacion': 'titulo_documento'
+            })
+
+            # Verifica y completa columnas faltantes
+            if 'tipo' not in df.columns:
+                df['tipo'] = 'Desconocido'
+            if 'categoria' not in df.columns:
+                df['categoria'] = 'General'
+
+            # Itera sobre las filas y actualiza la base de datos
+            for _, row in df.iterrows():
+                # Verifica si el documento ya existe en la base de datos o crea uno nuevo
+                documento = documentacion.objects.get_or_create(
+                    titulo_documento=row['titulo_documento'],
+                    defaults={'tipo': row['tipo'], 'categoria': row['categoria']}
+                )[0]
+                # Crea o actualiza los registros de seguimiento
+                seguimiento.objects.update_or_create(
+                    documentacion=documento,
+                    titulo_documento=row['titulo_documento'],
+                    defaults={
+                        'existe': True if row['existe'] == 'Si' else False,
+                        'observaciones': row['observaciones'] if pd.notnull(row['observaciones']) else '',
+                        'fecha_actualizado': row['fecha_actualizado'] if pd.notnull(row['fecha_actualizado']) else None
+                    }
+                )
+
+            messages.success(request, "Datos importados correctamente.")
+        except Exception as e:
+            messages.error(request, f"Error al importar: {str(e)}")
+
+        return redirect('importar_excel')
+
+    return render(request, 'importar_excel.html')
         
 
+def exportar_pdf(request):
+    # Crear una respuesta tipo PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="reporte_seguimientos.pdf"'
 
-        
+    # Crear el PDF
+    p = canvas.Canvas(response, pagesize=letter)
+    width, height = letter
 
+    # Títulos del informe
+    p.setFont("Helvetica-Bold", 14)
+    p.drawString(50, height - 50, "Listado de Seguimientos Actualizados")
 
+    # Encabezados de la tabla
+    encabezados = ["Tipo", "Categoría", "Título Documento", "Existe", "Observaciones", "Fecha Actualizado"]
+    p.setFont("Helvetica-Bold", 10)
+    y = height - 80
+    for i, encabezado in enumerate(encabezados):
+        p.drawString(50 + (i * 100), y, encabezado)
 
+    # Datos del modelo
+    items = seguimiento.objects.all()
+    p.setFont("Helvetica", 9)
+    y -= 20
 
+    for item in items:
+        datos = [
+            getattr(item, 'tipo', 'Sin Tipo') or 'Sin Tipo',
+            getattr(item, 'categoria', 'Sin Categoría') or 'Sin Categoría',
+            getattr(item, 'titulo_documento', 'Sin Título') or 'Sin Título',
+            "Sí" if item.existe else "No",
+            item.observaciones or "Sin Observaciones",
+            item.fecha_actualizado.strftime("%Y-%m-%d") if item.fecha_actualizado else "Sin Fecha"
+        ]
 
+        for i, dato in enumerate(datos):
+            p.drawString(50 + (i * 100), y, str(dato))
+        y -= 15  # Espaciado entre filas
 
+        # Controlar salto de página
+        if y < 50:
+            p.showPage()
+            y = height - 80
+            p.setFont("Helvetica", 9)
+
+    p.save()
+    return response

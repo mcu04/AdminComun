@@ -10,16 +10,16 @@
 
     <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="/">Manon Group SpA</a>
+            <a class="navbar-brand" href="{% url 'seguimientodocumentos:pagina_inicio' %}">Manon Group SpA</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto" >
-                <li class="nav-item"><a href="/" class="nav-link">Inicio</a></li>
+                
                 
                 {% if user.is_authenticated %}
-                <li class="nav-item"><a href="#">Hola, {{ user.username }}</a></li>         
+                <li class="nav-item"><a href="#">Hola, {{ user.username }}</a></li> 
                 <li class="nav-item">
                     <a href="{% url 'seguimientodocumentos:listar_seguimiento' %}" class="nav-link">Seguimiento Actualizado</a>
                 </li>
@@ -29,11 +29,10 @@
                 <li class="nav-item">
                     <a href="{% url 'seguimientodocumentos:crear_seguimiento' %}" class="nav-link">Crear Seguimiento</a>
                 </li>
-                <li class="nav-item"><a href="{% url 'seguimientodocumentos:cerrar_sesion' %}" class="nav-link">Cerrar Sesión</a></li>
+                <li class="nav-item"><a href="{% url 'seguimientodocumentos:pagina_principal' %}" class="nav-link">Cerrar Sesión</a></li>
             
                 {% else %}
-                <li class="nav-item"><a href="{% url 'seguimientodocumentos:registrarse' %}" class="nav-link">Registrarse</a></li>
-                <li class="nav-item"><a href="{% url 'seguimientodocumentos:iniciar_sesion' %}" class="nav-link">Iniciar Sesión</a></li>
+                <li class="nav-item"><a href="{% url 'seguimientodocumentos:pagina_inicio' %}" class="nav-link">Iniciar Sesión</a></li>
                 {% endif %}
                 {% if messages %}
                 <div>
@@ -54,11 +53,3 @@
 </body>
 </html>
 
-<!--
-<li class="nav-item">
-    <a href="{% url 'seguimientodocumentos:registrarse' %}" class="nav-link">Registrarse</a>
-</li>
-<li class="nav-item">
-    <a href="{% url 'seguimientodocumentos:iniciar_sesion' %}" class="nav-link">Iniciar Sesion</a>
-</li>
--->

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Importar Excel</title>
+</head>
+<body>
+    <h2>Importar Datos desde Excel</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="archivo_excel">Seleccionar archivo Excel:</label>
+        <input type="file" name="archivo_excel" accept=".xls, .xlsx" required>
+        <button type="submit">Importar</button>
+    </form>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

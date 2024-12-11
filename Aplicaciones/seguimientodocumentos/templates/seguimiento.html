@@ -9,8 +9,11 @@
 
             <!-- Botón de regreso a la página principal -->
             <div class="text-center mb-4">
-                <a href="/" class="btn btn-primary btn-lg">Regresar a la Página Principal</a>
+                <a href="/" class="btn btn-primary btn-lg">Regresar a la Página Inicio</a>
             </div>
+            <a href="{% url 'seguimientodocumentos:exportar_excel' %}" class="btn btn-success">Exportar a Excel</a>
+
+            <a href="{% url 'seguimientodocumentos:exportar_pdf' %}" class="btn btn-danger">Exportar a PDF</a>
 
             <!-- Tabla de Seguimientos -->
             <table class="table table-bordered">

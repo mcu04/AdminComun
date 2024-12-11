@@ -8,9 +8,9 @@ app_name = 'autenticacion'
 urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='iniciar_sesion.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
-    path('registrarse/', views.registrarse, name='registrarse'),
+    
+    
 ]
-
 
 
 
