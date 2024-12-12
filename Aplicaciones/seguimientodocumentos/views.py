@@ -40,7 +40,7 @@ def detallesseguimiento(request, seguimiento_id):
             form= SeguimientoForm(request.POST, instance=seguimiento_instance)
             if form.is_valid():
                 form.save()
-                return redirect('seguimientodocumentos:seguimiento')
+                return redirect('seguimientodocumentos:listar_seguimiento')
         except ValueError:
             return render(request, 'detalle_seguimiento.html', {
             'seguimiento_instance': seguimiento_instance,
