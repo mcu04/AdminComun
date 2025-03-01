@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Imprimir Seguimientos</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        @media print {
+            body { margin: 0; }
+            button { display: none; } /* Ocultar botones en impresión */
+            .no-print { display: none; } /* Ocultar elementos con esta clase */
+        }
+    </style>
+</head>
+<body>
+    <h1>Listado de Seguimientos {{ tipo|title }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Categoría</th>
+                <th>Título Documento</th>
+                <th>Existe</th>
+                <th>Observaciones</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td>{{ item.documentacion__tipo }}</td>
+                <td>{{ item.documentacion__categoria }}</td>
+                <td>{{ item.documentacion__titulo_documento }}</td>
+                <td>{{ "Sí" if item.existe else "No" }}</td>
+                <td>{{ item.observaciones|default:"Sin Observaciones" }}</td>
+                <td>{{ item.fecha_actualizado|date:"d-m-Y"|default:"Sin Fecha" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button onclick="window.print()" class="no-print">Imprimir</button>
+</body>
+</html>

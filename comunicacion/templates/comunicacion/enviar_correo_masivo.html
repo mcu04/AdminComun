@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+            <h2 class="row justify-content-center">Enviar Correo Masivo</h2>
+
+    <form id="correo-masivo-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Campo para seleccionar destinatarios (checkboxes) -->
+        <div class="mb-3">
+            {{ form.destinatarios.label_tag }}
+            {{ form.destinatarios }}
+        </div>
+        
+        <div class="mb-3">
+            {{ form.asunto.label_tag }}
+            {{ form.asunto }}
+        </div>
+        
+        <div class="mb-3">
+            {{ form.mensaje.label_tag }}
+            {{ form.mensaje }}
+        </div>
+        
+        <!-- Sección para archivos -->
+        <div class="mb-3">
+            <label for="file-input" class="form-label">Elegir archivo</label>
+            <div class="input-group">
+                <input type="file" id="file-input" class="form-control">
+            </div>
+
+            <!-- Lista visible de archivos a enviar -->
+            <ul id="file-list" class="list-group mt-2"></ul>
+        </div>
+
+        <!-- Botones: agregar archivo y enviar correo en la misma línea -->
+        <div class="d-flex align-items-center gap-2">
+
+            <button type="button" class="btn btn-success" id="add-file-btn" title="Agregar Archivo">
+                <i class="bi bi-file-earmark-check"></i> Agregar Archivo
+            </button>
+
+            <button type="submit" class="btn btn-primary" title="Enviar Correo">
+                <i class="bi bi-envelope-check-fill"></i> Enviar Correo
+            </button>
+        </div>
+    </form>
+                    
+    <!-- DIV donde se mostrarán mensajes de resultado (éxito/error) -->
+    <div id="result-message" class="mt-3"></div>
+
+<!-- Incluir jQuery: asegúrate de que solo se cargue una vez (la versión completa) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function(){
+        console.log("Documento listo para correo masivo.");
+    // Array global para almacenar los archivos
+    var archivosAdjuntos = [];
+
+    /// Función para actualizar la lista de archivos
+    function actualizarListaArchivos() {
+        var fileList = $("#file-list");
+        fileList.empty();
+        archivosAdjuntos.forEach(function(file, index) {
+            var li = $("<li></li>")
+                        .addClass("list-group-item d-flex justify-content-between align-items-center")
+                        .text(file.name);
+            var removeBtn = $("<button></button>")
+                        .addClass("btn btn-danger btn-sm")
+                        .text("Eliminar")
+                        .attr("data-index", index)
+                        .on("click", function() {
+                            var idx = $(this).data("index");
+                            archivosAdjuntos.splice(idx, 1);
+                            actualizarListaArchivos();
+                });
+            li.append(removeBtn);
+            fileList.append(li);
+        });
+    }
+
+    // Evento para agregar archivo al array
+    $("#add-file-btn").on("click", function() {
+        var fileInput = $("#file-input");
+        var files = fileInput[0].files;
+        if (files.length > 0) {
+            // En este ejemplo, se asume que el usuario elige un archivo a la vez
+            for (var i = 0; i < files.length; i++) {
+                archivosAdjuntos.push(files[i]);
+            }
+            actualizarListaArchivos();
+            // Limpia el input para permitir volver a seleccionar
+            fileInput.val("");
+            console.log("Archivos actuales:", archivosAdjuntos);
+        } else {
+            alert("Selecciona un archivo antes de hacer clic en 'Agregar archivo'.");
+        }
+    });
+
+    // Manejo del envío del formulario vía AJAX
+    $("#correo-masivo-form").on("submit", function(e){
+        e.preventDefault(); // Prevenir envío tradicional
+        console.log("Evento submit disparado para correo masivo.");
+
+        var formData = new FormData(this);
+        // Agregar cada archivo del array al FormData
+        archivosAdjuntos.forEach(function(file) {
+            formData.append("archivos_adjuntos", file);
+        });
+
+        console.log("Enviando correo masivo con:", {
+            destinatarios: $("input[name='destinatarios']:checked").map(function(){ return $(this).val(); }).get(),
+            asunto: $("input[name='asunto']").val(),
+            mensaje: $("textarea[name='mensaje']").val(),
+            archivos: archivosAdjuntos
+        });
+
+        $.ajax({
+            url: "{% url 'comunicacion:enviar_correo_masivo' comunidad_id=comunidad_id %}",
+            type: "POST",
+            data: formData,
+            processData: false, // Se requiere para FormData
+            contentType: false,
+            success: function(response) {
+                console.log("Respuesta AJAX:", response);
+                // Podríamos mostrar mensajes de éxito dentro de la respuesta HTML
+                $("#result-message").html
+                ("<div class='alert alert-success'>Correo masivo enviado correctamente.</div>");
+
+                // Limpia el formulario y la lista de archivos
+                $("#correo-masivo-form")[0].reset();
+                archivosAdjuntos = [];
+                actualizarListaArchivos();
+            },
+            error: function(xhr, status, error) {
+                console.error("Error AJAX:", status, error);
+                $("#result-message").html(
+                    "<div class='alert alert-danger'>Error al enviar el correo. Revisa la consola o logs.</div>"
+                );
+            }
+        });
+    });
+});
+
+</script>
+{% endblock %}

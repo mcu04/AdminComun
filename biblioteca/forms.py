@@ -31,9 +31,13 @@ class ArchivoForm(forms.ModelForm):
         ('Otros', 'Otros'),
     ]
 
-    tipo = forms.ChoiceField(choices=TIPO_CHOICES, label='Tipo', widget=forms.Select(attrs={'class': 'form-select'}))
-    categoria = forms.ChoiceField(choices=CATEGORIA_CHOICES, label='Categoría', widget=forms.Select(attrs={'class': 'form-select'}))
+    tipo = forms.ChoiceField(choices=TIPO_CHOICES, 
+    label='Tipo', widget=forms.Select(attrs={'class': 'form-select'}))
+    categoria = forms.ChoiceField(choices=CATEGORIA_CHOICES, 
+    label='Categoría', widget=forms.Select(attrs={'class': 'form-select'}))
 
     class Meta:
         model = Archivo
         fields = ['tipo', 'categoria', 'titulo_documento', 'documento']
+        exclude = ['comunidad']  # Excluye el campo comunidad
+    

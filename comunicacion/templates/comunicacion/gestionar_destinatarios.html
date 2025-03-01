@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Gestión de Destinatarios</h2>
+    <p>Comunidad actual: <strong>{{ comunidad.nombre }}</strong></p>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Agregar Destinatario</button>
+    </form>
+    
+    <hr>
+    <h3>Lista de Destinatarios</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre Completo</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for destinatario in destinatarios %}
+            <tr>
+                <td>{{ destinatario.nombre }} {{ destinatario.apellido }}</td>
+                <td>{{ destinatario.correo }}</td>
+                <td>
+                    <a href="{% url 'comunicacion:destinatario_update' destinatario.pk %}" class="btn btn-primary btn-sm">Editar</a>
+                    <a href="{% url 'comunicacion:destinatario_delete' destinatario.pk %}" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No hay destinatarios registrados en esta comunidad.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

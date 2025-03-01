@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import documentacion,seguimiento
+from Aplicaciones.seguimientodocumentos.models import Documentacion,Seguimiento
 # Register your models here.
 
 # Configuración para el modelo 'seguimiento'
@@ -25,5 +25,5 @@ class documentacionAdmin(admin.ModelAdmin):
     fields = ('tipo', 'categoria', 'titulo_documento')  # Mostrar solo estos campos en la vista de edición
 
 # Registrar los modelos en el panel de administración
-admin.site.register(documentacion, documentacionAdmin)  # Registrar 'documentacion' con configuración personalizada
-admin.site.register(seguimiento, seguimientoAdmin)  # Registrar 'seguimiento' con configuración personalizada
+admin.site.register(Documentacion, documentacionAdmin)  # Registrar 'documentacion' con configuración personalizada
+admin.site.register(Seguimiento, seguimientoAdmin)  # Registrar 'seguimiento' con configuración personalizada

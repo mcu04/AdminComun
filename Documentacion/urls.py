@@ -19,20 +19,23 @@ from django.urls import path, include
 from Aplicaciones.seguimientodocumentos import views
 from django.conf import settings
 from django.conf.urls.static import static
-from main.views import home
-from Aplicaciones.seguimientodocumentos.views import pagina_principal
-from main import views as main_views
+from Aplicaciones.seguimientodocumentos.views import listar_comunidades
+from Aplicaciones.seguimientodocumentos import views as seguimiento_views
 
-
-# from Aplicaciones.seguimientodocumentos.views import *
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("seguimiento/", include("Aplicaciones.seguimientodocumentos.urls")),  # Incluye las rutas de seguimiento
-    path("auth/", include("Aplicaciones.seguimientodocumentos.autenticacion.urls")),  # Incluye las rutas de autenticación
+    path('seguimiento/iniciar-sesion/', include('Aplicaciones.seguimientodocumentos.autenticacion.urls')),  # Ruta de login
     path('biblioteca/', include('biblioteca.urls')),   # Incluir URLs de la biblioteca
-    path('main/', main_views.home, name='home'),  # Página principal
-    path('', pagina_principal, name='pagina_principal'),  # Ahora la raíz apunta a esta vista
+    path('', seguimiento_views.iniciar_sesion, name='iniciar_sesion'),
+    path('accounts/', include('accounts.urls')),  # Asegúrate de que tu aplicación maneja autenticación
+    path('seguimiento/', include('django.contrib.auth.urls')),
+    path('comunicacion/', include('comunicacion.urls')),
+    
+    path('seguimiento/comunidades/', listar_comunidades, name='comunidades'),
+    path('mantenimiento/', include('mantenimiento.urls', namespace='mantenimiento')),
+    path("autenticacion/", include("Aplicaciones.seguimientodocumentos.autenticacion.urls", namespace="autenticacion")),
 ]
 
 if settings.DEBUG:

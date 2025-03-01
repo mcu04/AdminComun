@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>Reparaciones Generales</h1>
+  <a href="{% url 'mantenimiento:reparacion_create' comunidad_id=comunidad.id %}" class="btn btn-primary mb-3">Nueva Reparación</a>
+  
+  {% if reparaciones %}
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+            <th>Área</th>
+            <th>Problema</th>
+            <th>Estado</th>
+            <th>Fecha Solicitud</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reparacion in reparaciones %}
+        <tr>
+            <td>{{ reparacion.area }}</td>
+            <td>{{ reparacion.problema }}</td>
+            <td>{{ reparacion.estado }}</td>
+            <td>{{ reparacion.fecha_solicitud|date:"d/m/Y" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    {% else %}
+    <p>No hay reparaciones generales registradas.</p>
+    {% endif %}
+</div>
+{% endblock %}

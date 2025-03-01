@@ -1,0 +1,80 @@
+{% extends 'base_sin_modulos.html' %} 
+
+{% block content %} 
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Listado de Comunidades</h1>
+  <!--Font-Awesome-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Gestion Documentos</title>
+
+{% if comunidades %}
+<!-- Botón para registrar una nueva comunidad -->
+<div class="text-end mt-4" style="padding-bottom:10px">
+  <a 
+  href="{% url 'seguimientodocumentos:registrar_comunidad' %}" 
+  class="btn btn-success btn-sm"
+  title="Registrar una comunidad">
+  <i class="fa-solid fa-building-user"></i>
+  </a>
+</div>
+
+
+<table class="table table-bordered table-hover text-center">
+  <thead class="table-light">
+    <tr> 
+      <th>Nombre</th>
+      <th>Dirección</th>
+      <th>Descripción</th>
+      <th>Administrador</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+    <tbody>
+    {% for comunidad in comunidades %}
+    <tr>
+      <td>{{ comunidad.nombre }}</td>
+      <td>{{ comunidad.direccion }}</td>
+      <td>{{ comunidad.descripcion }}</td>
+      <td>{{ comunidad.administrador }}</td>
+      <td>
+        <div class="d-flex justify-content-center gap-2">
+          <!-- Botón Seleccionar -->
+          <a
+          href="{% url 'seguimientodocumentos:listar_seguimiento' comunidad.id %}"
+          class="btn btn-info btn-sm"
+          title="Seleccionar">
+          <i class="fas fa-eye"></i>
+        </a>
+          <!-- Botón Actualizar -->
+          <a
+          href="{% url 'seguimientodocumentos:actualizar_comunidad' comunidad.pk %}"
+          class="btn btn-warning btn-sm"
+          title="Actualizar">
+          <i class="fas fa-edit"></i>
+        </a>
+                <!-- Botón Eliminar -->
+            <a
+            href="{% url 'seguimientodocumentos:eliminar_comunidad' comunidad.pk %}"
+            class="btn btn-danger btn-sm"
+            title="Eliminar">
+            <i class="fas fa-trash-alt"></i>
+          </a>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="text-center">No hay comunidades disponibles.</p>
+{% endif %}
+
+
+</div>
+
+{% endblock %}
+
+
+
+
+

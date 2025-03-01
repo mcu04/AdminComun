@@ -1,0 +1,33 @@
+{% extends 'base_sin_modulos.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+        <div class="card p-4">
+            <div class="card-body">
+    <h2 class="card-title mb-4">Actualizar Comunidad</h2>
+        <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary"
+        title="Actualizar">
+        <i class="fa-solid fa-pen-to-square"></i> 
+        </button>
+
+        <a href="{% url 'seguimientodocumentos:comunidades' %}" class="btn btn-secondary" 
+        title="Volver">
+        <i class="bi bi-arrow-left-circle"></i>
+        </a>
+        </form>
+        
+
+    <script src="{% static 'js/script.js' %}"></script>
+
+</div>
+</div>
+</div>
+    </div>
+<div>
+{% endblock %}

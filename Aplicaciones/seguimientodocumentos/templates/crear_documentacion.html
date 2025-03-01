@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="container">
+    <div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h1 class="text-center my-4">Crear Documentación</h1>
+
+        <!-- Mostrar mensajes de error si existen -->
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+
+        <!-- Formulario -->
+        <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+           <a href="{% url 'seguimientodocumentos:seguimiento_pendiente' %}" class="btn btn-secondary ms-2">
+            Cancelar
+            </a>
+        </div>
+        </form>
+    </div>
+    </div>
+</main>
+{% endblock %}

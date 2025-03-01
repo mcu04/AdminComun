@@ -26,17 +26,19 @@
                     <label for="id_documento" class="form-label">Documento:</label>
                     {{ form.documento }}
                 </div>
-                <button type="submit" class="btn btn-primary">Subir Archivo</button>
-                    <a href="{% url 'biblioteca:biblioteca' %}" class="btn btn-secondary">Regresar a la Biblioteca</a>
+                <button type="submit" class="btn btn-primary"
+                    title="Subir Archivo">
+                    <i class="bi bi-file-earmark-arrow-up"></i>
+                    </button>
+                    <a href="{% url 'biblioteca:biblioteca' %}" class="btn btn-secondary"
+                    title="Regresar a la Biblioteca">
+                    <i class="bi bi-arrow-left-circle"></i>
+                    </a>
                 </form>
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
-            
-
    
-      
-<!--
-justify-content-center-->    
+

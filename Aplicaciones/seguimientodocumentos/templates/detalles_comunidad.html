@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Detalles de la Comunidad</h2>
+  <p><strong>Nombre:</strong> {{ comunidad.nombre }}</p>
+  <p><strong>Dirección:</strong> {{ comunidad.direccion }}</p>
+  <p><strong>Descripción:</strong> {{ comunidad.descripcion }}</p>
+  <p><strong>Administrador:</strong> {{ comunidad.administrador }}</p>
+  <a href="{% url 'seguimientodocumentos:pagina_inicio' %}">Ir a pagina inicio</a>
+{% endblock %}

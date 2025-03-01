@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h1>Panel de Mantenimiento</h1>
+
+    <div class="row">
+        <!-- Tarjeta de Mantenciones Programadas -->
+        <div class="col-md-3">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-header">Mantenciones</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ total_mantenciones }}</h5>
+                    <p class="card-text">Tareas programadas para mantenimiento preventivo.</p>
+                    <a href="{% url 'mantenimiento:mantencion_list' %}" class="btn btn-light btn-sm">Ver detalles</a>
+                </div>
+            </div>
+        </div>
+        <!-- Tarjeta de Reparaciones Pendientes -->
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-header">Reparaciones Pendientes</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ total_reparaciones_pendientes }}</h5>
+                    <p class="card-text">Reparaciones en proceso.</p>
+                    <a href="{% url 'mantenimiento:reparacion_list' %}" class="btn btn-light btn-sm">Ver detalles</a>
+                </div>
+            </div>
+        </div>
+        <!-- Se pueden agregar más tarjetas para otros módulos -->
+    </div>
+    
+    <!-- Lista de mantenciones recientes -->
+    <h3>Últimas Mantenciones</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Instalación</th>
+                <th>Fecha</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in mantenciones %}
+            <tr>
+                <td>{{ m.instalacion }}</td>
+                <td>{{ m.fecha }}</td>
+                <td>{{ m.descripcion }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No hay mantenciones registradas.</td>
+            </tr>
+            {% endfor %}
+
+            <script>
+                function actualizarDashboard() {
+                    fetch("{% url 'mantenimiento:dashboard' %}")
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById("mantenciones-count").innerText = data.total_mantenciones;
+                            document.getElementById("pendientes-count").innerText = data.total_pendientes;
+                        });
+                }
+                setInterval(actualizarDashboard, 10000);
+                </script>
+                
+        </tbody>
+    </table>
+</div>
+{% endblock %}

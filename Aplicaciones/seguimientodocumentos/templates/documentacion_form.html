@@ -1,0 +1,16 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+
+<h2>{% if editar %}Editar{% else %}Crear{% endif %} Documentación</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" style="padding: 8px 12px; background-color: #4CAF50; color: white; border: none; border-radius: 5px;">       {% if editar %}Guardar Cambios{% else %}Crear Documento{% endif %}
+    </button>
+    <a href="{% url 'documentacion_list' %}" style="margin-left: 10px;">Cancelar</a>
+</form>
+
+<a href="{% url 'seguimientodocumentos:documentacion_list' %}">Volver al Listado</a>
+{% endblock %}

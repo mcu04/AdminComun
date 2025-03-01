@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Listado de Documentos</h1>
+
+<!-- Filtro por comunidad -->
+<form method="get">
+    <label for="comunidad">Filtrar por Comunidad:</label>
+    <select name="comunidad" id="comunidad" onchange="this.form.submit()">
+        <option value="">Todas</option>
+        {% for comunidad in comunidades %}
+            <option value="{{ comunidad.id }}" {% if request.GET.comunidad == comunidad.id|stringformat:"s" %}selected{% endif %}>
+                {{ comunidad.nombre }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
+<!-- Tabla de documentos -->
+{% if documentos %}
+    <table border="1" style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th>Tipo</th>
+                <th>Categoría</th>
+                <th>Título</th>
+                <th>Comunidad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for documento in documentos %}
+                <tr>
+                    <td>{{ documento.tipo }}</td>
+                    <td>{{ documento.categoria }}</td>
+                    <td>{{ documento.titulo_documento }}</td>
+                    <td>{{ documento.comunidad.nombre }}</td>
+                    <td>
+                        <a href="{% url 'seguimientodocumentos:documentacion_edit' documento.id %}">Editar</a> |
+                        <a href="{% url 'seguimientodocumentos:documentacion_delete' documento.id %}" onclick="return confirm('¿Eliminar este documento?');">Eliminar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No hay documentos disponibles.</p>
+{% endif %}
+
+<!-- Botón para agregar nuevo documento -->
+<a href="{% url 'seguimientodocumentos:documentacion_create' %}" style="padding: 8px 12px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">
+    Agregar Nuevo Documento
+</a>
+{% endblock %}

@@ -1,5 +1,5 @@
-/* General */
-body {
+ /* General */
+ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -233,3 +233,59 @@ footer {
     text-align: center;
     margin-top: 10px;
 }
+
+
+/* Forzar texto en una línea */
+.table td, .table th {
+    white-space: nowrap; /* Evita que el texto se quiebre */
+    overflow: hidden;    /* Esconde el texto que no cabe */
+    text-overflow: ellipsis; /* Muestra "..." para texto largo */
+    max-width: 200px;    /* Establece un ancho máximo */
+}
+
+/* Estilo para el contenedor de botones en las acciones */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem; /* Espaciado entre botones */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Botones para Editar y Eliminar */
+.action-buttons .btn-edit {
+    background-color: #ffc107; /* Amarillo */
+    color: #212529;
+    border: none;
+    font-size: 1rem; /* Ajustar tamaño */
+}
+
+.action-buttons .btn-edit:hover {
+    background-color: #e0a800;
+}
+
+.action-buttons .btn-delete {
+    background-color: #dc3545; /* Rojo */
+    color: #fff;
+    border: none;
+    font-size: 1rem; /* Ajustar tamaño */
+}
+
+.action-buttons .btn-delete:hover {
+    background-color: #bd2130;
+}
+
+
+/* Ajuste para la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+    vertical-align: middle; /* Asegura el centrado vertical */
+}
+
+
+

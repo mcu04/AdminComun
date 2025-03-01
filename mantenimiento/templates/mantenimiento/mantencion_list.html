@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Mantención Preventiva Instalaciones</h1>
+    {% if comunidad %}
+    <a href="{% url 'mantenimiento:mantencion_create' comunidad_id=comunidad.id %}" class="btn btn-primary mb-3">Nueva Mantención</a>
+    {% else %}
+    <p>Error: No se encontró la comunidad.</p>
+    {% endif %}
+
+    {% if mantenciones %}
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Instalación</th>
+                <th>Fecha</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mantencion in mantenciones %}
+        <tr>
+            <td>{{ mantencion.instalacion }}</td>
+            <td>{{ mantencion.fecha|date:"d/m/Y" }}</td>
+            <td>{{ mantencion.descripcion }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No hay mantenciones registradas.</p>
+    {% endif %}
+</div>
+{% endblock %}

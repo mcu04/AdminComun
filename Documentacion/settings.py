@@ -49,12 +49,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites', 
     'Aplicaciones.seguimientodocumentos',
-    'widget_tweaks',
-    'Aplicaciones.seguimientodocumentos.autenticacion',
+    'Aplicaciones.seguimientodocumentos.autenticacion', 
     'biblioteca',
-    'main',
+    'widget_tweaks',
+    'accounts', 
+    'channels',
+    'comunicacion',
+    'mantenimiento',
+    'django_filters',
 ]
+
+    
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -67,12 +75,20 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
+# Configuración del sistema de autenticación
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+# Configuración del sitio para correos
+SITE_ID = 2  # Requerido si usas Django Sites Framework
+
 ROOT_URLCONF = 'Documentacion.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,13 +96,21 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'Aplicaciones.seguimientodocumentos.context_processors.comunidad_context_processor',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'Documentacion.wsgi.application'
+ASGI_APPLICATION = 'comunicacion_condominio.asgi.application'
+ASGI_APPLICATION = 'Documento_PostgreSQL.asgi.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -99,13 +123,12 @@ DATABASES = {
         'PASSWORD': 'mario04',
         'HOST': '127.0.0.1',
         'PORT': '5432',
-        
-        
-       
     }
-}
+    }
+
 #Esta cadena de conexión asume que tiene PostgreSQL ejecutándose en localhost, en el puerto 5432, con una base de datos llamada mysite y un usuario llamado postgres con la contraseña postgres.
 
+#AUTH_USER_MODEL = 'seguimientodocumentos.User'
 
         
 
@@ -153,8 +176,8 @@ if not DEBUG:
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-LOGIN_URL = 'iniciar sesion/'
-LOGIN_REDIRECT_URL = 'seguimientodocumentos:listar_seguimiento'
+LOGIN_URL = '/seguimientodocumentos/iniciar-sesion/'
+LOGIN_REDIRECT_URL = '/seguimiento/comunidades/'
 LOGOUT_REDIRECT_URL = '/'
 
 
@@ -171,3 +194,13 @@ MEDIA_ROOT = BASE_DIR / 'media'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Permite sesiones persistentes
 SESSION_COOKIE_AGE = 1209600  # 2 semanas (en segundos)
 
+# Configuración para enviar correos (Gmail como ejemplo)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'contacto@manon.cl'  # Tu dirección de correo
+EMAIL_HOST_PASSWORD = 'rnyyxwtwwrghtwhg'   # Tu contraseña o App Password
+DEFAULT_FROM_EMAIL = 'contacto@manon.cl'
+
+PASSWORD_RESET_TIMEOUT_DAYS = 1  # Número de días antes de que el enlace expire

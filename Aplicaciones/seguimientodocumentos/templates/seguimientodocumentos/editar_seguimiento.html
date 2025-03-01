@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-5">
+    <div class="row justify-content-center">
+    <div class="col-md-6">
+    <div class="card p-4">
+        <div class="card-body">
+    <h1 class="card-title mb-4">Editar Seguimiento</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-sm btn-success" 
+        title="Guardar Cambios">
+        <i class="fa-solid fa-save"></i>
+        </button>
+        <a href="{% url 'seguimientodocumentos:listar_seguimiento' seguimiento.comunidad.id %}" 
+        class="btn btn-sm btn-secondary"
+        title="Volver a Seguimiento">
+        <i class="fa-solid fa-arrow-left"></i> 
+        </a>
+    </form>
+    <script src="{% static 'js/script.js' %}"></script>
+    </div>
+    </div>
+    </div>
+        </div>
+</div>
+{% endblock %}
+
+
+        
+        
+            
