@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from django.contrib.messages import constants as messages
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,6 +45,7 @@ if RENDER_EXTERNAL_HOSTNAME:
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,8 +60,9 @@ INSTALLED_APPS = [
     'accounts', 
     'channels',
     'comunicacion',
-    'mantenimiento',
     'django_filters',
+    'import_export',
+    'mantenimiento.apps.MantenimientoConfig',
 ]
 
     
@@ -88,8 +92,8 @@ ROOT_URLCONF = 'Documentacion.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Directorio global de plantillas
+        'APP_DIRS': True,    # Esto activa el loader de directorios de aplicaciones
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -104,14 +108,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Documentacion.wsgi.application'
 ASGI_APPLICATION = 'comunicacion_condominio.asgi.application'
-ASGI_APPLICATION = 'Documento_PostgreSQL.asgi.application'
+ASGI_APPLICATION = 'Documentacion.asgi.application'
 
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',  # Para producción, se recomienda Redis
     },
 }
-
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],  # Redis local
+        },
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -123,14 +134,19 @@ DATABASES = {
         'PASSWORD': 'mario04',
         'HOST': '127.0.0.1',
         'PORT': '5432',
+        'TEST': {
+            'NAME': 'test_new_db',
+        },
     }
-    }
+}
 
 #Esta cadena de conexión asume que tiene PostgreSQL ejecutándose en localhost, en el puerto 5432, con una base de datos llamada mysite y un usuario llamado postgres con la contraseña postgres.
 
 #AUTH_USER_MODEL = 'seguimientodocumentos.User'
 
-        
+#DATABASES["default"]["TEST"] = {
+#    "NAME": "test_Documentacion"
+#}
 
 
 # Password validation
@@ -168,13 +184,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Se define siempre
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 if not DEBUG:
     # Configuraciones adicionales para producción
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
 
 LOGIN_URL = '/seguimientodocumentos/iniciar-sesion/'
 LOGIN_REDIRECT_URL = '/seguimiento/comunidades/'
@@ -187,9 +206,6 @@ LOGOUT_REDIRECT_URL = '/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Permite sesiones persistentes
 SESSION_COOKIE_AGE = 1209600  # 2 semanas (en segundos)
@@ -204,3 +220,14 @@ EMAIL_HOST_PASSWORD = 'rnyyxwtwwrghtwhg'   # Tu contraseña o App Password
 DEFAULT_FROM_EMAIL = 'contacto@manon.cl'
 
 PASSWORD_RESET_TIMEOUT_DAYS = 1  # Número de días antes de que el enlace expire
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'debug',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'error',
+}
+    
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Documentacion.settings")  
+

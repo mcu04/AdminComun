@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/mantenimiento.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mantenimiento_advanced.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Tablero Kanban de Mantenimiento - {{ comunidad.nombre }}</h1>
+    <!-- Input oculto para CSRF (si usas CSRFProtect en lugar de Exempt) -->
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+    <div class="row">
+        {% for estado, tasks in task_statuses.items %}
+        <div class="col-md-3">
+            <h3>{{ estado|title }}</h3>
+            <div id="{{ estado }}" class="kanban-column" data-status="{{ estado }}"
+                data-update-url="{% url 'mantenimiento:kanban' comunidad.id %}"
+                style="min-height: 300px; border: 1px solid #ccc; padding: 10px;">
+                {% for task in tasks %}
+                <div class="kanban-card card mb-1" data-id="{{ task.id }}">  <!-- Se cambia mb-2 por mb-1 para menos margen -->
+                    <div class="card-body">
+                        <h5 class="card-title">{{ task.titulo }}</h5>
+                        <p class="card-text">{{ task.descripcion }}</p>
+                        <p class="card-text"><small>Programada: {{ task.fecha_programada|date:"d/m/Y" }}</small></p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<script src="{% static 'js/mantenimiento_advanced.js' %}"></script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+    function actualizarEstado(tareaId, nuevoEstado, updateUrl) {
+    $.ajax({
+        url: updateUrl,
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            task_id: tareaId,  // <-- Aquí antes decía tarea_id (incorrecto)
+            new_status: nuevoEstado  // <-- Antes decía nuevo_estado (incorrecto)
+        }),
+        headers: {
+            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        success: function (response) {
+            console.log("Tarea actualizada:", response);
+        },
+        error: function (xhr) {
+            console.error("Error al actualizar tarea:", xhr.responseText);
+        }
+    });
+}
+
+document.querySelectorAll(".kanban-column").forEach(column => {
+    new Sortable(column, {
+        group: "kanban",
+        animation: 150,
+        onEnd: function (evt) {
+            const tareaId = evt.item.dataset.id;
+            const nuevoEstado = evt.to.dataset.status;
+            const updateUrl = evt.to.dataset.updateUrl;
+
+            fetch(updateUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({
+                    task_id: tareaId,
+                    new_status: nuevoEstado
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log("Estado actualizado:", data.new_status);
+                    
+                    // Mover la tarjeta visualmente a la columna correcta
+                    evt.to.appendChild(evt.item);
+                } else {
+                    console.error("Error en la actualización:", data.error);
+                }
+            })
+            .catch(error => {
+                console.error("Error de red:", error);
+            });
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
+
+

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/main.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/mantenimiento_advanced.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>Calendario de Mantenciones</h1>
+  <div id="calendar"></div>
+</div>
+
+<!-- Modal para mostrar detalles de la mantención -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eventModalLabel">Detalle de la Mantención</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p id="eventDescription"></p>
+        <p id="eventDate"></p>
+        <!-- Puedes agregar más detalles aquí si es necesario -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js"></script>
+  <script src="{% static 'js/mantenimiento_advanced.js' %}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'es',  // Establece el idioma a español
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,listWeek'
+        },
+         // Sobrescribe los textos de los botones para asegurar su traducción
+      buttonText: {
+          today: 'Hoy',
+          month: 'Mes',
+          week: 'Semana',
+          day: 'Día',
+          list: 'Lista'
+      },
+        events: '{% url "mantenimiento:eventos_mantenciones" comunidad_id=comunidad.id %}',
+        // Personalización de la apariencia de los eventos según su estado
+        eventDidMount: function(info) {
+          if (info.event.extendedProps.status === 'realizada') {
+            info.el.style.backgroundColor = 'var(--success-color)';
+          } else if (info.event.extendedProps.status === 'pendiente') {
+            info.el.style.backgroundColor = 'var(--warning-color)';
+          } else {
+            info.el.style.backgroundColor = 'var(--primary-color)';
+          }
+        },
+        // Uso de modal de Bootstrap para mostrar detalles en lugar de alert()
+        eventClick: function(info) {
+          info.jsEvent.preventDefault();
+          document.getElementById('eventModalLabel').textContent = info.event.title;
+          document.getElementById('eventDescription').textContent = info.event.extendedProps.description || 'Sin descripción';
+          document.getElementById('eventDate').textContent = "Fecha: " + info.event.start.toLocaleDateString();
+          var eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
+          eventModal.show();
+        }
+      });
+      calendar.render();
+    });
+  </script>
+{% endblock %}

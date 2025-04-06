@@ -1,70 +1,210 @@
 {% extends 'base.html' %}
-{% block content %}
-<div class="container">
-    <h1>Panel de Mantenimiento</h1>
+{% load static %}
 
-    <div class="row">
-        <!-- Tarjeta de Mantenciones Programadas -->
-        <div class="col-md-3">
-            <div class="card text-white bg-info mb-3">
-                <div class="card-header">Mantenciones</div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ total_mantenciones }}</h5>
-                    <p class="card-text">Tareas programadas para mantenimiento preventivo.</p>
-                    <a href="{% url 'mantenimiento:mantencion_list' %}" class="btn btn-light btn-sm">Ver detalles</a>
-                </div>
+{% block extra_css %}
+    <style>
+    /* Ejemplo de estilos para tarjetas, ajusta según necesites */
+    .card {
+        box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.075);
+        border-radius: 0.5rem;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h1 class="mb-4">Panel de Mantenimiento</h1>
+
+    <!-- Tarjetas de Información -->
+    <div class="row g-3">
+
+        <!-- Total de Mantenciones (listado completo) -->
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+            <h5 class="card-title">Total de Mantenciones Anual</h5>
+            <p class="display-6">{{ total_mantenciones }}</p>
+        </div>
+            <div class="card-footer">
+                {% if comunidad %}
+            <a href="{% url 'mantenimiento:mantencion_list' comunidad.id %}?filtro=todas" class="text-white">Ver detalles</a>
+            {% else %}
+            <span class="text-muted">Sin comunidad asignada</span>
+            {% endif %}
             </div>
         </div>
-        <!-- Tarjeta de Reparaciones Pendientes -->
-        <div class="col-md-3">
-            <div class="card text-white bg-warning mb-3">
-                <div class="card-header">Reparaciones Pendientes</div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ total_reparaciones_pendientes }}</h5>
-                    <p class="card-text">Reparaciones en proceso.</p>
-                    <a href="{% url 'mantenimiento:reparacion_list' %}" class="btn btn-light btn-sm">Ver detalles</a>
-                </div>
+    </div>
+
+        <!-- Mantenciones Realizadas -->
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+            <h5 class="card-title">Realizadas</h5>
+            <p class="display-6">{{ total_realizadas }}</p>
+        </div>
+            <div class="card-footer">
+                {% if comunidad %}
+                <a href="{% url 'mantenimiento:mantencion_list' comunidad.id %}?filtro=realizadas" class="text-white">Ver detalles</a>
+                {% else %}
+                <span class="text-muted">Sin comunidad asignada</span>
+                {% endif %}
             </div>
         </div>
-        <!-- Se pueden agregar más tarjetas para otros módulos -->
+    </div>
+
+        <!-- Mantenciones Pendientes -->
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+            <h5 class="card-title">Pendientes</h5>
+            <p class="display-6">{{ total_pendientes }}</p>
+        </div>
+            <div class="card-footer">
+                {% if comunidad %}
+                <a href="{% url 'mantenimiento:mantencion_list' comunidad.id %}?filtro=pendientes" class="text-dark">Ver detalles</a>
+                {% else %}
+                <span class="text-muted">Sin comunidad asignada</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+        <!-- Instalaciones con Mantenciones Pendientes -->
+    <div class="col-md-3">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+            <h5 class="card-title">Instalaciones Pendientes</h5>
+            <p class="display-6">{{ instalaciones_pendientes }}</p>
+        </div>
+            <div class="card-footer">
+                {% if comunidad %}
+                <a href="{% url 'mantenimiento:mantencion_list' comunidad.id %}?filtro=instalaciones_pendientes" class="text-white">Ver detalles</a>
+                {% else %}
+                <span class="text-muted">Sin comunidad asignada</span>
+                {% endif %}
+            </div>
+        </div>
     </div>
     
-    <!-- Lista de mantenciones recientes -->
-    <h3>Últimas Mantenciones</h3>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Instalación</th>
-                <th>Fecha</th>
-                <th>Descripción</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for m in mantenciones %}
-            <tr>
-                <td>{{ m.instalacion }}</td>
-                <td>{{ m.fecha }}</td>
-                <td>{{ m.descripcion }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="3">No hay mantenciones registradas.</td>
-            </tr>
-            {% endfor %}
+        <!-- Métricas por Año y Mes -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title">Mantenciones en el Año {{ total_mantenciones_año }}</h5>
+                <p class="card-text">Total mantenciones programadas para el año actual.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title">Mantenciones en el Mes {{ total_mantenciones_mes }}</h5>
+                <p class="card-text">Total mantenciones programadas para el mes actual.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            <script>
-                function actualizarDashboard() {
-                    fetch("{% url 'mantenimiento:dashboard' %}")
-                        .then(response => response.json())
-                        .then(data => {
-                            document.getElementById("mantenciones-count").innerText = data.total_mantenciones;
-                            document.getElementById("pendientes-count").innerText = data.total_pendientes;
-                        });
-                }
-                setInterval(actualizarDashboard, 10000);
-                </script>
-                
-        </tbody>
-    </table>
+        <!-- (Opcional) Gráfico de evolución (requiere Chart.js) -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+        <canvas id="mantencionesChart"></canvas>
+        </div>
+    </div>          
+    
+        <!-- Tabla de Mantenciones Recientes -->
+    <div class="mt-5">
+        <h3>Últimas Mantenciones</h3>
+        <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Instalación</th>
+            <th>Fecha Programada</th>
+            <th>Fecha Realizada</th>
+            <th>Descripción</th>
+            </tr>
+    </thead>
+    <tbody>
+        {% for m in mantenciones_recientes %}
+        <tr>
+            <td>{{ m.instalacion }}</td>
+            <td>{{ m.fecha_programada|date:"d/m/Y" }}</td>
+            <td>
+                {% if m.fecha_realizada %}
+                {{ m.fecha_realizada|date:"d/m/Y" }}
+            {% else %}
+                Pendiente
+            {% endif %}
+            </td>
+            <td>{{ m.descripcion|default:"Sin descripción" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No hay mantenciones registradas.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
+    
+{% block extra_js %}
+    <!-- Bootstrap JS Bundle (opcional si no se incluye en base) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Incluir Chart.js desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Inyecta de forma segura la variable monthly_counts en formato JSON -->
+    {{ monthly_counts|json_script:"monthlyCountsData" }}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        // Recupera y parsea el JSON inyectado
+        const monthlyCounts = JSON.parse(document.getElementById('monthlyCountsData').textContent);
+        // Obtener el contexto del canvas
+        const ctx = document.getElementById('mantencionesChart').getContext('2d');
+
+        // Configuración del gráfico de línea con datos reales
+        const mantencionesChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                datasets: [{
+                    label: 'Mantenciones por Mes',
+                    // Utilizamos la variable de contexto que contiene la lista de datos reales.
+                    // La variable monthly_counts se renderiza como un array de números.
+                    data: monthlyCounts,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+            scales: {
+            y: {
+                beginAtZero: true,
+                ticks: { stepSize: 1 }
+            }
+        },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+        });
+    });
+    </script>
+{% endblock %}
+    
+    
+    
+    
+            
+
+            
+
+
+
+

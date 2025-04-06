@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificación de Mantenimiento</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Contenedor de la Notificación -->
+    <div id="notificacion" class="notification" style="display:none; background:yellow; padding:10px; position:fixed; top:10px; right:10px; border-radius:5px;">
+        <p id="mensaje-notificacion"></p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const notificacionDiv = document.getElementById("notificacion");
+            const mensajeNotificacion = document.getElementById("mensaje-notificacion");
+
+            // Conectar al WebSocket
+            const socket = new WebSocket("ws://" + window.location.host + "/ws/notificaciones/");
+
+            socket.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                console.log("Nueva notificación:", data.mensaje);
+
+                // Mostrar la notificación con el mensaje recibido
+                mensajeNotificacion.textContent = data.mensaje;
+                notificacionDiv.style.display = "block";
+
+                // Ocultar la notificación después de 5 segundos
+                setTimeout(() => {
+                    notificacionDiv.style.display = "none";
+                }, 5000);
+            };
+
+            socket.onopen = function() {
+                console.log("Conexión WebSocket establecida");
+            };
+
+            socket.onclose = function() {
+                console.log("Conexión WebSocket cerrada");
+            };
+        });
+    </script>
+
+</body>
+</html>

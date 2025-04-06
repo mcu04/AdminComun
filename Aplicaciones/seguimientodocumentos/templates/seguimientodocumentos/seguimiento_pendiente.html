@@ -3,7 +3,7 @@
 {% block content %}
 
 <main class="container">
-    <h1 class="text-center dispaly-5 py-4">{{ comunidad.nombre }} - Seguimientos Pendientes</h1>
+    <h1 class="text-center dispaly-5 py-5">{{ comunidad.nombre }} - Seguimientos Pendientes</h1>
 
             <!-- Formulario de búsqueda -->
     <form method="GET" action="" class="mb-4 d-flex justify-content-between align-items-center flex-wrap">
@@ -110,26 +110,12 @@
 </div>
 </main>
 
-<script>
-    $(document).ready(function () {
-        $('#seguimientoTabla').DataTable({
-            language: {
-                url: "{% static 'js/datatables_spanish.json' %}",
-            },
-            responsive: true,
-            pageLength: 10,
-            paging: true,
-            ordering: true,
-            info: true,
-        });
-    });
-</script>
 
 {% endblock %}
 
 
 
-      <!-- Controles de paginación <nav aria-label="Paginación">
+    <!-- Controles de paginación <nav aria-label="Paginación">
         <ul class="pagination justify-content-center">
             {% if seguimientos.has_previous %}
             <li class="page-item">
@@ -165,5 +151,21 @@
           </ul>
       </nav>
       
-      </main>-->
+      </main>
+      
+      
+<script>
+    $(document).ready(function () {
+        $('#seguimientoTabla').DataTable({
+            language: {
+                url: "{% static 'js/datatables_spanish.json' %}",
+            },
+            responsive: true,
+            pageLength: 10,
+            paging: true,
+            ordering: true,
+            info: true,
+        });
+    });
+</script>-->
       

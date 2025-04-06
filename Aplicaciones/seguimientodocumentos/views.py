@@ -407,8 +407,8 @@ def exportar_excel(request, tipo_seguimiento, comunidad_id=None):
             return HttpResponse(f"El DataFrame está vacío para {tipo_seguimiento}", status=404)
         
     # Crear respuesta HTTP
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = f'attachment; filename="seguimiento_{tipo_seguimiento}.xlsx"'
+        #response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        #response['Content-Disposition'] = f'attachment; filename="seguimiento_{tipo_seguimiento}.xlsx"'
 
     # Escribir los datos en el archivo Excel
         with BytesIO() as output:
@@ -417,27 +417,38 @@ def exportar_excel(request, tipo_seguimiento, comunidad_id=None):
         
         # Aplicar estilos
                 workbook = writer.book
-                sheet = writer.sheets[f"Seguimiento_{tipo_seguimiento}"]
-                header_format = workbook.add_format({'bold': True, 'align': 'center', 'bg_color': '#D3D3D3'})
+                worksheet = writer.sheets[f"Seguimiento_{tipo_seguimiento}"]
+                
+                header_format = workbook.add_format({
+                    'bold': True,
+                    'text_wrap': True,
+                    'align': 'center',
+                    'valign': 'top',
+                    'bg_color': '#D3D3D3'
+                })
+                
+                
                 for col_num, value in enumerate(df.columns.values):
-                    sheet.write(0, col_num, value, header_format)
-                    sheet.set_column(col_num, col_num, len(value) + 5)
+                    worksheet.write(0, col_num, value, header_format)
+                    worksheet.set_column(col_num, col_num, max(len(str(value)) + 5, 15))
                     
                     # Aplicar formato a las columnas de fecha
                     date_format = workbook.add_format({'num_format': 'dd-mm-yyyy'})
                 if 'fecha_actualizado' in df.columns:
-                    fecha_col_idx = df.columns.get_loc('fecha_actualizado')
-                    sheet.set_column(fecha_col_idx, fecha_col_idx, 12, date_format)
+                    col_idx = df.columns.get_loc('fecha_actualizado')
+                    worksheet.set_column(col_idx, col_idx, 12, date_format)
                 if 'fecha_registrado' in df.columns:
-                    fecha_col_idx = df.columns.get_loc('fecha_registrado')
-                    sheet.set_column(fecha_col_idx, fecha_col_idx, 12, date_format)
+                    col_idx = df.columns.get_loc('fecha_registrado')
+                    worksheet.set_column(col_idx, col_idx, 12, date_format)
         
             # Guardar el archivo Excel en la respuesta
-            response.write(output.getvalue())
-                
+            response = HttpResponse(output.getvalue(),
+                                    content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = f'attachment; filename="seguimiento_{tipo_seguimiento}.xlsx"'
             return response
+
     except Exception as e:
-                return HttpResponse(f"Error al exportar: {str(e)}", status=500)
+        return HttpResponse(f"Error al exportar: {str(e)}", status=500)
 
 def iniciar_sesion(request):
     """

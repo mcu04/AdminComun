@@ -2,32 +2,35 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-        <div class="card p-4">
-            <div class="card-body">
-    <h2 class="card-title mb-4">Actualizar Comunidad</h2>
-        <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary"
-        title="Actualizar">
-        <i class="fa-solid fa-pen-to-square"></i> 
-        </button>
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-4 text-center">Actualizar Comunidad</h2>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
 
-        <a href="{% url 'seguimientodocumentos:comunidades' %}" class="btn btn-secondary" 
-        title="Volver">
-        <i class="bi bi-arrow-left-circle"></i>
-        </a>
-        </form>
-        
+                        <div class="d-flex justify-content-end gap-2 mt-3">
+                            <!-- Botón Actualizar -->
+                            <button type="submit" class="btn btn-primary" title="Actualizar">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                                Actualizar
+                            </button>
 
-    <script src="{% static 'js/script.js' %}"></script>
-
-</div>
-</div>
-</div>
+                            <!-- Botón Volver -->
+                            <a href="{% url 'seguimientodocumentos:comunidades' %}" 
+                                class="btn btn-secondary"
+                                title="Volver al listado de Comunidades">
+                                <i class="bi bi-arrow-left-circle"></i>
+                                Volver
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-<div>
+</div>
 {% endblock %}

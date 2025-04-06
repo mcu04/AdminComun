@@ -132,7 +132,7 @@ def subir_archivo(request):
             obj.save()
             
             # Usar namespace para redirigir
-            return redirect('biblioteca:biblioteca_archivos', comunidad_id)  
+            return redirect('biblioteca:biblioteca_archivos', comunidad_id=comunidad_id)
     else:
         form = ArchivoForm()
 

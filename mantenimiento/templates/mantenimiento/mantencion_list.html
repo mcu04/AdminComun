@@ -1,35 +1,145 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <!-- CSS adicional para esta página (si es necesario) -->
+    <link rel="stylesheet" href="{% static 'css/mantenimiento_advanced.css' %}">  
+{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
     <h1>Mantención Preventiva Instalaciones</h1>
+    
     {% if comunidad %}
-    <a href="{% url 'mantenimiento:mantencion_create' comunidad_id=comunidad.id %}" class="btn btn-primary mb-3">Nueva Mantención</a>
+        <a href="{% url 'mantenimiento:mantencion_create' comunidad_id=comunidad.id %}" class="btn btn-primary mb-3">
+            Nueva Mantención
+        </a>
     {% else %}
-    <p>Error: No se encontró la comunidad.</p>
+        <p>Error: No se encontró la comunidad.</p>
     {% endif %}
 
     {% if mantenciones %}
-    <table class="table table-bordered table-striped">
-        <thead>
+    <table id="mantencionesTable" class="table table-custom table-striped table-hover">
+        <thead class="table-dark">
             <tr>
-                <th>Instalación</th>
-                <th>Fecha</th>
-                <th>Descripción</th>
+                <th scope="col">Instalación</th>        <!-- Índice 0 -->
+                <th scope="col">Fecha Programada</th>   <!-- Índice 1 -->
+                <th scope="col">Fecha Realizada</th>    <!-- Índice 2 -->
+                <th scope="col">Descripción</th>        <!-- Índice 3 -->
+                <th scope="col">Observaciones</th>      <!-- Índice 4 -->
+                <th scope="col">Acciones</th>           <!-- Índice 5 -->
             </tr>
         </thead>
         <tbody>
             {% for mantencion in mantenciones %}
-        <tr>
-            <td>{{ mantencion.instalacion }}</td>
-            <td>{{ mantencion.fecha|date:"d/m/Y" }}</td>
-            <td>{{ mantencion.descripcion }}</td>
-        </tr>
-        {% endfor %}
+            <tr>
+                <td>{{ mantencion.instalacion }}</td>
+                <td>{{ mantencion.fecha_programada|date:"d/m/Y" }}</td>
+                <td>
+                    {% if mantencion.fecha_realizada %}
+                        {{ mantencion.fecha_realizada|date:"d/m/Y" }}
+                    {% else %}
+                        Pendiente
+                    {% endif %}
+                </td>
+                <td>{{ mantencion.descripcion|default:"Sin descripciones" }}</td>
+                <td>{{ mantencion.observaciones|default:"Sin observaciones" }}</td>
+                <td>
+                    <a href="{% url 'mantenimiento:mantencion_update' comunidad_id=comunidad.id pk=mantencion.id %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'mantenimiento:mantencion_delete' comunidad_id=comunidad.id pk=mantencion.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
     {% else %}
-    <p>No hay mantenciones registradas.</p>
+        <p>No hay mantenciones registradas.</p>
     {% endif %}
 </div>
+
 {% endblock %}
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            // Inicializa DataTables sobre la tabla con id "mantencionesTable"
+            var dt = $('#mantencionesTable').DataTable({
+                dom: 'lfrtip',
+                language: {
+                    url: "{% static 'js/datatables_spanish.json' %}"
+                },
+                responsive: true,
+                pageLength: 10,
+                paging: true,
+                ordering: true,
+                info: true,
+                
+                drawCallback: function(settings) {
+                    // Callback para depuración: muestra la página actual y el total de páginas
+                    var info = this.api().page.info();
+                    console.log("Tabla redibujada. Página actual:", info.page + 1, "de", info.pages);
+                }
+            });
+            console.log("DataTable inicializado:", dt);
+        });
+    </script>
+{% endblock %}
+
+
+
+        
+
+<!-- Paginación manual (solo si se utiliza en el backend) 
+    {% if mantenciones_page and mantenciones_page.paginator.num_pages > 1 %}
+    <div class="mt-3 d-flex justify-content-between align-items-center">
+        <p class="text-muted">
+        Mostrando {{ mantenciones_page.start_index }} a {{ mantenciones_page.end_index }} de {{ mantenciones_page.paginator.count }} entradas
+        </p>
+        <ul class="pagination">
+        {% if mantenciones_page.has_previous %}
+            <li class="page-item">
+            <a class="page-link" href="?page=1{% if query %}&q={{ query }}{% endif %}">&laquo; Inicio</a>
+            </li>
+            <li class="page-item">
+            <a class="page-link" href="?page={{ mantenciones_page.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">Anterior</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+            <span class="page-link">&laquo; Inicio</span>
+            </li>
+            <li class="page-item disabled">
+            <span class="page-link">Anterior</span>
+            </li>
+        {% endif %}
+
+        {% for page_num in mantenciones_page.paginator.page_range %}
+            {% if page_num == mantenciones_page.number %}
+            <li class="page-item active">
+                <span class="page-link">{{ page_num }}</span>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_num }}{% if query %}&q={{ query }}{% endif %}">{{ page_num }}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if mantenciones_page.has_next %}
+            <li class="page-item">
+            <a class="page-link" href="?page={{ mantenciones_page.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Siguiente</a>
+            </li>
+            <li class="page-item">
+            <a class="page-link" href="?page={{ mantenciones_page.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}">Final &raquo;</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+            <span class="page-link">Siguiente</span>
+            </li>
+            <li class="page-item disabled">
+            <span class="page-link">Final &raquo;</span>
+            </li>
+        {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+</div> -->

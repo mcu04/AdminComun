@@ -1,29 +1,139 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/mantenimiento_advanced.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Registrar Mantención Preventiva</h2>
+    <!-- Título dinámico según si es creación o edición -->
+    <h1>{% if form.instance.pk %}Editar{% else %}Nueva{% endif %} Mantención Preventiva</h1>
 
     <form method="POST" class="shadow p-4 bg-light rounded">
         {% csrf_token %}
-        <div class="mb-3">
-            <label class="form-label">Instalación:</label>
-            {{ form.instalacion }}
+
+        <!-- Mostrar errores no asociados a ningún campo -->
+        {{ form.non_field_errors }}
+
+        {% if form.errors %}
+        <div class="alert alert-danger">
+        {{ form.errors }}
         </div>
-        <div class="mb-3">
-            <label class="form-label">Fecha:</label>
-            {{ form.fecha }}
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Descripción:</label>
-            {{ form.descripcion }}
-        </div>
-        <button type="submit" class="btn btn-primary">Guardar</button>
-        {% if comunidad %}
-        <a href="{% url 'mantenimiento:mantencion_list' comunidad_id=comunidad.id %}" class="btn btn-secondary">Cancelar</a>
-        {% else %}
-        <a href="#" class="btn btn-secondary">Cancelar</a>  {# O una URL alternativa #}
         {% endif %}
+
+        <!-- Campo para selección de instalación predefinida -->
+        <div class="mb-3">
+            <label class="form-label" for="{{ form.category.id_for_label }}">Instalación Predefinida:</label>
+            {{ form.category }}
+            <div class="text-danger">{{ form.category.errors }}</div>
+        </div>
+
+        <!-- Campo para ingresar una instalación personalizada -->
+        <div class="mb-3">
+            <label class="form-label" for="{{ form.custom_category.id_for_label }}">Otra Instalación:</label>
+            <input type="text" 
+                    name="{{ form.custom_category.name }}" 
+                    id="{{ form.custom_category.id_for_label }}" 
+                    class="form-control" 
+                        placeholder="Ingrese otra instalación" 
+                    value="{{ form.custom_category.value|default_if_none:'' }}">
+            <div class="text-danger">{{ form.custom_category.errors }}</div>
+        </div>
+
+        <!-- Fecha Programada -->
+        <div class="mb-3">
+            <label class="form-label" for="{{ form.fecha_programada.id_for_label }}">Fecha Programada:</label>
+            <input type="date" 
+                    name="{{ form.fecha_programada.name }}" 
+                    id="{{ form.fecha_programada.id_for_label }}" 
+                    class="form-control" 
+                    value="{{ form.instance.fecha_programada|date:'Y-m-d' }}">
+            <div class="text-danger">{{ form.fecha_programada.errors }}</div>
+        </div>
+
+        <!-- Fecha Realizada -->
+        <div class="mb-3">
+            <label class="form-label" for="{{ form.fecha_realizada.id_for_label }}">Fecha Realizada:</label>
+            <input type="date" 
+                    name="{{ form.fecha_realizada.name }}" 
+                    id="{{ form.fecha_realizada.id_for_label }}" 
+                    class="form-control" 
+                    value="{{ form.instance.fecha_realizada|date:'Y-m-d' }}">
+            <div class="text-danger">{{ form.fecha_realizada.errors }}</div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="mb-3">
+            <label class="form-label" for="{{ form.descripcion.id_for_label }}">Descripción:</label>
+            <textarea name="{{ form.descripcion.name }}" 
+                        id="{{ form.descripcion.id_for_label }}" 
+                        class="form-control" 
+                        placeholder="Ingrese la descripción previa a la mantencion">{{ form.descripcion.value|default_if_none:'' }}</textarea>
+            <div class="text-danger">{{ form.descripcion.errors }}</div>
+        </div>
+
+        <!-- Observaciones -->
+        <div class="mb-3">
+            <label class="form-label" for="{{ form.observaciones.id_for_label }}">Observaciones:</label>
+            <textarea name="{{ form.observaciones.name }}" 
+                        id="{{ form.observaciones.id_for_label }}" 
+                        class="form-control" 
+                        placeholder="Ingrese observaciones despues de la mantencion realizada">{{ form.observaciones.value|default_if_none:'' }}</textarea>
+            <div class="text-danger">{{ form.observaciones.errors }}</div>
+        </div>
+
+        <!-- Campo: Estado (status) -->
+        <div class="mb-3">
+            <label class="form-label" for="{{ form.status.id_for_label }}">Estado:</label>
+            {{ form.status }}
+            <div class="text-danger">{{ form.status.errors }}</div>
+        </div>
+
+        <!-- Campo: Periodo/Frecuencia -->
+        <div class="mb-3">
+            <label class="form-label" for="{{ form.periodo.id_for_label }}">Periodo/Frecuencia:</label>
+            {{ form.periodo }}
+            <div class="text-danger">{{ form.periodo.errors }}</div>
+        </div>
+
+        <!-- Campo: Responsable (ingreso manual) -->
+        <div class="mb-3">
+            <label class="form-label" for="{{ form.responsable.id_for_label }}">Responsable:</label>
+            <input type="text" 
+                    name="{{ form.responsable.name }}" 
+                    id="{{ form.responsable.id_for_label }}" 
+                    class="form-control" 
+                    placeholder="Ingrese el nombre del responsable" 
+                    value="{{ form.responsable.value|default_if_none:'' }}">
+            <div class="text-danger">{{ form.responsable.errors }}</div>
+        </div>
+        <!-- Campo: Costo -->
+        <div class="mb-3">
+            <label class="form-label" for="{{ form.costo.id_for_label }}">Costo:</label>
+            <input type="number" 
+                    name="{{ form.costo.name }}" 
+                    id="{{ form.costo.id_for_label }}" 
+                    class="form-control" 
+                    placeholder="Ingrese el costo" 
+                    value="{{ form.costo.value|default_if_none:'' }}">
+            <div class="text-danger">{{ form.costo.errors }}</div>
+        </div>
+
+        <!-- Campo oculto para 'comunidad_id' -->
+        <input type="hidden" name="comunidad_id" value="{{ comunidad.id }}">
+
+        <!-- Botón para Guardar -->
+        <button type="submit" class="btn btn-advanced btn-primary">
+            {% if form.instance.pk %}Actualizar{% else %}Guardar{% endif %}
+        </button>
+
+        <!-- Botón para Cancelar -->
+        <a href="{% url 'mantenimiento:mantencion_list' comunidad_id=comunidad.id %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/mantenimiento_advanced.js' %}"></script>
 {% endblock %}

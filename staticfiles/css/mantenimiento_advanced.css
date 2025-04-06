@@ -1,0 +1,79 @@
+/* Variables para colores y tipografía */
+:root {
+    --primary-color: #0056b3;
+    --secondary-color: #17a2b8;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --light-bg: #f4f4f9;
+    --font-family-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Estilos para el Tablero Kanban */
+  .kanban-column {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 5px;
+    min-height: 250px;
+  }
+  
+  .kanban-card {
+    background: #f9f9f9;
+    border-left: 3px solid var(--primary-color);
+    margin-bottom: 5px;
+    padding: 6px;
+    border-radius: 3px;
+    cursor: grab;
+    font-size: 0.85rem;  /* Reduce el tamaño del texto */
+    transition: transform 0.2s;
+}
+
+.kanban-card h5 {
+  font-size: 1rem; /* Reduce el tamaño del título */
+  margin-bottom: 3px;
+}
+
+.kanban-card p {
+  font-size: 0.8rem; /* Reduce el tamaño de la descripción */
+  margin-bottom: 2px;
+}
+  
+  .kanban-card:hover {
+    transform: scale(1.02);
+  }
+  
+  /* Calendario FullCalendar */
+  .fc {
+    font-family: var(--font-family-base);
+    background: #fff;
+    border-radius: 4px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  /* Notificaciones y Recordatorios (ejemplo simple) */
+  .notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--secondary-color);
+    color: #fff;
+    padding: 15px 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 1050;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .notification.show {
+    opacity: 1;
+  }
+  
+  
+  
+  
+  
+  
+    
