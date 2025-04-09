@@ -44,4 +44,4 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 "message": event["message"]
             }))
         except Exception as e:
-            logger.error("Error al enviar notificación: %s", e)
+            logger.error("Error al enviar notificación: %s", e) 

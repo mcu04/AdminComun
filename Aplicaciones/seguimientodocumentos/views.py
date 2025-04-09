@@ -776,16 +776,17 @@ def registrar_comunidad(request):
                 
                 
                 # Agregar documentos iniciales si es necesario
-                Documento.objects.create(
-                comunidad=comunidad,
-                titulo="Documento Inicial",
-                descripcion="Descripción del documento inicial."
-            )
-                Archivo.objects.create(
-                comunidad=comunidad,
-                titulo_documento="Archivo Inicial",
-                tipo="Administracion"
-            )
+                #Documento.objects.create(
+                #comunidad=comunidad,
+                #titulo="Documento Inicial",
+                #descripcion="Descripción del documento inicial."
+            #)
+                # No se crea un Archivo ya que la subida se hará solo desde la biblioteca.
+                #Archivo.objects.create(
+                #comunidad=comunidad,
+                #titulo_documento="Archivo Inicial",
+                #tipo="Administracion"
+            #)
                 messages.success(request, f"La comunidad '{comunidad.nombre}' ha sido registrada exitosamente.")
                 return redirect('seguimientodocumentos:comunidades')  # Redirige al listado
             else:
@@ -806,7 +807,13 @@ def detalles_comunidad(request, comunidad_id):
 def listar_comunidades(request):
     # Ahora request.user será un usuario autenticado, por lo que se puede filtrar sin error
     comunidades = Comunidad.objects.filter(administrador=request.user)
-    return render(request, "listar_comunidades.html", {'comunidades': comunidades})
+    # No se asigna comunidad si el usuario no ha seleccionado todavía.
+    # comunidad_actual = None  # Opcional: no la necesitas si no pasas nada.
+    
+    return render(request, "listar_comunidades.html", {
+        'comunidades': comunidades,
+        # "comunidad": None,  # <= si quieres forzar a None
+    })
 
 from django.shortcuts import get_object_or_404
 

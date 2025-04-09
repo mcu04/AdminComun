@@ -73,7 +73,7 @@ class Archivo(models.Model):
     tipo = models.CharField(max_length=100, blank=True, null=True, choices=TIPO_CHOICES)
     categoria = models.CharField(max_length=100, blank=True, null=True, choices=CATEGORIA_CHOICES)
     titulo_documento = models.CharField(max_length=255)
-    documento = models.FileField(upload_to='archivos/')
+    documento = models.FileField(upload_to='archivos/', blank=True, null=True)
     fecha_subida = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

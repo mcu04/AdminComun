@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <!-- Meta viewport para responsividad en móviles -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seguimiento de Documentos</title>
+    <title>{% block title %}Seguimiento de Documentos{% endblock %}</title>
 
     <!-- 1. jQuery -->
     <script
@@ -63,7 +63,7 @@
             
         <div class="container-fluid">
             
-            <!-- Enlace del logo o marca -->
+            <!-- Enlace del logo o marca según el estado de autenticación y comunidad -->
             {% if user.is_authenticated and request.resolver_match.url_name != "iniciar_sesion" and comunidad %}
                 <a class="navbar-brand" href="{% url 'seguimientodocumentos:comunidades' %}">Regresar a Comunidades</a>
             {% else %}
@@ -71,7 +71,7 @@
             {% endif %}
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -106,23 +106,21 @@
                 <li class="nav-item dropdown">
                     {% if comunidad %}
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMantenimiento" role="button" 
-                            data-bs-toggle="dropdown" aria-expanded="false" >
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             Mantenimiento
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMantenimiento">
-                            
-                            <li><a class="dropdown-item" href="{% url 'mantenimiento:dashboard' comunidad_id=comunidad.id %}">Dashboard de Mantenimiento</a>
-                            </li>        
+                            <li><a class="dropdown-item" href="{% url 'mantenimiento:dashboard' comunidad_id=comunidad.id %}">Dashboard de Mantenimiento</a></li>
                             <li><a class="dropdown-item" href="{% url 'mantenimiento:mantencion_list' comunidad_id=comunidad.id %}">Mantención Preventiva Instalaciones</a></li>
                             <li><a class="dropdown-item" href="{% url 'mantenimiento:kanban' comunidad_id=comunidad.id %}">Kanban</a></li>
                             <li><a class="dropdown-item" href="{% url 'mantenimiento:calendario' comunidad_id=comunidad.id %}">Calendario de Mantenciones</a></li>
                             <li><a class="dropdown-item" href="{% url 'mantenimiento:mantencion_informe' comunidad_id=comunidad.id %}">Informe de Mantenciones</a></li>
                         </ul>
                     {% else %}
-                        <a class="nav-link disabled" href="#" title="Seleccione una comunidad">                           Mantenimiento
+                        <a class="nav-link disabled" href="#" title="Seleccione una comunidad">
+                            Mantenimiento
                         </a>
                     {% endif %}
-
                 </li>
 
                     <!-- Menú Comunicación -->
@@ -166,10 +164,13 @@
                     </li>
 
                     <!-- Si el usuario NO está autenticado -->
+            
                     {% else %}
-                    <li class="nav-item">
-                    <a class="nav-link" href="{% url 'seguimientodocumentos:iniciar_sesion' %}">Iniciar Sesión</a>
-                    </li>
+                        <!-- Opciones para usuarios no autenticados -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'seguimientodocumentos:iniciar_sesion' %}">Iniciar Sesión</a>
+                        </li>
+                    
                     <li class="nav-item">
                     <a class="nav-link" href="{% url 'biblioteca:contacto' %}">Contacto</a>
                     </li>
@@ -185,11 +186,11 @@
 
     <!-- Sección para Mostrar Mensajes -->
     {% if messages %}
-    <div class="container mt-3">
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    </div>
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
     {% endif %}
 
     <!-- Bloque de Contenido Principal -->
