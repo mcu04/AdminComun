@@ -1,12 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block extra_css %}
-        <!-- CSS adicional para este informe (si es necesario) -->
-        <link rel="stylesheet" href="{% static 'css/mantenimiento_informe.css' %}">
-        {% endblock %}
 
 {% block content %}
+
 <div class="container mt-4">
     <h1 class="mb-4">Informe de Mantenciones Preventivas</h1>
 
@@ -44,6 +41,7 @@
             <tr>
                 <th>Instalación</th>
                 <th>Fecha Programada</th>
+                <th>Descripcion</th>
                 <th>Fecha Realizada</th>
                 <th>Observaciones</th>
             </tr>
@@ -53,6 +51,7 @@
             <tr>
                 <td>{{ item.instalacion }}</td>
                 <td>{{ item.fecha_programada|date:"d/m/Y" }}</td>
+                <td>{{ item.descripcion }}</td>
                 <td>
                     {% if item.fecha_realizada %}
                     {{ item.fecha_realizada|date:"d/m/Y" }}
@@ -68,59 +67,107 @@
 </div>
 {% endblock %}
 
-{% block extra_js %}
-    <!-- Cargar las extensiones de DataTables para exportación -->
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+{% block extra_css %}
+<style>
+    .dt-buttons .btn-success {
+        background-color: #198754 !important;
+        border-color: #198754 !important;
+        color: #fff !important;
+    }
 
-    <script>
-        $(document).ready(function () {
-            // Inicializa DataTables con opciones de exportación y configuración básica
-            var dt = $('#informeTable').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    {
-                    extend: 'excelHtml5',
-                    text: '<i class="fa-solid fa-file-excel"></i> Excel',
-                    className: 'btn btn-success'  // Verde
-                    },
-                    {
-                    extend: 'pdfHtml5',
-                    text: '<i class="fa-solid fa-file-pdf"></i> PDF',
-                    className: 'btn btn-danger'   // Rojo
-                    },
-                    {
-                    extend: 'print',
-                    text: '<i class="fa-solid fa-print"></i> Imprimir',
-                    className: 'btn btn-secondary' // Gris o plateado
-                    }
-                ],
-                responsive: true,
-                pageLength: 10,
-                paging: true,
-                ordering: true,
-                info: true,
-                language: {
-                    url: "{% static 'js/datatables_spanish.json' %}"
-                },
-                drawCallback: function(settings) {
-                    var info = this.api().page.info();
-                    console.log("Tabla redibujada. Página actual:", info.page + 1, "de", info.pages);
-                }
-            });
-            console.log("DataTable Informe inicializado:", dt);
-        });
-    </script>
+    .dt-buttons .btn-success:hover,
+    .dt-buttons .btn-success:focus,
+    .dt-buttons .btn-success:active {
+        background-color: #157347 !important;
+        border-color: #146c43 !important;
+        color: #fff !important;
+    }
+
+    .dt-buttons .btn-danger {
+        background-color: #dc3545 !important;
+        border-color: #dc3545 !important;
+        color: #fff !important;
+    }
+
+    .dt-buttons .btn-danger:hover,
+    .dt-buttons .btn-danger:focus,
+    .dt-buttons .btn-danger:active {
+        background-color: #bb2d3b !important;
+        border-color: #b02a37 !important;
+        color: #fff !important;
+    }
+
+    .dt-buttons .btn-secondary {
+        background-color: #6c757d !important;
+        border-color: #6c757d !important;
+        color: #fff !important;
+    }
+
+    .dt-buttons .btn-secondary:hover,
+    .dt-buttons .btn-secondary:focus,
+    .dt-buttons .btn-secondary:active {
+        background-color: #5c636a !important;
+        border-color: #565e64 !important;
+        color: #fff !important;
+    }
+
+    .dt-buttons button.btn {
+        padding: 6px 12px;
+        font-size: 15px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .dt-buttons button.btn i {
+        font-size: 1.2rem;
+    }
+
+</style>
 {% endblock %}
 
+{% block extra_js %} 
+<script>
+    $(document).ready(function () {
+        var dt = $('#informeTable').DataTable({
+            dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 text-end'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa-solid fa-file-excel fa-lg"></i> Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i class="fa-solid fa-file-pdf fa-lg"></i> PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa-solid fa-print fa-lg"></i> Imprimir',
+                    className: 'btn btn-secondary'
+                }
+            ],
+            responsive: true,
+            pageLength: 10,
+            paging: true,
+            ordering: true,
+            info: true,
+            language: {
+                url: "{% static 'js/datatables_spanish.json' %}"
+            },
+            drawCallback: function(settings) {
+                var info = this.api().page.info();
+                console.log("Tabla redibujada. Página actual:", info.page + 1, "de", info.pages);
+            }
+        });
 
-
-
+        console.log("DataTable Informe inicializado:", dt);
+    });
+</script>
+{% endblock %}
 
 
 

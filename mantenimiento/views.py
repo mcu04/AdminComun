@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, CreateView, TemplateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import (MantencionPreventiva)
 from .forms import (MantencionPreventivaForm)
 from .filters import MantencionPreventivaFilter
 from django.views.generic import ListView
@@ -27,7 +26,18 @@ from datetime import datetime
 from .models import MantencionPreventiva
 from django.http import Http404
 from django.views.generic import ListView
+from django.db.models import OuterRef, Subquery
+from django.core.paginator import Paginator
 
+
+# Define el FilterSet para el modelo de mantenciones
+class MantencionPreventivaFilter(django_filters.FilterSet):
+    # Ejemplo: filtrar por fecha (a partir de una fecha)
+    fecha_desde = django_filters.DateFilter(field_name='fecha_programada', lookup_expr='gte', label='Fecha desde')
+
+    class Meta:
+        model = MantencionPreventiva
+        fields = ['instalacion', 'fecha_desde']
 
 
 # Mantención Preventiva
@@ -35,48 +45,93 @@ class MantencionPreventivaListView(ListView):
     model = MantencionPreventiva
     template_name = "mantenimiento/mantencion_list.html"
     context_object_name = "mantenciones"
+    paginate_by = 10  # Activa paginación integrada
     
     def get_queryset(self):
-
         # Obtiene la comunidad a partir del parámetro en la URL
         comunidad_id = self.kwargs.get('comunidad_id')
-        comunidad = get_object_or_404(Comunidad, id=comunidad_id)
-        qs = super().get_queryset().filter(comunidad=comunidad)
+        self.comunidad = get_object_or_404(Comunidad, id=comunidad_id)
+        
+        # Base queryset filtrado por comunidad
+        qs = MantencionPreventiva.objects.filter(comunidad=self.comunidad)
         
         # Obtén el filtro enviado como query parameter
-        filtro = self.request.GET.get('filtro')
+        filtro = self.request.GET.get('filtro', 'todas')
+        
         if filtro == 'realizadas':
             qs = qs.filter(fecha_realizada__isnull=False)
         elif filtro == 'pendientes':
             qs = qs.filter(fecha_realizada__isnull=True)
         elif filtro == 'instalaciones_pendientes':
-            # Para instalaciones pendientes, se agrupan (distinct) por el campo 'instalacion'
-            qs = qs.filter(fecha_realizada__isnull=True).distinct('instalacion')
-        
-        # Ordena por fecha_programada (ascendente) y, en caso de igualdad, por instalacion (A-Z)
+            # Obtener solo una mantención pendiente por cada instalación (solo para bases compatibles)
+            subquery = MantencionPreventiva.objects.filter(
+                instalacion=OuterRef('instalacion'),
+                comunidad=self.comunidad,
+                fecha_realizada__isnull=True
+            ).order_by('fecha_programada')  # el más próximo
+
+            qs = qs.filter(
+                fecha_realizada__isnull=True,
+                id__in=Subquery(subquery.values('id')[:1])
+            )
+
+        # Ordena por fecha_programada (ascendente) y por instalación (alfabético)
         qs = qs.order_by('fecha_programada', 'instalacion')
-        return qs
+        
+        # Aplica filtros adicionales usando django-filters
+        self.filterset = MantencionPreventivaFilter(self.request.GET, queryset=qs)
+        return self.filterset.qs
     
     def get_context_data(self, **kwargs):
-        
-        """Agrega al contexto la instancia de la comunidad para usarla en la plantilla."""
-        
         context = super().get_context_data(**kwargs)
-        comunidad_id = self.kwargs.get('comunidad_id')
-        comunidad = get_object_or_404(Comunidad, id=comunidad_id)
-        context['comunidad'] = comunidad
-        # Pasa el filtro actual para usarlo en la plantilla si lo necesitas
-        context['filtro'] = self.request.GET.get('filtro', 'todas')
+        context.update({
+            'comunidad': self.comunidad,
+            'filtro': self.request.GET.get('filtro', 'todas'),
+            'filter': self.filterset,
+        })
         return context
 
-# Define el FilterSet para el modelo de mantenciones
-class MantencionPreventivaFilter(django_filters.FilterSet):
-    # Ejemplo: filtrar por fecha (a partir de una fecha)
-    fecha = django_filters.DateFilter(lookup_expr='gte', label="Fecha desde")
+
+        
+"""def mantencion_list(request, comunidad_id):
+    comunidad = get_object_or_404(Comunidad, id=comunidad_id)
+    filtro = request.GET.get('filtro', 'todas')
+
+    mantenciones = MantencionPreventiva.objects.filter(comunidad=comunidad)
+
+    print("Filtro recibido:", filtro)
+    print("Mantenciones totales en comunidad:", MantencionPreventiva.objects.filter(comunidad=comunidad).count())
+
+    if filtro == 'realizadas':
+        mantenciones = mantenciones.filter(status='completado')
+    elif filtro == 'pendientes':
+        mantenciones = mantenciones.filter(status='pendiente')
+    elif filtro == 'instalaciones_pendientes':
+        mantenciones = mantenciones.filter(instalacion__isnull=True)
+
+    print("Cantidad luego del filtro:", mantenciones.count())
+    print("Queryset final:", mantenciones.query)
     
-    class Meta:
-        model = MantencionPreventiva
-        fields = ['instalacion', 'fecha'] 
+    if not mantenciones.exists():
+        print("No hay mantenciones luego del filtro")
+    else:
+        print("Hay mantenciones antes de paginar:", mantenciones.count())
+
+    paginator = Paginator(mantenciones.order_by('-fecha_programada'), 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    print("Mantenciones en page_obj:", list(page_obj.object_list))
+
+
+    return render(request, 'mantenimiento/mantencion_list.html', {
+        'comunidad': comunidad,
+        'filtro': filtro,
+        'page_obj': page_obj,
+        'mantenciones': page_obj,
+    })  """
+
+    
         
 class MantencionPreventivaCreateView(CreateView):
     model = MantencionPreventiva
@@ -191,6 +246,9 @@ class MantencionPreventivaUpdateView(UpdateView):
     model = MantencionPreventiva
     form_class = MantencionPreventivaForm
     template_name = "mantenimiento/mantencion_form.html"
+    
+    def get_queryset(self):
+        return MantencionPreventiva.objects.filter(comunidad_id=self.kwargs['comunidad_id'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -207,6 +265,9 @@ class MantencionPreventivaUpdateView(UpdateView):
 class MantencionPreventivaDeleteView(DeleteView):
     model = MantencionPreventiva
     template_name = "mantenimiento/mantencion_confirm_delete.html"
+    
+    def get_queryset(self):
+        return MantencionPreventiva.objects.filter(comunidad_id=self.kwargs['comunidad_id'])
 
     def get_success_url(self):
         return reverse_lazy('mantenimiento:mantencion_list', kwargs={'comunidad_id': self.kwargs.get('comunidad_id')})
@@ -248,13 +309,14 @@ class MantencionInformeView(TemplateView):
             informe_data.append({
                 'instalacion': m.instalacion,
                 'fecha_programada': m.fecha_programada,
+                'descripcion': m.descripcion or "Sin descripcion",
                 'fecha_realizada': m.fecha_realizada,
                 'observaciones': m.observaciones or "Sin observaciones"
             })
         context['informe_data'] = informe_data
         
         # Puedes pasar también los años y meses para el formulario
-        context['years'] = [2023, 2024, 2025, 2026]  # O genera dinámicamente
+        context['years'] = [2023, 2024, 2025, 2026,2027,2028,2029,2030]  # O genera dinámicamente
         context['months'] = {
             1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril',
             5: 'Mayo', 6: 'Junio', 7: 'Julio', 8: 'Agosto',
@@ -411,6 +473,10 @@ def send_maintenance_notification(descripcion, fecha_inicio, fecha_fin, finaliza
             "message": notification_message,
         }
     )
+
+
+
+
 
 
 

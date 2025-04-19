@@ -1,15 +1,7 @@
-/* Variables para colores y tipografía */
-:root {
-    --primary-color: #0056b3;
-    --secondary-color: #17a2b8;
-    --success-color: #28a745;
-    --warning-color: #ffc107;
-    --danger-color: #dc3545;
-    --light-bg: #f4f4f9;
-    --font-family-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
+/* ========================== */
+/* TABLERO KANBAN */
+/* ========================== */
   
-  /* Estilos para el Tablero Kanban */
   .kanban-column {
     background: #fff;
     border-radius: 4px;
@@ -43,7 +35,9 @@
     transform: scale(1.02);
   }
   
-  /* Calendario FullCalendar */
+  /* ========================== */
+/* CALENDARIO FULLCALENDAR */
+/* ========================== */
   .fc {
     font-family: var(--font-family-base);
     background: #fff;
@@ -52,7 +46,9 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
   
-  /* Notificaciones y Recordatorios (ejemplo simple) */
+  /* ========================== */
+/* NOTIFICACIONES Y RECORDATORIOS */
+/* ========================== */
   .notification {
     position: fixed;
     top: 20px;
@@ -71,9 +67,67 @@
     opacity: 1;
   }
   
-  
-  
-  
+/* ========================== */
+/* ESTILOS ESPECÍFICOS PARA DATATABLES BUTTONS */
+/* ========================== */
+.dt-buttons .btn-success {
+  background-color: var(--success-color) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.dt-buttons .btn-danger {
+  background-color: var(--danger-color) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.dt-buttons .btn-secondary {
+  background-color: #6c757d !important;
+  color: white !important;
+  border: none !important;
+}
+
+/* ========================== */
+/* ESTILOS AVANZADOS ADICIONALES (opcional) */
+/* ========================== */
+
+/* Tarjetas o secciones avanzadas */
+.section-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
+}
+
+/* Estados personalizados */
+.estado-pendiente {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.estado-completado {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+/* Responsive para secciones avanzadas */
+@media (max-width: 768px) {
+  .section-card {
+      padding: 15px;
+  }
+  .action-buttons {
+      flex-direction: column;
+      gap: 10px;
+  }
+}
   
   
     

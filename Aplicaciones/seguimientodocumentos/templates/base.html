@@ -7,40 +7,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Seguimiento de Documentos{% endblock %}</title>
 
-    <!-- 1. jQuery -->
+    <!-- jQuery -->
     <script
         src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
         crossorigin="anonymous"></script>
 
-    <!-- 2. moment.js desde CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
-        integrity="sha512-qTXRIMyZIFb8TuKcC0f5OugZfYg+1W7a+8J2e6p5R5tM1IgJv8Zs++2bxTSTK6Z8Ww+b3e3PCdIWK6IX+Z7+1w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- moment.js desde CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 
-    <!-- 3. datetime-moment.js (plugin de DataTables) -->
-    <script src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/datetime-moment.js"></script>
-
-    <!-- 4. Bootstrap 5 CSS -->
+    <!-- Bootstrap 5 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     
-    <!-- 5. Bootstrap Icons y Font Awesome -->
+    
+    <!-- Bootstrap Icons y Font Awesome -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
             integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
             crossorigin="anonymous" referrerpolicy="no-referrer">
 
-    <!-- 6. DataTables CSS y JS -->
+    <!-- DataTables CSS y JS -->
     <!-- DataTables CSS y JS (versión 1.13.6) -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script> 
     <!-- DataTables Bootstrap 5 CSS y JS (opcional si usas el estilo Bootstrap 5) -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script> 
 
 
-    <!-- 7. Extensiones de DataTables Buttons (versión 2.3.6) -->
+    <!-- Extensiones de DataTables Buttons (versión 2.3.6) -->
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.bootstrap5.min.css">
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
@@ -48,7 +44,15 @@
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
 
-    <!-- 8. Tus archivos CSS propios -->
+    
+    <!-- Cargar las extensiones de DataTables para exportación -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    
+
+
+    <!-- Tus archivos CSS propios -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/mantenimiento_advanced.css' %}">
     <link rel="stylesheet" href="{% static 'css/datatables.min.css' %}">  
@@ -59,7 +63,7 @@
 <body>
     <!-- Menú de Navegación
     <nav class="navbar bg-primary" data-bs-theme="dark"> -->
-    <nav class="navbar navbar-expand-lg bg-primary navbar-dark">  
+        <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
             
         <div class="container-fluid">
             
@@ -77,6 +81,8 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto"> 
+
+                
 
                     {% if user.is_authenticated %}
                     <!-- Menú Seguimiento de documentación -->
@@ -105,24 +111,26 @@
                 <!-- Menú Mantenimiento -->
                 <li class="nav-item dropdown">
                     {% if comunidad %}
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMantenimiento" role="button" 
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Mantenimiento
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMantenimiento">
-                            <li><a class="dropdown-item" href="{% url 'mantenimiento:dashboard' comunidad_id=comunidad.id %}">Dashboard de Mantenimiento</a></li>
-                            <li><a class="dropdown-item" href="{% url 'mantenimiento:mantencion_list' comunidad_id=comunidad.id %}">Mantención Preventiva Instalaciones</a></li>
-                            <li><a class="dropdown-item" href="{% url 'mantenimiento:kanban' comunidad_id=comunidad.id %}">Kanban</a></li>
-                            <li><a class="dropdown-item" href="{% url 'mantenimiento:calendario' comunidad_id=comunidad.id %}">Calendario de Mantenciones</a></li>
-                            <li><a class="dropdown-item" href="{% url 'mantenimiento:mantencion_informe' comunidad_id=comunidad.id %}">Informe de Mantenciones</a></li>
-                        </ul>
+                    <!-- Caso: sí hay comunidad seleccionada -->
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMantenimiento" role="button" 
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Mantenimiento
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMantenimiento">
+                        <li><a class="dropdown-item" href="{% url 'mantenimiento:dashboard' comunidad_id=comunidad.id %}">Dashboard de Mantenimiento</a></li>
+                        <li><a class="dropdown-item" href="{% url 'mantenimiento:mantencion_list' comunidad_id=comunidad.id %}">Mantención Preventiva Instalaciones</a></li>
+                        <li><a class="dropdown-item" href="{% url 'mantenimiento:kanban' comunidad_id=comunidad.id %}">Kanban</a></li>
+                        <li><a class="dropdown-item" href="{% url 'mantenimiento:calendario' comunidad_id=comunidad.id %}">Calendario de Mantenciones</a></li>
+                        <li><a class="dropdown-item" href="{% url 'mantenimiento:mantencion_informe' comunidad_id=comunidad.id %}">Informe de Mantenciones</a></li>
+                    </ul>
                     {% else %}
-                        <a class="nav-link disabled" href="#" title="Seleccione una comunidad">
-                            Mantenimiento
-                        </a>
-                    {% endif %}
-                </li>
-
+                    <!-- Caso: autenticado pero sin comunidad -->
+                    <a class="nav-link disabled" href="#" title="Seleccione una comunidad">
+                    Mantenimiento
+                    </a>
+                {% endif %}
+            </li>
+                    
                     <!-- Menú Comunicación -->
                     <li class="nav-item dropdown">
                         {% if comunidad %}
@@ -176,8 +184,17 @@
                     </li>
                     {% endif %}
 
-                <!-- Botón de Modo Oscuro siempre visible -->
-                <button id="darkModeToggle" class="btn btn-sm btn-outline-light me-2">Modo Oscuro</button>
+                <!-- Dropdown para Modo Claro / Oscuro -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="modoTemaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-circle-half"></i> Tema
+                    </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="modoTemaDropdown">
+                            <li><button class="dropdown-item" id="modo-claro">Modo Claro</button></li>
+                            <li><button class="dropdown-item" id="modo-oscuro">Modo Oscuro</button></li> 
+                            
+                        </ul>
+                </li>
 
                 </ul>
             </div>
@@ -203,46 +220,42 @@
         <p>&copy; 2024 Manon Group SpA. Todos los derechos reservados.</p>
     </footer>
 
-    {% block extra_js %}
+    {% block extra_js %}{% endblock extra_js %}
         <!-- Bootstrap Bundle JS (incluye Popper) -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         
         <!-- SortableJS, WebSocket, etc. si los usas -->
-        <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-        
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script> 
+
         <!-- Tu script de inicialización de DataTables y otros scripts personalizados -->
         <script src="{% static 'js/mantenimiento_advanced.js' %}"></script>  
-
-        <!-- Script para el modo oscuro -->
+        
+        <!-- Script para Modo Oscuro / Claro -->
         <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const toggleButton = document.getElementById("darkModeToggle");
-            const body = document.body;
-
-            // Comprobar la preferencia en localStorage
-            if (localStorage.getItem("darkMode") === "enabled") {
-                body.classList.add("dark-mode");
-                toggleButton.textContent = 'Modo Claro';
-            } else {
-                toggleButton.textContent = 'Modo Oscuro';
+            // Guardar el modo preferido en localStorage
+            function aplicarTema(modo) {
+                if (modo === 'oscuro') {
+                    document.body.classList.add('bg-dark', 'text-white');
+                    document.querySelectorAll('.card').forEach(card => card.classList.add('bg-secondary', 'text-white'));
+                } else {
+                    document.body.classList.remove('bg-dark', 'text-white');
+                    document.querySelectorAll('.card').forEach(card => card.classList.remove('bg-secondary', 'text-white'));
+                }
+                localStorage.setItem('modo-tema', modo);
             }
 
-            // Evento de clic para alternar el modo
-            toggleButton.addEventListener("click", function () {
-                body.classList.toggle("dark-mode");
-
-                // Actualizar el texto del botón y guardar la preferencia en localStorage
-                if (body.classList.contains("dark-mode")) {
-                    toggleButton.textContent = 'Modo Claro';
-                    localStorage.setItem("darkMode", "enabled");
-                } else {
-                    toggleButton.textContent = 'Modo Oscuro';
-                    localStorage.setItem("darkMode", "disabled");
-                }
+            // Al cargar la página, aplicar tema guardado
+            document.addEventListener('DOMContentLoaded', () => {
+                const temaGuardado = localStorage.getItem('modo-tema') || 'claro';
+                aplicarTema(temaGuardado);
+        
+            document.getElementById('modo-claro').addEventListener('click', () => aplicarTema('claro'));
+            document.getElementById('modo-oscuro').addEventListener('click', () => aplicarTema('oscuro'));
+        
+            
             });
-        });
-        </script>
-    {% endblock %}
+        </script>  
+
 
     <!-- WebSocket o Scripts finales -->
     <script>
@@ -265,6 +278,7 @@
             console.warn("La conexión WebSocket se cerró inesperadamente");
         };
         })();
-    </script>  
+    </script> 
+    
 </body>
 </html>

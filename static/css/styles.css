@@ -1,15 +1,20 @@
-/* Variables para colores y tipografía */
+/* ========================== */
+/* VARIABLES (Colores, Tipografía) */
+/* ========================== */
+
 :root {
     --primary-color: #0056b3;
     --secondary-color: #17a2b8;
     --success-color: #28a745;
     --warning-color: #ffc107;
-    --danger-color: #dc3545;
-    --light-bg: #f4f4f9;
+    --danger-color:  #dc3545;
+    --light-bg:      #f4f4f9;
     --font-family-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* General */
+/* ========================== */
+/* ESTILOS GENERALES */
+/* ========================== */
 body {
     font-family: var(--font-family-base, Arial, sans-serif);
     margin: 0;
@@ -18,17 +23,30 @@ body {
     color: #333;
 }
 
-/* Encabezados y títulos */
+html {
+    overflow-y: scroll; /* Evita saltos por scrollbar */
+}
+
 h1, h2, h3 {
     color: var(--primary-color);
     margin-bottom: 20px;
 }
 
+/* ========================== */
+/* HEADER, NAVBAR Y FOOTER */
+/* ========================== */
 header {
-    background-color: #0056b3;
+    background-color: var(--primary-color);
     color: #fff;
     padding: 10px 0;
     text-align: center;
+}
+
+.navbar {
+    position: relative;
+    z-index: 1100;
+    flex-wrap: wrap !important;
+    overflow: visible !important;
 }
 
 .nav-links {
@@ -43,46 +61,51 @@ header {
     color: #fff;
     text-decoration: none;
     padding: 8px 12px;
-    transition: background-color 0.3s;
     border-radius: 4px;
+    transition: background-color 0.3s;
 }
 
 .nav-links li a:hover {
     background-color: #003f7f;
 }
 
-.navbar {
-    position: relative;
-    z-index: 1100; /* Asegura que esté por encima de otros elementos */
-}
-
 footer {
     text-align: center;
-    background-color: #0056b3;
+    background-color: var(--primary-color);
     color: #fff;
     padding: 10px 0;
-    position: relative;
     width: 100%;
-    z-index: 100; /* Un valor bajo para que no cubra al dropdown */
-    }
+    position: relative;
+    z-index: 100;
+}
 
-/* Biblioteca */
+/* ========================== */
+/* CONTENEDORES GENERALES */
+/* ========================== */
+.container {
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 20px;
+}
+
+/* Biblioteca / Secciones generales */
 .library-container {
     width: 90%;
     max-width: 1200px;
-    margin: 80px auto 60px;  /* Espacio para el footer */
+    margin: 80px auto 60px;
     padding: 20px;
     background: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .library-container h1 {
     text-align: center;
-    margin-bottom: 20px;
 }
 
-/* Tabla */
+/* ========================== */
+/* TABLAS (General y DataTables) */
+/* ========================== */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -95,10 +118,15 @@ footer {
     border: 1px solid #ddd;
     padding: 12px;
     text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
 }
 
-.table-style th {
-    background-color: #0056b3;
+.table-style th,
+.table-custom th {
+    background-color: var(--primary-color);
     color: white;
 }
 
@@ -109,43 +137,34 @@ footer {
     border-bottom: 1px solid #ddd;
 }
 
-.table-custom th {
-    background-color: var(--primary-color);
-    color: #fff;
-}
-
-/* Botones */
+/* ========================== */
+/* BOTONES - ESTILOS GENERALES */
+/* ========================== */
 .btn {
     display: inline-block;
     padding: 8px 16px;
     text-decoration: none;
     border-radius: 4px;
-    transition: background-color 0.3s;
     font-size: 14px;
-}
-.btn-primary {
-    background-color: #28a745;
-    color: white;
-    border: none;
+    transition: background-color 0.3s;
+    cursor: pointer;
 }
 
-.actions .btn-primary {
-    display: inline-block;
-    background-color: #0056b3;
+.btn-primary {
+    background-color: var(--success-color);
     color: #fff;
-    padding: 10px 15px;
-    text-decoration: none;
-    border-radius: 5px;
+    border: none;
 }
 
 .btn-primary:hover {
     background-color: #003f7f;
 }
 
+/* Botones alternos */
 .btn-success {
-    background-color: #17a2b8;
-    color: white;
-    border: none;
+    background-color: var(--secondary-color) !important;
+    color: #fff !important;
+    border: none !important;
 }
 
 .btn-success:hover {
@@ -153,7 +172,7 @@ footer {
 }
 
 .btn-warning {
-    background-color: #ffc107;
+    background-color: var(--warning-color);
     color: #212529;
     border: none;
 }
@@ -164,15 +183,32 @@ footer {
 
 .btn-secondary {
     background-color: #6c757d;
-    color: white;
-    border: none;
+    color: #fff;
     padding: 8px 12px;
     border-radius: 5px;
     text-decoration: none;
+    border: none;
 }
 
 .btn-secondary:hover {
     background-color: #5a6268;
+}
+
+/* Botones para acciones en tablas */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.actions .btn-primary {
+    display: inline-block;
+    background-color: #0056b3;
+    color: #fff;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
 }
 
 .btn-advanced {
@@ -210,7 +246,9 @@ footer {
     background: #bd2130;
 }
 
-/* Formulario */
+/* ========================== */
+/* FORMULARIOS GENERALES */
+/* ========================== */
 .form-container {
     display: flex;
     justify-content: center;
@@ -222,7 +260,7 @@ footer {
     background: #fff;
     padding: 25px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 500px;
     margin: 20px auto;
@@ -236,45 +274,32 @@ footer {
     margin-bottom: 20px;
 }
 
-.form-card label {
-    display: block;
-    margin-bottom: 5px;
+.form-card label,
+.form-card .form-label {
     font-weight: bold;
+    margin-bottom: 5px;
 }
 
-.form-card input[type="date"],
 .form-card input[type="text"],
-.form-card input[type="file"] {
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 100%;
-}
-
+.form-card input[type="date"],
+.form-card input[type="file"],
+.form-card select,
 .form-card textarea {
     padding: 10px;
-    margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
     width: 100%;
-}
-.form-card select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
     margin-bottom: 15px;
 }
 
 .form-card button {
-    width: 100%;
-    background-color: #0056b3;
-    color: white;
+    background-color: var(--primary-color);
+    color: #fff;
     border: none;
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
+    width: 100%;
 }
 
 .form-card button:hover {
@@ -287,26 +312,61 @@ footer {
     margin-top: 10px;
 }
 
-.form-card .form-label {
-    font-weight: bold;
-    margin-bottom: 5px;
+/* ========================== */
+/* DROPDOWN */
+/* ========================== */
+.dropdown-menu {
+    position: absolute; /* Asegura que el menú flote sobre otros elementos */
+    z-index: 1050 !important; /* O incluso un valor mayor, si es necesario */
 }
 
-/* Forzar texto en una línea */
-.table td, .table th {
-    white-space: nowrap; /* Evita que el texto se quiebre */
-    overflow: hidden;    /* Esconde el texto que no cabe */
-    text-overflow: ellipsis; /* Muestra "..." para texto largo */
-    max-width: 200px;    /* Establece un ancho máximo */
+/* ========================== */
+/* MODO OSCURO */
+/* ========================== */
+body.dark-mode {
+    background-color: #121212 !important;
+    color: #ffffff !important;
 }
 
-/* Estilo para el contenedor de botones en las acciones */
-.action-buttons {
-    display: flex;
-    gap: 0.5rem; /* Espaciado entre botones */
-    justify-content: center;
-    align-items: center;
+body.dark-mode .navbar,
+body.dark-mode .dropdown-menu {
+    background-color: #333 !important;
+    color: #fff !important;
+    border-color: #444 !important;
+    width: auto !important;
+    max-width: 300px; /*Un ejemplo */
+    overflow: auto;  /*Por si se llena de items */
 }
+
+body.dark-mode .nav-link,
+body.dark-mode .navbar-brand {
+    color: #fff !important;
+    font-size: 1rem !important;
+    font-weight: normal !important;
+}
+
+body.dark-mode .dropdown-menu .dropdown-item {
+    color: #fff !important;
+}
+
+body.dark-mode .dropdown-menu .dropdown-item:hover {
+    background-color: #444 !important;
+}
+
+body.bg-dark {
+    background-color: #121212 !important;
+}
+
+.navbar.bg-primary {
+    background-color: #0d6efd !important;
+} 
+
+/* Botón de modo oscuro */
+#darkModeToggle {
+    min-width: 100px;
+}
+
+/* ========================== */
 
 /* Botones para Editar y Eliminar */
 .action-buttons .btn-edit {
@@ -331,7 +391,6 @@ footer {
     background-color: #bd2130;
 }
 
-
 /* Ajuste para la tabla */
 table {
     width: 100%;
@@ -344,82 +403,3 @@ th, td {
     vertical-align: middle; /* Asegura el centrado vertical */
 }
 
-.dropdown-menu {
-    position: absolute; /* Asegura que el menú flote sobre otros elementos */
-    z-index: 1050 !important; /* O incluso un valor mayor, si es necesario */
-}
-
-/* Modo Oscuro */
-
-/* Modo oscuro general */
-body.dark-mode {
-    background-color: #121212 !important;
-    color: #ffffff !important;
-}
-
-/* Sobrescribe la navbar entera en modo oscuro */
-body.dark-mode .navbar {
-    background-color: #333 !important;
-    color: #fff !important;
-}
-
-/* Asegura que los enlaces de la navbar sean blancos */
-body.dark-mode .navbar .nav-link,
-body.dark-mode .navbar .navbar-brand {
-    color: #ffffff !important;
-}
-
-/* Dropdown: fondo oscuro para el menú desplegable */
-body.dark-mode .dropdown-menu {
-    background-color: #333 !important;
-    color: #ffffff !important;
-    border-color: #444 !important;
-}
-
-/* Enlaces dentro de dropdown */
-body.dark-mode .dropdown-menu .dropdown-item {
-    color: #ffffff !important;
-}
-
-/* Opcional: cambia el color de hover en los dropdown items */
-body.dark-mode .dropdown-menu .dropdown-item:hover {
-    background-color: #444 !important;
-}
-
-/* Asegura que el botón de modo oscuro mantenga dimensiones fijas */
-#darkModeToggle {
-    min-width: 100px;
-    /* Puedes ajustar el padding y font-size para mantenerlo consistente */
-}
-
-/* Evitar el “scrollbar shift” */
-html {
-    overflow-y: scroll; /* Siempre muestra scroll vertical */
-}
-
-  /* Asegura que la barra no cambie su wrap */
-.navbar {
-    flex-wrap: wrap !important; /* O .navbar-expand-lg segun tu caso */
-    overflow: visible !important; /* Permite que los dropdown no “corten” */
-}
-
-  /* Ajuste en modo oscuro para que no altere tamaño */
-body.dark-mode .navbar,
-body.dark-mode .dropdown-menu {
-    background-color: #333 !important;
-    color: #fff !important;
-}
-
-  /* Asegura que el texto del nav no cambie de tamaño */
-body.dark-mode .nav-link,
-body.dark-mode .navbar-brand {
-    font-size: 1rem !important; /* Mantener el mismo tamaño que modo claro */
-    font-weight: normal !important; /* O el que uses en modo claro */
-}
-
-  /* Manejo de dropdown en modo oscuro */
-body.dark-mode .dropdown-menu {
-    width: auto !important;
-    max-width: 300px; /* Un ejemplo */
-    overflow: auto; /* Por si se llena de items */
-}

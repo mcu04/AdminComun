@@ -1,10 +1,29 @@
 from django.db import models
-from Aplicaciones.seguimientodocumentos.models import Comunidad  # Ajusta la importación según tu estructura
+from Aplicaciones.seguimientodocumentos.models import Comunidad# Ajusta la importación según tu estructura
 from django.contrib.auth import get_user_model
 from datetime import date
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
+
+
+# Modelo principal: Mantención Preventiva
+STATUS_CHOICES = (
+    ('pendiente', 'Pendiente'),
+    ('revision', 'En Revisión'),
+    ('proceso', 'En Proceso'),
+    ('completado', 'Completado'),
+)
+
+# Opciones de periodo/frecuencia para la mantención
+PERIODO_CHOICES = (
+    ('semanal', 'Semanal'),
+    ('quincenal', 'Quincenal'),
+    ('mensual', 'Mensual'),
+    ('trimestral', 'Trimestral'),
+    ('semestral', 'Semestral'),
+    ('anual', 'Anual'),
+)
 
 
 
@@ -26,26 +45,6 @@ class InstallationCategory(models.Model):
         ordering = ['name']
         
 
-    
-# Modelo principal: Mantención Preventiva
-STATUS_CHOICES = (
-    ('pendiente', 'Pendiente'),
-    ('revision', 'En Revisión'),
-    ('proceso', 'En Proceso'),
-    ('completado', 'Completado'),
-)
-
-# Opciones de periodo/frecuencia para la mantención
-PERIODO_CHOICES = (
-    ('semanal', 'Semanal'),
-    ('quincenal', 'Quincenal'),
-    ('mensual', 'Mensual'),
-    ('trimestral', 'Trimestral'),
-    ('semestral', 'Semestral'),
-    ('anual', 'Anual'),
-)
-
-
 class MantencionPreventiva(models.Model):
     """
     Modelo principal para las mantenciones preventivas.
@@ -55,38 +54,27 @@ class MantencionPreventiva(models.Model):
     comunidad = models.ForeignKey('seguimientodocumentos.Comunidad', on_delete=models.CASCADE)
     category = models.ForeignKey(InstallationCategory, on_delete=models.SET_NULL, null=True, blank=True)
     custom_category = models.CharField(max_length=100, blank=True, null=True,
-                                        help_text=_("Usa este campo si no se encuentra la categoría predefinida.")
-    )
+                                        help_text=_("Usa este campo si no se encuentra la categoría predefinida."))
     instalacion = models.CharField(max_length=200)
     fecha_programada = models.DateField()
     fecha_realizada = models.DateField(blank=True, null=True)
     descripcion = models.TextField()
     observaciones = models.TextField(blank=True, null=True)
-    # Campo de estado (Kanban)
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
         default='pendiente',
         help_text=_("Estado de la mantención en el tablero Kanban.")
     )
-    
-    # Campo de periodo/frecuencia
     periodo = models.CharField(
         max_length=20,
         choices=PERIODO_CHOICES,
         default='mensual',
         help_text=_("Frecuencia con la que se repite la mantención.")
     )
-    # Otros campos, por ejemplo, costo, responsable, etc.
-    responsable = models.CharField(
-        max_length=200,
-        blank=True,
-        null=True,
-        help_text=_("Ingrese el nombre del responsable de la mantención.")
-    )
+    responsable = models.CharField(max_length=200, blank=True, null=True)
     costo = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    
-    
+
     def __str__(self):
         return f"Mantención de {self.instalacion} ({self.fecha_programada})"
 
@@ -94,23 +82,20 @@ class MantencionPreventiva(models.Model):
         # Si se ingresa fecha realizada, forzamos el estado a "completado"
         if self.fecha_realizada:
             self.status = 'completado'
-            
+
         is_new = self.pk is None  # Determina si es un registro nuevo
-        
+
         # 1. Guarda la mantención preventiva
         super().save(*args, **kwargs)
-        
+
         # 2. Sincroniza o crea la InstalacionPreventiva relacionada
-        # (Se asume que el modelo InstalacionPreventiva tiene un ForeignKey a MantencionPreventiva
-        #  con related_name="instalacion_preventiva" o similar)
-        from .models import InstalacionPreventiva
-    
+        # Hacer importación local para evitar el import circular
         try:
-            ip = self.instalacion_preventiva  # Se obtiene a través del related_name definido en InstalacionPreventiva
+            from .models import InstalacionPreventiva  # Importación dentro del método
+            ip = self.instalacion_preventiva
         except ObjectDoesNotExist:
             ip = InstalacionPreventiva(mantencion=self)
-            
-        # Actualizamos los campos relevantes del objeto relacionado.
+
         ip.instalacion = self.instalacion
         ip.fecha_instalacion = self.fecha_programada
         ip.descripcion = self.descripcion
@@ -118,9 +103,9 @@ class MantencionPreventiva(models.Model):
         ip.responsable = self.responsable
         ip.costo = self.costo
         ip.save()
-        
+
         # 3. Crear o actualizar la tarea en el tablero Kanban (MaintenanceTask)
-        from .models import MaintenanceTask
+        from .models import MaintenanceTask  # Importación local para evitar el import circular
         task_qs = MaintenanceTask.objects.filter(mantencion=self)
         if is_new and not task_qs.exists():
             MaintenanceTask.objects.create(
@@ -132,7 +117,6 @@ class MantencionPreventiva(models.Model):
                 status=self.status,
                 responsable=self.responsable,
             )
-            
         elif task_qs.exists():
             task = task_qs.first()
             task.titulo = self.instalacion
@@ -147,8 +131,7 @@ class MantencionPreventiva(models.Model):
         verbose_name = _("Mantención Preventiva")
         verbose_name_plural = _("Mantenciones Preventivas")
         ordering = ['instalacion', 'fecha_programada']
-            
-        
+
     
 # Modelo relacionado: Instalación Preventiva
 class InstalacionPreventiva(models.Model):
@@ -238,49 +221,46 @@ class MaintenanceTask(models.Model):
         ordering = ['fecha_programada']
     
 class Mantenimiento(models.Model):
+    mantencion = models.OneToOneField(
+        MantencionPreventiva,
+        on_delete=models.CASCADE,
+        related_name='mantenimiento_extendido',
+        help_text=_("Relación con la mantención preventiva.")
+    )
     fecha_inicio = models.DateTimeField()
     fecha_fin = models.DateTimeField()
     descripcion = models.TextField()
-    STATUS_CHOICES = (
-    ('pendiente', 'Pendiente'),
-    ('revision', 'En Revisión'),
-    ('proceso', 'En Proceso'),
-    ('completado', 'Completado'),
-)
 
     estado = models.CharField(
-    max_length=20,
-    choices=STATUS_CHOICES,
-    default='pendiente',
-    help_text=_("Estado del mantenimiento.")
-)
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pendiente',
+        help_text=_("Estado del mantenimiento.")
+    )
 
     def __str__(self):
         return f"Mantenimiento {self.descripcion} desde {self.fecha_inicio} hasta {self.fecha_fin}"
 
     def iniciar_mantenimiento(self):
-        """Inicia el mantenimiento y notifica a los usuarios."""
-        self.estado = 'en_curso'
+        self.estado = 'proceso'
         self.save()
-
-        # Llamar a la función de notificación para informar a los usuarios
-        from .views import send_maintenance_notification
-        send_maintenance_notification(self.descripcion, self.fecha_inicio, self.fecha_fin)
+        self.notificar_mantenimiento()
 
     def finalizar_mantenimiento(self):
-        """Finaliza el mantenimiento y notifica a los usuarios."""
-        self.estado = 'finalizado'
+        self.estado = 'completado'
         self.save()
+        self.notificar_mantenimiento(finalizado=True)
 
-        # Llamar a la función de notificación para informar a los usuarios
-        from .views import send_maintenance_notification
-        send_maintenance_notification(self.descripcion, self.fecha_inicio, self.fecha_fin, finalizado=True)
-    
-        
- 
+    def notificar_mantenimiento(self, finalizado=False):
+        # Centraliza la lógica de notificación aquí
+        from .views import send_maintenance_notification  # Importación local para evitar el import circular
+        send_maintenance_notification(
+            self.descripcion,
+            self.fecha_inicio,
+            self.fecha_fin,
+            finalizado=finalizado
+        )
 
-    
-    
 
 
 
