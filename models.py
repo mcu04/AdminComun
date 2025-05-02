@@ -153,15 +153,6 @@ class DjangoSession(models.Model):
         managed = False
         db_table = 'django_session'
 
-
-class Prueba(models.Model):
-    nombre = models.CharField(max_length=50, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'prueba'
-
-
 class SeguimientodocumentosDocumentacion(models.Model):
     id = models.BigAutoField(primary_key=True)
     tipo = models.CharField(max_length=100)

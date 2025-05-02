@@ -11,7 +11,7 @@ RUN apk add --no-cache \
     zlib-dev \
     gfortran \
     lapack-dev \
-    musl-dev
+    musl-dev 
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt

@@ -116,14 +116,15 @@ CHANNEL_LAYERS = {
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'Documentacion',
-        'USER': 'postgres',
-        'PASSWORD': 'mario04',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
+    'default': 
+        {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.getenv('DATABASE_NAME', 'Documentacion'),
+            'USER': os.getenv('DATABASE_USER', 'postgres'),
+            'PASSWORD': os.getenv('DATABASE_PASSWORD', 'mario04'),
+            'HOST': os.getenv('DATABASE_HOST', 'localhost'),
+            'PORT': os.getenv('DATABASE_PORT', '5432'),
+        }
     }
 
 #Esta cadena de conexión asume que tiene PostgreSQL ejecutándose en localhost, en el puerto 5432, con una base de datos llamada mysite y un usuario llamado postgres con la contraseña postgres.
