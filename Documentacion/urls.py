@@ -21,7 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from Aplicaciones.seguimientodocumentos.views import listar_comunidades
 from Aplicaciones.seguimientodocumentos import views as seguimiento_views
-
+from mantenimiento import views as mantenimiento_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -34,8 +34,10 @@ urlpatterns = [
     path('comunicacion/', include('comunicacion.urls')),
     
     path('seguimiento/comunidades/', listar_comunidades, name='comunidades'),
+    
+    
     path('mantenimiento/', include('mantenimiento.urls', namespace='mantenimiento')),
-    path("autenticacion/", include("Aplicaciones.seguimientodocumentos.autenticacion.urls", namespace="autenticacion")),
+    
 ]
 
 if settings.DEBUG:

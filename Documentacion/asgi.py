@@ -8,26 +8,18 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/asgi/
 """
 
 import os
-
-from django.core.asgi import get_asgi_application
+import django
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
-from comunicacion_real.routing import websocket_urlpatterns
+from django.core.asgi import get_asgi_application
+from mantenimiento.routing import websocket_urlpatterns  # Importa desde tu app
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Documentacion.settings')
-
-application = get_asgi_application()
-
-
-
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'comunicacion_condominio.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Documentacion.settings")
+django.setup()
 
 application = ProtocolTypeRouter({
-    "http": get_asgi_application(),  # Maneja solicitudes HTTP normales
+    "http": get_asgi_application(),
     "websocket": AuthMiddlewareStack(
-        URLRouter(
-            websocket_urlpatterns  # Importa las rutas de WebSocket de la app "comunicacion"
-        )
+        URLRouter(websocket_urlpatterns)
     ),
 })

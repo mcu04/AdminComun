@@ -3,28 +3,30 @@
 
 {% block content %}
 <main class="container">
-    <h1 class="text-center display-5 py-4">{{ comunidad.nombre }} - Seguimientos Actualizados</h1>
+    <h1 class="text-center display-5 py-5">{{ comunidad.nombre }} - Seguimientos Actualizados</h1>
     
     <!-- Formulario de búsqueda -->
     <form method="GET" action="" class="mb-4 d-flex justify-content-between align-items-center flex-wrap">
         {% csrf_token %}
         <div class="form-group d-flex gap-2  mb-2 ">
-            <input type="text" name="q" class="form-control" placeholder="Buscar por título" value="{{ query }}" />
-            <button type="submit" class="btn btn-primary" title="Buscar">
+            <input type="text" name="q" id="input-buscar-seguimiento" class="form-control" placeholder="Buscar por título" value="{{ query }}" />
+            <button type="submit" id="btn-buscar-seguimiento" class="btn btn-primary" title="Buscar">
                 <i class="fa-solid fa-magnifying-glass"></i> </button>
-            <a href="?" class="btn btn-secondary" title="Restablecer">
+            <a href="?" id="btn-reset-seguimiento" class="btn btn-secondary" title="Restablecer">
                 <i class="fa-solid fa-rotate-left"></i> </a>
         </div>
         <div class="d-flex justify-content-end gap-2 mb-3">
             <!-- Botón Exportar a Excel -->
+            <a id="btn-export-seguimiento-excel"
             <a href="{% url 'seguimientodocumentos:exportar_excel' tipo_seguimiento='actualizado' comunidad_id=comunidad.id %}" 
             class="btn btn-success" 
             title="Exportar a Excel">
             <i class="fa-solid fa-file-excel"></i></a>
             
         
-                        <!-- Botón Exportar a PDF -->
-            <a href="{% url 'seguimientodocumentos:exportar_pdf' tipo_seguimiento='actualizado' comunidad_id=comunidad.id %}"
+            <!-- Botón Exportar a PDF -->
+            <a id="btn-export-seguimiento-pdf"
+            href="{% url 'seguimientodocumentos:exportar_pdf' tipo_seguimiento='actualizado' comunidad_id=comunidad.id %}"
             class="btn btn-danger"
             title="Exportar Seguimiento Actualizado a PDF">
             <i class="fa-solid fa-file-pdf"></i></a>
@@ -107,20 +109,7 @@
     </div>
 </main>
 
-<script>
-    $(document).ready(function () {
-        $('#seguimientoTabla').DataTable({
-            language: {
-                url: "{% static 'js/datatables_spanish.json' %}",
-            },
-            responsive: true,
-            pageLength: 10,
-            paging: true,
-            ordering: true,
-            info: true,
-        });
-    });
-</script>
+
 {% endblock %}
 
 
@@ -163,4 +152,19 @@
                 </li>
                 {% endif %}
             </ul>
+
+    <script>
+    $(document).ready(function () {
+        $('#seguimientoTabla').DataTable({
+            language: {
+                url: "{% static 'js/datatables_spanish.json' %}",
+            },
+            responsive: true,
+            pageLength: 10,
+            paging: true,
+            ordering: true,
+            info: true,
+        });
+    });
+</script>
 -->

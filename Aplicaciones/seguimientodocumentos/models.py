@@ -95,15 +95,24 @@ class Seguimiento(models.Model):
         ordering = ['-fecha_actualizado']
         
 class Comunidad(models.Model):
-        nombre = models.CharField(max_length=100, verbose_name="Nombre de la Comunidad")
+        nombre = models.CharField(max_length=100, verbose_name="Nombre de la Comunidad", unique=True)
         direccion = models.CharField(max_length=200, verbose_name="Dirección")
         descripcion = models.TextField(blank=True, null=True,verbose_name="Descripción")
-        usuarios = models.ManyToManyField(User, related_name='comunidade_seguimiento')
+        usuarios = models.ManyToManyField(User, related_name='comunidades_seguimiento')
         administrador = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='comunidades_administradas',
-        verbose_name="comunidades")
+        verbose_name="Administrador"
+        )
+        
+class Meta:
+        verbose_name = 'Comunidad'
+        verbose_name_plural = 'Comunidades'
+        ordering = ['nombre']  # Ordena por nombre alfabéticamente
+        constraints = [
+            models.UniqueConstraint(fields=['nombre', 'direccion'], name='unique_comunidad_direccion')
+        ]  # Restricción única en lugar de unique_together
 
 def __str__(self):
     return self.nombre
@@ -114,11 +123,7 @@ def get_documentos(self):
     Documentacion = apps.get_model('seguimientodocumentos', 'Documentacion') 
     return Documentacion.objects.filter(comunidad=self)
 
-class Meta:
-    verbose_name = 'Comunidad'
-    verbose_name_plural = 'Comunidades'
-    ordering = ['nombre']   # Ordenar las comunidades alfabéticamente por nombre.
-    unique_together = ['nombre', 'direccion']   # Garantizar que no existan duplicados.
+
 
 
 class BibliotecaArchivo(models.Model):

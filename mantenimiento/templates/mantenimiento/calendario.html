@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <!-- FullCalendar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/main.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>Calendario de Mantenciones</h1>
+  <div id="calendar"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <!-- FullCalendar JS -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/main.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,listWeek'
+        },
+        // Aquí apuntas a la vista "eventos_mantenciones"
+        events: "{% url 'mantenimiento:eventos_mantenciones' comunidad.id %}",
+        eventClick: function(info) {
+          alert(info.event.title + "\n" + (info.event.extendedProps.description || 'Sin descripción'));
+        }
+      });
+      calendar.render();
+    });
+  </script>
+{% endblock %}

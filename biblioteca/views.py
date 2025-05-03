@@ -110,36 +110,31 @@ def descargar_archivo_externo(request, url):
         return HttpResponse("Error al descargar el archivo", status=404)
 
 
-@login_required    
-def subir_archivo(request):
-    comunidad_id = request.session.get('comunidad_id')
-    
-    if not comunidad_id: # Manejar el caso donde comunidad_id no está en la sesión 
-        return HttpResponse("Comunidad ID no está presente en la sesión.", status=400)
-    
-    
-        # Obtener la comunidad y verificar que el usuario pertenece a ella
+@login_required
+def subir_archivo(request, comunidad_id):
+    # 1) Recupera la comunidad o devuelve 404
     comunidad = get_object_or_404(Comunidad, pk=comunidad_id)
-    #if comunidad not in request.user.comunidades.all():
-        #return HttpResponseForbidden("No tienes una comunidad asociada.")
-    
-    # Manejar el formulario de subida de archivo
+
+    # 2) (Opcional) Verifica que el usuario tenga acceso a esta comunidad
+    # if not request.user.comunidades.filter(pk=comunidad_id).exists():
+    #     return HttpResponseForbidden("No tienes permiso sobre esta comunidad.")
+
+    # 3) Procesa el formulario de subida de archivo
     if request.method == 'POST':
         form = ArchivoForm(request.POST, request.FILES)
         if form.is_valid():
-            obj = form.save(commit=False)
-            obj.comunidad = comunidad
-            obj.save()
-            
-            # Usar namespace para redirigir
-            return redirect('biblioteca:biblioteca_archivos', comunidad_id)  
+            archivo = form.save(commit=False)
+            archivo.comunidad = comunidad
+            archivo.save()
+            # 4) Redirige de vuelta al listado de archivos de esta comunidad
+            return redirect('biblioteca:biblioteca_archivos', comunidad_id=comunidad.id)
     else:
         form = ArchivoForm()
 
-    # Renderizar la plantilla con el formulario
+    # 5) Renderiza la plantilla pasando el form y la comunidad
     return render(request, 'biblioteca/subir_archivo.html', {
         'form': form,
-        'comunidad_id': comunidad_id,
+        'comunidad': comunidad,
     })
     
     # Vista para descargar un archivo

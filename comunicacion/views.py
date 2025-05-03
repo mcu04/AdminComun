@@ -8,7 +8,7 @@ from Aplicaciones.seguimientodocumentos.models import Comunidad
 from .forms import EnviarCorreoIndividualForm, EnviarCorreoMasivoForm, CorreoAdjuntoForm, ArchivoForm, DestinatarioForm
 from .models import Archivo, Destinatario, CorreoAdjunto
 from django.http import HttpResponse
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.http import JsonResponse
@@ -138,44 +138,42 @@ def enviar_correo_masivo(request, comunidad_id):
         form = EnviarCorreoMasivoForm(request=request)
     return render(request, "comunicacion/enviar_correo_masivo.html", {"form": form, "comunidad": comunidad, "comunidad_id": comunidad.id})
 
-def gestionar_destinatarios(request):
+def gestionar_destinatarios(request, comunidad_id):
     """
-    Vista para agregar y listar destinatarios, filtrando solo los que pertenecen a la comunidad actual
-    (almacenada en la sesión).
+    Añade y lista destinatarios para la comunidad indicada.
     """
-    # Obtener la comunidad actual desde la sesión
-    comunidad_id = request.session.get('comunidad_id')
-    
-    if not comunidad_id:
-        messages.error(request, "No tienes una comunidad asignada. Por favor selecciona una comunidad.")
-        return redirect("seguimientodocumentos:comunidades")  # Ajusta la URL según tu configuración
+    # 1) Recuperar la comunidad o lanzar 404
+    comunidad = get_object_or_404(Comunidad, pk=comunidad_id)
 
-    # Recuperar la comunidad para asignarla en el formulario
-    comunidad = get_object_or_404(Comunidad, id=comunidad_id)
-    
-    if request.method == "POST":
+    # 2) Procesar formulario
+    if request.method == 'POST':
         form = DestinatarioForm(request.POST)
         if form.is_valid():
-            # Crear el objeto sin guardarlo aún
             destinatario = form.save(commit=False)
-            destinatario.user = request.user
-            destinatario.comunidad = comunidad  # Asigna la comunidad actual
+            destinatario.comunidad = comunidad
+            destinatario.user = request.user  # opcional, si tu modelo lo requiere
             destinatario.save()
-            messages.success(request, "Destinatario agregado correctamente.")
-            return redirect("comunicacion:gestionar_destinatarios")
+            messages.success(request, "✅ Destinatario agregado correctamente.")
+            # Redirigimos al mismo view, conservando comunidad_id
+            return redirect('comunicacion:gestionar_destinatarios', comunidad_id=comunidad.id)
         else:
-            messages.error(request, "Error al agregar destinatario. Verifica los campos.")
+            messages.error(request, "❌ Error al agregar destinatario. Verifica los campos.")
     else:
         form = DestinatarioForm()
-    
-    # Filtrar la lista de destinatarios según la comunidad actual
-    destinatarios = Destinatario.objects.filter(comunidad=comunidad)
-    context = {
-        "form": form,
-        "destinatarios": destinatarios,
-        "comunidad": comunidad,
-    }
-    return render(request, "comunicacion/gestionar_destinatarios.html", context)
+
+    # 3) Obtener todos los destinatarios de esta comunidad
+    destinatarios = (
+        Destinatario.objects
+        .filter(comunidad=comunidad)
+        .order_by('apellido', 'nombre')
+    )
+
+    # 4) Renderizar plantilla con contexto
+    return render(request, 'comunicacion/gestionar_destinatarios.html', {
+        'comunidad': comunidad,
+        'form': form,
+        'destinatarios': destinatarios,
+    })
 
 @login_required
 def enviar_correo(request):
@@ -281,12 +279,31 @@ class DestinatarioUpdateView(LoginRequiredMixin, UpdateView):
     model = Destinatario
     form_class = DestinatarioForm
     template_name = "comunicacion/destinatario_form.html"
-    success_url = reverse_lazy("comunicacion:gestionar_destinatarios")
+    # Eliminamos success_url estático:
+    # success_url = reverse_lazy("comunicacion:gestionar_destinatarios")
+
+    def get_success_url(self):
+        # self.object es el Destinatario recién guardado
+        comunidad_id = self.object.comunidad.id
+        return reverse("comunicacion:gestionar_destinatarios", 
+                        kwargs={"comunidad_id": comunidad_id})
     
 class DestinatarioDeleteView(LoginRequiredMixin, DeleteView):
     model = Destinatario
     template_name = "comunicacion/destinatario_confirm_delete.html"
-    success_url = reverse_lazy("comunicacion:gestionar_destinatarios")
+    # eliminamos success_url estático
+
+    def get_success_url(self):
+        # tras eliminar, redirigimos al listado de su comunidad
+        comunidad_id = self.object.comunidad.id
+        return reverse("comunicacion:gestionar_destinatarios", 
+                        kwargs={"comunidad_id": comunidad_id})
+
+    def get_context_data(self, **kwargs):
+        # para que en el template tengamos {{ comunidad.id }}
+        ctx = super().get_context_data(**kwargs)
+        ctx["comunidad_id"] = self.object.comunidad.id
+        return ctx
     
 def obtener_destinatarios(request):
     """

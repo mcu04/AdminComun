@@ -3,170 +3,386 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Meta viewport para responsividad en móviles -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seguimiento de Documentos</title>
-    <!--Data Table-->
-    <link
-        href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.min.css"
-        rel="stylesheet"
-    />
-    <link
-        href="https://cdn.datatables.net/buttons/3.2.0/css/buttons.bootstrap5.min.css"
-        rel="stylesheet"
-    />
-    <link rel="stylesheet" href="{% static 'css/datatables.min.css' %}">
+    <title>{% block title %}Seguimiento de Documentos{% endblock %}</title>
+
+    <!-- jQuery -->
+    <script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+
+    <!-- moment.js desde CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    
+    
+    <!-- Bootstrap Icons y Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+            integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <!-- DataTables CSS y JS -->
+    <!-- DataTables CSS y JS (versión 1.13.6) -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script> 
+    <!-- DataTables Bootstrap 5 CSS y JS (opcional si usas el estilo Bootstrap 5) -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script> 
+
+
+    <!-- Extensiones de DataTables Buttons (versión 2.3.6) -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.bootstrap5.min.css">
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+
+    
+    <!-- Cargar las extensiones de DataTables para exportación -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     
 
-    <!--Bootstrap-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'seguimientodocumentos/static/css/styless.css' %}">
+
+    <!-- Tus archivos CSS propios -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mantenimiento_advanced.css' %}">
+    <link rel="stylesheet" href="{% static 'css/datatables.min.css' %}">
     
-    <!--Font-Awesome-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- Intro.js CSS y JS desde CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js/minified/introjs.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/intro.js/minified/intro.min.js"></script>
+
+    {% block extra_css %}{% endblock %}
 
 </head>
 <body>
-
-    <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
-            {% if user.is_authenticated %}
-            <a class="navbar-brand" href="{% url 'seguimientodocumentos:comunidades' %}">Regresar a Comunidades</a>
+    <!-- Menú de Navegación
+    <nav class="navbar bg-primary" data-bs-theme="dark"> -->
+        <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
+            
+        <div class="container-fluid">
+            
+            <!-- Enlace del logo o marca según el estado de autenticación y comunidad -->
+            {% if user.is_authenticated and request.resolver_match.url_name != "iniciar_sesion" and comunidad %}
+                <a class="navbar-brand" href="{% url 'seguimientodocumentos:comunidades' %}">Regresar a Comunidades</a>
             {% else %}
-            <a class="navbar-brand" href="{% url 'iniciar_sesion' %}">Iniciar Sesión</a>
+                <a class="navbar-brand" href="{% url 'seguimientodocumentos:iniciar_sesion' %}">Iniciar Sesion</a>
             {% endif %}
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto" >
+                <ul class="navbar-nav ms-auto"> 
 
                 {% if user.is_authenticated %}
+                    <!-- Menú Seguimiento de documentación -->
+                    <li class="nav-item dropdown" id="nav-modulos">
+                        {% if comunidad %}
+                        <!-- Caso: sí hay comunidad seleccionada -->
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSeguimiento" role="button" 
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Seguimiento de documentación
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownSeguimiento">
+                            <li><a class="dropdown-item" href="{% url 'seguimientodocumentos:listar_seguimiento' comunidad_id=comunidad.id %}">Seguimiento Actualizado</a></li>
+                            <li><a class="dropdown-item" href="{% url 'seguimientodocumentos:seguimiento_pendientes' comunidad_id=comunidad.id %}">Seguimiento Pendiente</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'seguimientodocumentos:crear_seguimiento' comunidad_id=comunidad.id %}">Crear Seguimiento</a></li>
 
-                <!-- Menú Seguimiento de Documentación -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </ul>
+                        {% else %}
+                        <!-- Caso: autenticado pero sin comunidad -->
+                        <a class="nav-link disabled" href="#" title="Seleccione una comunidad">
                         Seguimiento de documentación
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        {% if comunidad %}
-                            <a class="dropdown-item" href="{% url 'seguimientodocumentos:listar_seguimiento' comunidad_id=comunidad.id %}">Seguimiento Actualizado</a>
-                            <a class="dropdown-item" href="{% url 'seguimientodocumentos:seguimiento_pendientes' comunidad_id=comunidad.id %}">Seguimiento Pendiente</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'seguimientodocumentos:crear_seguimiento' comunidad_id=comunidad.id %}">Crear Seguimiento</a>
-                        {% else %}
-                            <a class="dropdown-item disabled" href="#">Seguimiento Actualizado</a>
-                            <a class="dropdown-item disabled" href="#">Seguimiento Pendiente</a>
-                            <a class="dropdown-item disabled" href="#">Crear Seguimiento</a>
-                        {% endif %}
-                    </div>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarComunicacion" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Comunicación
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownComunicacion">
-
-                    {% if comunidad %}
-                        <a class="dropdown-item" href="{% url 'comunicacion:index' %}">Correo Invidual</a>
-                        <a class="dropdown-item" href="{% url 'comunicacion:enviar_correo_individual' comunidad_id=comunidad.id %}">Correo Invidual</a>
-                        <a class="dropdown-item" href="{% url 'comunicacion:enviar_correo_masivo' comunidad_id=comunidad.id  %}">Correo Masivo</a>
-                        <a class="dropdown-item" href="{% url 'comunicacion:gestionar_destinatarios' %}">Gestión de Destinatarios</a>
-
-                        {% else %}
-                        <a class="dropdown-item disabled" href="#">Correo Individual</a>
-                        <a class="dropdown-item disabled" href="#">Correo Masivo</a>
                     {% endif %}
-                    </div>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarMantenimiento" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Mantenimiento
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarMantenimiento">
-                        {% if comunidad %}
-                        <a class="dropdown-item" href="{% url 'mantenimiento:mantencion_list' comunidad_id=comunidad.id %}">Mantención Preventiva Instalaciones</a>
-                        <a class="dropdown-item" href="{% url 'mantenimiento:contrato_list' comunidad_id=comunidad.id %}">Contratos Empresas de Mantenimiento</a>
-                        <a class="dropdown-item" href="{% url 'mantenimiento:reparacion_list' comunidad_id=comunidad.id %}">Reparaciones Generales</a>
-                        <a class="dropdown-item" href="{% url 'mantenimiento:cotizacion_list' comunidad_id=comunidad.id %}">Cotizaciones de Proveedores</a>
-                        <a class="dropdown-item" href="{% url 'mantenimiento:proveedor_list' comunidad_id=comunidad.id %}">Proveedores en el Mercado</a>
-
-                        {% endif %}
-
-                    </div>
                 </li>
                 
-
-                <li class="nav-item">
+                <!-- Menú Mantenimiento -->
+                <li class="nav-item dropdown">
                     {% if comunidad %}
-                    <a href="{% url 'biblioteca:biblioteca_archivos' comunidad_id=comunidad.id %}" class="nav-link">Biblioteca</a>
-                    {% elif comunidad_id %}
-                    <a href="{% url 'biblioteca:biblioteca_archivos' comunidad_id=comunidad_id %}" class="nav-link">Biblioteca</a>
+                    <!-- Caso: sí hay comunidad seleccionada -->
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMantenimiento" role="button" 
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Mantenimiento
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMantenimiento">
+                        <li><a class="dropdown-item" href="{% url 'mantenimiento:dashboard' comunidad_id=comunidad.id %}">Dashboard de Mantenimiento</a></li>
+                        <li><a class="dropdown-item" href="{% url 'mantenimiento:mantencion_list' comunidad_id=comunidad.id %}">Mantención Preventiva Instalaciones</a></li>
+                        <li><a class="dropdown-item" href="{% url 'mantenimiento:kanban' comunidad_id=comunidad.id %}">Kanban</a></li>
+                        <li><a class="dropdown-item" href="{% url 'mantenimiento:calendario' comunidad_id=comunidad.id %}">Calendario de Mantenciones</a></li>
+                        <li><a class="dropdown-item" href="{% url 'mantenimiento:mantencion_informe' comunidad_id=comunidad.id %}">Informe de Mantenciones</a></li>
+                    </ul>
                     {% else %}
-                    <a class="nav-link disabled" href="#" title="No hay comunidad asociada">Biblioteca</a>
+                    <!-- Caso: autenticado pero sin comunidad -->
+                    <a class="nav-link disabled" href="#" title="Seleccione una comunidad">
+                    Mantenimiento
+                    </a>
+                {% endif %}
+            </li>
+                    
+                    <!-- Menú Comunicación -->
+                    <li class="nav-item dropdown">
+                        {% if comunidad %}
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownComunicacion" role="button" 
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Comunicación
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownComunicacion">
+                            <li><a class="dropdown-item" href="{% url 'comunicacion:enviar_correo_individual' comunidad_id=comunidad.id %}">Correo Individual</a></li>
+                            <li><a class="dropdown-item" href="{% url 'comunicacion:enviar_correo_masivo' comunidad_id=comunidad.id %}">Correo Masivo</a></li>
+                            <li><a class="dropdown-item" href="{% url 'comunicacion:gestionar_destinatarios' comunidad.id %}">Gestión de Destinatarios</a></li>
+                        </ul>
+                        {% else %}
+                        <a class="nav-link disabled" href="#" title="Seleccione una comunidad">
+                            Comunicación
+                        </a>
+                        {% endif %}
+                    </li>
+                            
+                    <!-- Menú Biblioteca -->
+                    <li class="nav-item">
+                    {% if comunidad %}
+                    <a class="nav-link" href="{% url 'biblioteca:biblioteca_archivos' comunidad_id=comunidad.id %}">
+                    Biblioteca
+                    </a>
+                    {% else %}
+                    <a class="nav-link disabled" href="#" title="Seleccione una comunidad">
+                        Biblioteca
+                    </a>
                     {% endif %}
                 </li>
 
-                <li class="nav-item">
-                    <a href="{% url 'seguimientodocumentos:cerrar_sesion' %}" class="nav-link">Cerrar Sesión</a></li>
+                    <!-- Enlace Contacto -->
+                    <li class="nav-item"><a class="nav-link" href="{% url 'biblioteca:contacto' %}">Contacto</a></li>
 
-                    {% else %}
-                    <!-- Opciones para usuarios no autenticados, por ejemplo: -->
+                    <!-- Cerrar Sesión -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'seguimientodocumentos:iniciar_sesion' %}">Iniciar Sesión</a>
-                    </li>   
-            
-                {% endif %}
-            </ul>
-            </div>
-        </nav>
-        {% if messages %}
-        <div>
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-        <div class="container mt-3">
-        {% block content %}
+                        <a id="nav-logout-btn" class="nav-link" href="{% url 'seguimientodocumentos:cerrar_sesion' %}">Cerrar Sesión</a>
+                    </li>
 
-        {% endblock %}
+                    <!-- Si el usuario NO está autenticado -->
+            
+                    {% else %}
+                        <!-- Opciones para usuarios no autenticados -->
+                        <li class="nav-item">
+                            <a id="nav-login" class="nav-link" href="{% url 'seguimientodocumentos:iniciar_sesion' %}">Iniciar Sesión</a>
+                        </li>
+                    
+                    <li class="nav-item">
+                    <a id="nav-contacto" class="nav-link" href="{% url 'biblioteca:contacto' %}">Contacto</a>
+                    </li>
+                    {% endif %}
+
+                    <li class="nav-item dropdown">
+                        <!-- El botón que muestra el icono y despliega el menú -->
+                        <button
+                            class="btn btn-outline-light nav-link dropdown-toggle d-flex align-items-center"
+                            id="boton-modo"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                            style="gap: .5rem;" >
+                            <i class="bi bi-circle-half fs-5"></i>
+                            <span>Tema</span>
+                            </button>
+            
+                        <!-- Menú desplegable con las dos opciones -->
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="boton-modo">
+                            <li>
+                            <button class="dropdown-item d-flex align-items-center" id="modo-claro" type="button">
+                                <i class="bi bi-sun me-2"></i>
+                                Modo Claro
+                            </button>
+                        </li>
+                        <li>
+                            <button class="dropdown-item d-flex align-items-center" id="modo-oscuro" type="button">
+                            <i class="bi bi-moon me-2"></i>
+                            Modo Oscuro
+                            </button>
+                        </li>
+                        </ul>
+                    </li>
+
+                <!-- … Tour justo después de tu dropdown de Tema … -->
+        <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="tutorialesDropdown" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                Tutoriales
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end tutorial-dropdown-menu"
+                aria-labelledby="tutorialesDropdown">
+
+            <li><a id="tour-general-btn"                   class="dropdown-item" href="#">🔰 Tour General</a></li>
+            <li><a id="tour-login-btn"                     class="dropdown-item" href="#">🔐 Tour Iniciar Sesión</a></li>
+            <li><a id="tour-recuperar-contrasena-btn"      class="dropdown-item" href="#">🔑 Tour Recuperar Contraseña</a></li>
+            <li><a id="tour-comunidades-lista-btn"         class="dropdown-item" href="#">🏘️ Tour Comunidades</a></li>
+            <li><a id="tour-comunidades-registrar-btn"     class="dropdown-item" href="#">📋 Tour Registrar Comunidad</a></li>
+            <li><a id="tour-ver-seguimiento-btn"           class="dropdown-item" href="#">📋 Tour Ver Seguimiento Actualizado</a></li>
+            <li><a id="tour-ver-seguimiento-pendiente-btn" class="dropdown-item" href="#">📋 Tour Ver Seguimiento Pendiente</a></li>
+            <li><a id="tour-crear-seguimiento-btn"         class="dropdown-item" href="#">➕ Tour Crear Seguimiento</a></li>
+            <li><a id="tour-exportar-pdf-btn"              class="dropdown-item" href="#">📄 Tour Exportar PDF</a></li>
+            <li><a id="tour-dashboard-mantenimiento-btn"   class="dropdown-item" href="#">🗓️ Tour Dashboard Mantenimiento</a></li>
+            <li><a id="tour-mantencion-preventiva-btn"     class="dropdown-item" href="#">⚙️ Tour Mantención Preventiva Instalaciones</a></li>
+            <li><a id="tour-kanban-btn"                    class="dropdown-item" href="#">📊 Tour Kanban</a></li>
+            <li><a id="tour-calender-btn"                  class="dropdown-item" href="#">🗓️ Tour Calendario Mantenciones</a></li>
+            <li><a id="tour-informe-btn"                   class="dropdown-item" href="#">📝 Tour Informe Mantenciones</a></li>
+            <li><a id="tour-crear-mantencion-btn"          class="dropdown-item" href="#">✍️ Tour Crear Nueva Mantención</a></li>
+            <li><a id="tour-gestionar-destinatarios-btn"   class="dropdown-item" href="#">➕ Tour Gestionar Destinatarios</a></li>
+            <li><a id="tour-correo-individual-btn"         class="dropdown-item" href="#">📧 Tour Correo Individual</a></li>
+            <li><a id="tour-correo-masivo-btn"             class="dropdown-item" href="#">📧 Tour Correo Masivo</a></li>
+            <li><a id="tour-biblioteca-btn"                class="dropdown-item" href="#">📤 Tour Biblioteca</a></li>
+            <li><a id="tour-subir-archivo-btn"             class="dropdown-item" href="#">📤 Tour Subir Archivo</a></li>
+            <li><a id="tour-modulo-contacto-btn"           class="dropdown-item" href="#">✉️ Tour Contacto</a></li>
+            <li><a id="tour-cerrar-sesion-btn"             class="dropdown-item" href="#">🔓 Tour Cerrar Sesión</a></li>
+            <li><a id="tour-modo-oscuro-btn"               class="dropdown-item" href="#">🌙 Tour Modo Oscuro/Claro</a></li>
+            </ul>
+        </li>
+    </ul>
+    </div>
+    </div>
+</nav>
+
+    <!-- Sección para Mostrar Mensajes -->
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
         </div>
-        <footer class="bg-primary text-white text-center py-2 mt-4">
+    {% endif %}
+
+    <!-- Bloque de Contenido Principal -->
+<div class="container mt-3">
+    {% block content %}
+    <!-- Vistas Tour General -->
+    
+    <!-- 🟢 Botón "Crear" -->
+    <button id="btn-crear" class="btn btn-primary mb-3">Crear</button>
+    
+    <!-- 🗂️ Tabla de registros -->
+    <div id="tabla-registros">
+    <!-- Aquí se carga dinámicamente la tabla -->
+    </div>
+    
+    {% endblock %}
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white text-center py-2 mt-4">
         <p>&copy; 2024 Manon Group SpA. Todos los derechos reservados.</p>
     </footer>
+
+    {% block extra_js %}{% endblock extra_js %}
+        <!-- Bootstrap Bundle JS (incluye Popper) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         
+        <!-- SortableJS, WebSocket, etc. si los usas -->
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script> 
+
+        <!-- Tu script de inicialización de DataTables y otros scripts personalizados -->
+        <script src="{% static 'js/mantenimiento_advanced.js' %}"></script> 
+
+        <!--Tutorial-->
+        <script src="{% static 'js/tutorial.js' %}"></script>
+        <script src="{% static 'js/tour_recuperar_contrasena.js' %}"></script>
+        <script src="{% static 'js/tour_seguimiento_actualizado.js' %}"></script>
+        <script src="{% static 'js/tour_seguimiento_pendiente.js' %}"></script>
+        <script src="{% static 'js/tour_dashboard_mantenimiento.js' %}"></script>
+        <script src="{% static 'js/tour_mantencion_preventiva.js' %}"></script>
+        <script src="{% static 'js/tour_kanban.js' %}"></script>
+        <script src="{% static 'js/tour_calender.js' %}"></script>
+        <script src="{% static 'js/tour_informe.js' %}"></script>
+        <script src="{% static 'js/tour_crear_mantencion.js' %}"></script>
+        <script src="{% static 'js/tour_gestionar_destinatarios.js' %}"></script>
+        <script src="{% static 'js/tour_correo_individual.js' %}"></script>
+        <script src="{% static 'js/tour_correo_masivo.js' %}"></script>
+        <script src="{% static 'js/tour_biblioteca.js' %}"></script>
+        <script src="{% static 'js/tour_subir_archivo.js' %}"></script>
+        <script src="{% static 'js/tour_contacto.js' %}"></script>
+        <script src="{% static 'js/tour_cerrar_sesion.js' %}"></script>
+        <script src="{% static 'js/tour_tema.js' %}"></script>
         
-        <!--JQuery-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJ+Y5v+6VXQ+Q7W3u7GFYQ4Gx7q0J/8m2Hc2U=" crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-
-    <!--Script Data Table-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.colVis.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.print.min.js"></script>
-    <script src="{% static 'js/datatables.min.js' %}"></script>
-    <script src="{% static 'js/script.js' %}"></script>
 
 
-    <!--Bootstrap-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="{% static 'js/datatables.min.js' %}"></script>
-    <script src="{% static 'js/datatable-init.js' %}"></script>
-    <script src="./script.js"></script>
+
+        
+        <!-- Script para Modo Oscuro / Claro -->
+        <script>
+            // Guardar el modo preferido en localStorage
+            function aplicarTema(modo) {
+                if (modo === 'oscuro') {
+                    document.body.classList.add('bg-dark', 'text-white');
+                    document.querySelectorAll('.card').forEach(card => card.classList.add('bg-secondary', 'text-white'));
+                } else {
+                    document.body.classList.remove('bg-dark', 'text-white');
+                    document.querySelectorAll('.card').forEach(card => card.classList.remove('bg-secondary', 'text-white'));
+                }
+                localStorage.setItem('modo-tema', modo);
+            }
+
+            // Al cargar la página, aplicar tema guardado
+            document.addEventListener('DOMContentLoaded', () => {
+                const temaGuardado = localStorage.getItem('modo-tema') || 'claro';
+                aplicarTema(temaGuardado);
+        
+            document.getElementById('modo-claro').addEventListener('click', () => aplicarTema('claro'));
+            document.getElementById('modo-oscuro').addEventListener('click', () => aplicarTema('oscuro'));
+        
+            
+            });
+        </script>  
+
+
+    <!-- WebSocket o Scripts finales -->
+    <script>
+        (function() {
+        // Configuración del WebSocket (si se utiliza)
+        const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+        const wsUrl = protocol + "://" + window.location.host + "/ws/maintenance/notifications/";
+        const socket = new WebSocket(wsUrl);
+
+        socket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            alert("Notificación: " + data.message);
+        };
+
+        socket.onerror = function(error) {
+            console.error("Error en el WebSocket:", error);
+        };
+
+        socket.onclose = function(e) {
+            console.warn("La conexión WebSocket se cerró inesperadamente");
+        };
+        })();
+    </script> 
+    
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

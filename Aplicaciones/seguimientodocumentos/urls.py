@@ -11,7 +11,7 @@ from .views import (
     DocumentacionListView, documentacion_create, documentacion_edit, documentacion_delete
 )
 
-app_name = "seguimientodocumentos"    # Importante para que los links funcionen
+app_name ="seguimientodocumentos"    # Importante para que los links funcionen
 
 urlpatterns = [
     path('seguimiento/listar/<int:comunidad_id>/', views.listar_seguimiento, name='listar_seguimiento'),    
@@ -28,8 +28,12 @@ urlpatterns = [
     path('seguimiento/exportar/pdf/<str:tipo_seguimiento>/', views.exportar_pdf, name='exportar_pdf'),
     path('exportar/pdf/<str:tipo_seguimiento>/<int:comunidad_id>/', views.exportar_pdf, name='exportar_pdf'),
     path('seguimiento/password_reset/', auth_views.PasswordResetView.as_view(
-        template_name='seguimientodocumentos/password_reset_form.html'
+        template_name='seguimientodocumentos/password_reset_request.html'
     ), name='password_reset'),
+    #path('password_reset/', auth_views.PasswordResetView.as_view(
+        #template_name='seguimientodocumentos/password_reset_request.html'
+    #), name='password_reset_request'
+    #),
     path('seguimiento/password_reset/done/', auth_views.PasswordResetDoneView.as_view(
         template_name='seguimientodocumentos/password_reset_done.html'
     ), name='password_reset_done'),
@@ -53,7 +57,7 @@ urlpatterns = [
     path('comunidades/', views.listar_comunidades, name='comunidades'),
     path('comunidades/actualizar/<int:pk>/', views.actualizar_comunidad, name='actualizar_comunidad'),
     path('comunidades/eliminar/<int:pk>/', views.eliminar_comunidad, name='eliminar_comunidad'),
-
+    path('ayuda/', views.ayuda, name='ayuda'),
 
 ]
 
