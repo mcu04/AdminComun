@@ -4,8 +4,7 @@ from django.views.generic import ListView
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User
-from django.contrib.auth.views import PasswordResetConfirmView
-from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.views import PasswordResetConfirmView, PasswordResetView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth import get_user_model
 from django.contrib.auth import views as auth_views
@@ -222,77 +221,52 @@ def crear_registro(request, modelo_form, template_name, redirect_url):
 
 @login_required
 def crear_seguimiento(request, comunidad_id):
-    # Validar que 'comunidad_id' esté presente
-    if not comunidad_id:
-        logging.error(f"comunidad_id no proporcionado en la URL para el usuario {request.user}")
-        return redirect('error_page')  # Redirigir si no se encuentra 'comunidad_id'
-
-    # Verificar si la comunidad existe
+    # 1️⃣ Obtén la comunidad o 404
     comunidad = get_object_or_404(Comunidad, pk=comunidad_id)
-
-    if request.method == 'GET':
-        form = SeguimientoForm()
-        return render(request, 'crear_seguimiento.html', {'form': form, 'comunidad_id':comunidad_id})
-
-    elif request.method == 'POST':
+    # 2️⃣ Si quieres ver todos los documentos:
+    docs_qs = Documentacion.objects.all()
+    # 3️⃣ Instancia del formulario
+    if request.method == 'POST':
         form = SeguimientoForm(request.POST)
-        
+    else:
+        form = SeguimientoForm()
+    # 4️⃣ Inyecta el queryset en el widget antes de validar/mostrar
+    form.fields['documentacion'].queryset = docs_qs
+    # 5️⃣ Si es POST, procesamos
+    if request.method == 'POST':
         if form.is_valid():
-            # Normalizar el campo 'existe' para asegurar consistencia
-            existe_normalizado = form.cleaned_data['existe'].strip().capitalize()
-            documentacion = form.cleaned_data['documentacion']  # Ajusta según el tipo de relación
-            
-            # Verificar si ya existe un seguimiento duplicado
-            existe_seguimiento = Seguimiento.objects.filter(
-                comunidad=comunidad,
-                documentacion=documentacion,
-                # Agrega más campos aquí si es necesario para determinar duplicados
-            ).exists()
+            # Normalizar existe
+            doc     = form.cleaned_data['documentacion']
+            existe = form.cleaned_data['existe'].strip().capitalize()
 
-            if existe_seguimiento:
-                # Mostrar un mensaje de error si ya existe un seguimiento duplicado
-                messages.error(request, 'Ya existe un seguimiento con los mismos datos. No se puede duplicar.')
-                return render(request, 'crear_seguimiento.html', {
-                    'form': form,
-                    'comunidad_id': comunidad_id
-                })
-            try:
-                # Crear un nuevo seguimiento pero no guardarlo aún
-                nuevo_seguimiento = form.save(commit=False)
-                nuevo_seguimiento.user = request.user  # Asigna el usuario actual
-                nuevo_seguimiento.comunidad = comunidad  # Asocia el seguimiento con la comunidad
-                nuevo_seguimiento.existe = existe_normalizado
-
-                # Establecer fecha_actualizado si el documento existe
-                if nuevo_seguimiento.existe == 'Si':
-                    nuevo_seguimiento.fecha_actualizado = now().date()
-
-                # Guardar el seguimiento
-                nuevo_seguimiento.save()
-
-                # Agregar mensaje de éxito
-                
-                messages.success(request, 'El seguimiento se ha creado exitosamente.')
-                if nuevo_seguimiento.existe == 'Si':
-                    return redirect('seguimientodocumentos:listar_seguimiento', comunidad_id=comunidad_id)
-                else:
-                    return redirect('seguimientodocumentos:seguimiento_pendientes', comunidad_id=comunidad_id)
-                
-            except IntegrityError as e:
-                # Loguear el error en la consola o archivo
-                logging.error(f"Error al guardar el seguimiento: {e}")
-                messages.error(request, 'Ocurrió un error al guardar el seguimiento. Por favor, intenta nuevamente.')
-                return render(request, 'crear_seguimiento.html', {
-                    'form': form,
-                    'comunidad_id': comunidad_id
-                })
+            # Duplicado?
+            if Seguimiento.objects.filter(comunidad=comunidad, documentacion=doc).exists():
+                messages.error(request, "Ya existe un seguimiento para ese documento.")
+            else:
+                try:
+                    nuevo = form.save(commit=False)
+                    nuevo.user = request.user
+                    nuevo.comunidad = comunidad
+                    nuevo.existe     = existe
+                    if existe == 'Si':
+                        nuevo.fecha_actualizado = now().date()
+                    nuevo.save()
+                    messages.success(request, "✅ Seguimiento creado exitosamente.")
+                    # Redirigir según “existe”
+                    if existe == 'Si':
+                        return redirect('seguimientodocumentos:listar_seguimiento', comunidad_id=comunidad_id)
+                    else:
+                        return redirect('seguimientodocumentos:seguimiento_pendientes', comunidad_id=comunidad_id)
+                except IntegrityError:
+                    messages.error(request, "❌ Error al guardar. Vuelve a intentarlo.")
         else:
-            # Si el formulario no es válido, mostrar un mensaje de error
-                messages.error(request, 'Formulario no válido. Por favor, verifica los datos ingresados.')
-                return render(request, 'crear_seguimiento.html', {
-                'form': form,
-                'comunidad_id': comunidad_id
-            })
+            messages.error(request, "❌ Formulario no válido. Revisa los datos.")
+
+    # 6️⃣ Render final
+    return render(request, 'seguimientodocumentos/crear_seguimiento.html', {
+        'form': form,
+        'comunidad_id': comunidad_id,
+    })
 
     
 @login_required
@@ -853,6 +827,7 @@ def seleccionar_comunidad(request, comunidad_id):
     # Redirigir a la página de seguimiento o donde corresponda
     return redirect('ruta_donde_redirigir')  # Modificar con la URL correcta
 
-
+def ayuda(request):
+    return render(request, 'ayuda.html')
 
 

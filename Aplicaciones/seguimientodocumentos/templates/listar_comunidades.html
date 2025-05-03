@@ -1,4 +1,5 @@
 {% extends 'base.html' %} 
+{% load static %}
 
 {% block content %} 
 <div class="container mt-5">
@@ -20,7 +21,8 @@
 {% if comunidades %}
 <!-- Botón para registrar una nueva comunidad -->
 <div class="text-end mt-4" style="padding-bottom:10px">
-  <a 
+
+  <a id="btn-nueva-comunidad"
   href="{% url 'seguimientodocumentos:registrar_comunidad' %}" 
   class="btn btn-success btn-sm"
   title="Registrar una comunidad">
@@ -28,8 +30,7 @@
   </a>
 </div>
 
-
-<table class="table table-bordered table-hover text-center">
+<table id="tabla-comunidades" class="table table-bordered table-hover text-center">
   <thead class="table-light">
     <tr> 
       <th>Nombre</th>
@@ -46,22 +47,32 @@
       <td>{{ comunidad.direccion }}</td>
       <td>{{ comunidad.descripcion }}</td>
       <td>{{ comunidad.administrador }}</td>
-      <td>
-        <div class="d-flex justify-content-center gap-2">
-          <!-- Botón Seleccionar -->
-          <a
-          href="{% url 'seguimientodocumentos:listar_seguimiento' comunidad.id %}"
-          class="btn btn-info btn-sm"
-          title="Seleccionar">
-          <i class="fas fa-eye"></i>
-        </a>
+      <td class="text-center">
+
+            <!-- Botón Ver Seguimiento -->
+            {# Sólo en la primer fila asignamos el id #}
+              {% if forloop.first %}
+                    <a id="btn-tour-ver-seguimiento" 
+                    href="{% url 'seguimientodocumentos:listar_seguimiento' comunidad.id %}"
+                    class="btn btn-info btn-sm"
+                    title="Ver seguimiento">
+                    <i class="fas fa-eye"></i>
+                </a>
+              {% else %}
+                <a href="{% url 'seguimientodocumentos:listar_seguimiento' comunidad.id %}"
+                    class="btn btn-info btn-sm"
+                    title="Ver seguimiento">
+                    <i class="fas fa-eye"></i>
+                </a>
+              {% endif %}
+                          
           <!-- Botón Actualizar -->
-          <a
-          href="{% url 'seguimientodocumentos:actualizar_comunidad' comunidad.pk %}"
-          class="btn btn-warning btn-sm"
-          title="Actualizar">
-          <i class="fas fa-edit"></i>
-        </a>
+                <a 
+                href="{% url 'seguimientodocumentos:actualizar_comunidad' comunidad.pk %}"
+                class="btn btn-warning btn-sm"
+                title="Actualizar">
+                <i class="fas fa-edit"></i>
+                </a>
                 <!-- Botón Eliminar -->
             <a
             href="{% url 'seguimientodocumentos:eliminar_comunidad' comunidad.pk %}"
@@ -69,16 +80,14 @@
             title="Eliminar">
             <i class="fas fa-trash-alt"></i>
           </a>
-        </div>
-      </td>
+        </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
-{% else %}
-<p class="text-center">No hay comunidades disponibles.</p>
-{% endif %}
-
+    {% else %}
+    <p class="text-center">No hay comunidades disponibles.</p>
+    {% endif %}
 
 </div>
 

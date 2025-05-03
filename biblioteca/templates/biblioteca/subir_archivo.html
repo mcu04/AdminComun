@@ -6,10 +6,10 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header bg-primary text-white">
-                <h3>Subir Archivo</h3>
+                <h3 id="subir-archivo-title">Subir Archivo</h3>
             </div>
             <div class="card-body">
-            <form method="post" enctype="multipart/form-data">
+                <form id="form-subir-archivo" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="{{ form.tipo.id_for_label }}" class="form-label">Tipo:</label>
@@ -30,11 +30,15 @@
                     {{ form.documento }}
                 </div>
                 
-                    <button type="submit" class="btn btn-primary"
+                    <button type="submit" id="btn-subir-archivo" 
+                    class="btn btn-primary"
                     title="Subir Archivo">
                     <i class="bi bi-file-earmark-arrow-up"></i>
                     </button>
-                    <a href="{% url 'biblioteca:biblioteca' %}" class="btn btn-secondary"
+                    
+                    <a href="{% url 'biblioteca:biblioteca_archivos' comunidad_id=comunidad.id %}"
+                    id="btn-volver-biblioteca" 
+                    class="btn btn-secondary"
                     title="Regresar a la Biblioteca">
                     <i class="bi bi-arrow-left-circle"></i>
                     </a>
@@ -44,5 +48,5 @@
     </div>
 </div>
 {% endblock %}
-   
+
 

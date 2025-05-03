@@ -1,7 +1,7 @@
 {% extends 'base.html' %} 
 {% load static %}
-{% block content %}
 
+{% block content %}
 <main class="container">
     <h1 class="text-center dispaly-5 py-5">{{ comunidad.nombre }} - Seguimientos Pendientes</h1>
 
@@ -11,19 +11,21 @@
         
             <!-- Campo de búsqueda y botones "Buscar" y "Mostrar Todo" -->
             <div class="form-group d-flex gap-2  mb-2 ">
-            <input type="text" name="q" class="form-control" placeholder="Buscar por título" value="{{ query }}" />
-            <button type="submit" class="btn btn-primary" title="Buscar">
+            <input type="text" name="q" id="input-buscar-seguimiento-pendiente" class="form-control" placeholder="Buscar por título" value="{{ query }}" />
+            <button type="submit" id="btn-buscar-seguimiento-pendiente" class="btn btn-primary" title="Buscar">
             <i class="fa-solid fa-magnifying-glass"></i> </button>
-            <a href="?" class="btn btn-secondary" title="Restablecer">
+            <a href="?" id="btn-reset-seguimiento-pendiente" class="btn btn-secondary" title="Restablecer">
             <i class="fa-solid fa-rotate-left"></i> </a>
         </div>
         <div class="d-flex justify-content-end gap-2 mb-3">
             <!-- Botón Exportar a Excel -->
-            <a href="{% url 'seguimientodocumentos:exportar_excel' tipo_seguimiento='pendiente' comunidad_id=comunidad.id %}" class="btn btn-success" 
+            <a id="btn-export-seguimiento-pendiente-excel"
+            href="{% url 'seguimientodocumentos:exportar_excel' tipo_seguimiento='pendiente' comunidad_id=comunidad.id %}" class="btn btn-success" 
             title="Exportar a Excel">
             <i class="fa-solid fa-file-excel"></i></a>
             <!-- Botón Exportar a PDF -->
-            <a href="{% url 'seguimientodocumentos:exportar_pdf' tipo_seguimiento='pendiente' comunidad_id=comunidad.id %}"
+            <a id="btn-export-seguimiento-pendiente-pdf"
+            href="{% url 'seguimientodocumentos:exportar_pdf' tipo_seguimiento='pendiente' comunidad_id=comunidad.id %}"
             class="btn btn-danger" 
             title="Exportar Seguimiento Pendientes a PDF">
             <i class="fa-solid fa-file-pdf"></i></a>

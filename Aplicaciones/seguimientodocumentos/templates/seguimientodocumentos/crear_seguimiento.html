@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card py-5">
+                <div class="card-body">
+                    <h1 id="titulo-crear-seguimiento" class="card-title mb-4">Crear Seguimiento</h1>
+
+                    {# Mensajes de éxito/error generales #}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+
+                    <form id="form-seguimiento"
+                        method="POST"
+                        action="{% url 'seguimientodocumentos:crear_seguimiento' comunidad_id=comunidad_id %}">
+                    {% csrf_token %}
+
+                    {# Documento relacionado #}
+                    <div class="mb-3">
+                        {{ form.documentacion.label_tag }}
+                        {{ form.documentacion }}
+                        {% if form.documentacion.errors %}
+                            <div class="text-danger small">{{ form.documentacion.errors|first }}</div>
+                        {% endif %}
+                    </div>
+
+                    {# Existe el documento? #}
+                    <div class="form-check mb-3">
+                        {{ form.existe }} {{ form.existe.label_tag }}
+                        {% if form.existe.errors %}
+                            <div class="text-danger small">{{ form.existe.errors|first }}</div>
+                        {% endif %}
+                    </div>
+
+                    {# Observaciones #}
+                    <div class="mb-3">
+                        {{ form.observaciones.label_tag }}
+                        {{ form.observaciones }}
+                        {% if form.observaciones.errors %}
+                            <div class="text-danger small">{{ form.observaciones.errors|first }}</div>
+                        {% endif %}
+                    </div>
+
+                         <button id="btn-guardar-seguimiento"
+                            type="submit"
+                            class="btn btn-primary"
+                            title="Guardar Seguimiento">
+                        <i class="bi bi-floppy me-1"></i> Guardar
+                        </button>
+                    
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+            

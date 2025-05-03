@@ -6,8 +6,9 @@
 
     <!-- Botón para subir un archivo -->
     <div class="text-end mt-4" style="padding-bottom:10px">
-        <a href="{% url 'biblioteca:subir_archivo' %}" class="btn btn-primary" title="Subir Archivo">
-            <i class="bi bi-file-earmark-arrow-up"></i>
+        <a href="{% url 'biblioteca:subir_archivo' comunidad_id=comunidad.id%}" 
+        class="btn btn-primary" title="Subir Archivo">
+        <i class="bi bi-file-earmark-arrow-up"></i>
         </a>
     </div>
         <!-- Tabla para listar archivos -->

@@ -8,19 +8,28 @@
         box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.075);
         border-radius: 0.5rem;
     }
+    /* Ajustes mínimos para que el chart y la tabla se vean bien */
+    #mantencionesChart {
+    width: 100%;
+    height: 300px;
+    }
+    #table-mantenciones-recientes {
+    margin-top: 2rem;
+    width: 100%;
+    }
     </style>
 {% endblock %}
 
 {% block content %}
 <div class="container my-4">
-    <h1 class="mb-4">Panel de Mantenimiento</h1>
-
+    <h1 id="dashboard-title" class="mb-4">Panel de Mantenimiento</h1>
     <!-- Tarjetas de Información -->
     <div class="row g-3">
 
         <!-- Total de Mantenciones (listado completo) -->
+        
     <div class="col-md-3">
-        <div class="card bg-primary text-white">
+        <div class="card bg-primary text-white" id="card-total-mantenciones">
             <div class="card-body">
             <h5 class="card-title">Total de Mantenciones Anual</h5>
             <p class="display-6">{{ total_mantenciones }}</p>
@@ -37,7 +46,7 @@
 
         <!-- Mantenciones Realizadas -->
     <div class="col-md-3">
-        <div class="card bg-success text-white">
+        <div class="card bg-success text-white" id="card-realizadas">
             <div class="card-body">
             <h5 class="card-title">Realizadas</h5>
             <p class="display-6">{{ total_realizadas }}</p>
@@ -54,7 +63,7 @@
 
         <!-- Mantenciones Pendientes -->
     <div class="col-md-3">
-        <div class="card bg-warning text-dark">
+        <div class="card bg-warning text-dark" id="card-pendientes">
             <div class="card-body">
             <h5 class="card-title">Pendientes</h5>
             <p class="display-6">{{ total_pendientes }}</p>
@@ -71,7 +80,7 @@
 
         <!-- Instalaciones con Mantenciones Pendientes -->
     <div class="col-md-3">
-        <div class="card bg-danger text-white">
+        <div class="card bg-danger text-white" id="card-instalaciones-pendientes">
             <div class="card-body">
             <h5 class="card-title">Instalaciones Pendientes</h5>
             <p class="display-6">{{ instalaciones_pendientes }}</p>
@@ -89,15 +98,16 @@
         <!-- Métricas por Año y Mes -->
     <div class="row mt-4">
         <div class="col-md-6">
-            <div class="card border-info">
+            <div class="card border-info" id="metric-anual">
                 <div class="card-body">
                 <h5 class="card-title">Mantenciones en el Año {{ total_mantenciones_año }}</h5>
                 <p class="card-text">Total mantenciones programadas para el año actual.</p>
                 </div>
             </div>
         </div>
+
         <div class="col-md-6">
-            <div class="card border-info">
+            <div class="card border-info" id="metric-mensual">
                 <div class="card-body">
                 <h5 class="card-title">Mantenciones en el Mes {{ total_mantenciones_mes }}</h5>
                 <p class="card-text">Total mantenciones programadas para el mes actual.</p>
@@ -115,8 +125,8 @@
     
         <!-- Tabla de Mantenciones Recientes -->
     <div class="mt-5">
-        <h3>Últimas Mantenciones</h3>
-        <table class="table table-striped">
+        <h3 id="recent-title">Últimas Mantenciones</h3>
+        <table class="table table-striped" id="table-mantenciones-recientes">
     <thead>
         <tr>
             <th>Instalación</th>
@@ -134,14 +144,14 @@
                 {% if m.fecha_realizada %}
                 {{ m.fecha_realizada|date:"d/m/Y" }}
             {% else %}
-                Pendiente
+            <span class="text-warning">Pendiente</span>
             {% endif %}
             </td>
             <td>{{ m.observaciones|default:"Sin observaciones" }}</td>
         </tr>
         {% empty %}
         <tr>
-            <td colspan="4">No hay mantenciones registradas.</td>
+            <td colspan="4" class="text-center">No hay mantenciones registradas.</td>
         </tr>
         {% endfor %}
     </tbody>
