@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -e
-
 host="$1"
 port="$2"
 shift 2
