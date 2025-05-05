@@ -314,9 +314,6 @@
         <script src="{% static 'js/tour_tema.js' %}"></script>
         
 
-
-
-        
         <!-- Script para Modo Oscuro / Claro -->
         <script>
             // Guardar el modo preferido en localStorage
@@ -343,30 +340,6 @@
             });
         </script>  
 
-
-    <!-- WebSocket o Scripts finales -->
-    <script>
-        (function() {
-        // Configuración del WebSocket (si se utiliza)
-        const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-        const wsUrl = protocol + "://" + window.location.host + "/ws/maintenance/notifications/";
-        const socket = new WebSocket(wsUrl);
-
-        socket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            alert("Notificación: " + data.message);
-        };
-
-        socket.onerror = function(error) {
-            console.error("Error en el WebSocket:", error);
-        };
-
-        socket.onclose = function(e) {
-            console.warn("La conexión WebSocket se cerró inesperadamente");
-        };
-        })();
-    </script> 
-    
 </body>
 </html>
 

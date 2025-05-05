@@ -2,26 +2,41 @@
 document.addEventListener('DOMContentLoaded', () => {
     const tutorialToggle = document.getElementById('tutorialesDropdown');
     const tourBtn        = document.getElementById('tour-ver-seguimiento-btn');
-    const inputBuscar    = document.getElementById('input-buscar-seguimiento');
-    const btnBuscar      = document.getElementById('btn-buscar-seguimiento');
-    const btnReset       = document.getElementById('btn-reset-seguimiento');
-    const btnExcel       = document.getElementById('btn-export-seguimiento-excel');
-    const tabla          = document.getElementById('seguimientoTabla');
-    const btnPdf         = document.getElementById('btn-export-seguimiento-pdf');
 
-    if (![tutorialToggle,tourBtn,inputBuscar,btnBuscar,btnReset,btnExcel,tabla,btnPdf].every(el=>el)) {
-        console.warn('Tour Seguimiento Actualizado: faltan elementos en el DOM.');
+    if (!tutorialToggle || !tourBtn) {
+        console.warn('Tour Seguimiento Actualizado: faltan menú o botón en el DOM.');
         return;
     }
-
+    
     tourBtn.addEventListener('click', e => {
         e.preventDefault();
         e.stopPropagation();
 
-      // Abrimos el dropdown “Tutoriales”
+    
+        const path = window.location.pathname;
+        // 1️⃣ Ruta válida?
+        if (!/listar\/\d+/.test(path)) {
+            return alert('⚠️ Ve primero al listado de Seguimientos Actualizados para este tour.');
+        }
+
+        /// 2️⃣ Abre el menú “Tutoriales”
         const bs = bootstrap.Dropdown.getOrCreateInstance(tutorialToggle);
         bs.show();
 
+        // 3️⃣ Ahora, recoge el resto de elementos (si no existen, salta con alerta)
+        const inputBuscar    = document.getElementById('input-buscar-seguimiento');
+        const btnBuscar      = document.getElementById('btn-buscar-seguimiento');
+        const btnReset       = document.getElementById('btn-reset-seguimiento');
+        const btnExcel       = document.getElementById('btn-export-seguimiento-excel');
+        const tabla          = document.getElementById('seguimientoTabla');
+        const btnPdf         = document.getElementById('btn-export-seguimiento-pdf');
+
+    if (![inputBuscar,btnBuscar,btnReset,btnExcel,tabla,btnPdf].every(el=>el)) {
+        bs.hide();
+        return alert('⚠️ No pude encontrar todos los controles para el Tour Seguimiento Actualizado.');
+    }
+
+        // 4️⃣ Y por fin, arranca Intro.js
     introJs()
         .setOptions({
             steps: [
@@ -68,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
             scrollToElement: true,
             overlayOpacity: 0.5
         })
-        .onexit    (() => bs.hide())
+        .onexit(()     => bs.hide())
         .oncomplete(() => bs.hide())
         .start();
     });

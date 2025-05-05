@@ -5,6 +5,8 @@ from datetime import date
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
+
 
 
 # Modelo principal: Mantención Preventiva
@@ -219,14 +221,13 @@ class MaintenanceTask(models.Model):
         verbose_name = _("Tarea de Mantenimiento")
         verbose_name_plural = _("Tareas de Mantenimiento")
         ordering = ['fecha_programada']
-    
+
+
+
 class Mantenimiento(models.Model):
-    mantencion = models.OneToOneField(
-        MantencionPreventiva,
+    mantencion = models.OneToOneField('mantenimiento.MantencionPreventiva',
         on_delete=models.CASCADE,
-        related_name='mantenimiento_extendido',
-        help_text=_("Relación con la mantención preventiva.")
-    )
+        related_name='mantenimiento_extendido')
     fecha_inicio = models.DateTimeField()
     fecha_fin = models.DateTimeField()
     descripcion = models.TextField()
@@ -239,28 +240,17 @@ class Mantenimiento(models.Model):
     )
 
     def __str__(self):
-        return f"Mantenimiento {self.descripcion} desde {self.fecha_inicio} hasta {self.fecha_fin}"
+        return f"{self.descripcion} ({self.get_estado_display()})"
 
     def iniciar_mantenimiento(self):
-        self.estado = 'proceso'
+        self.estado = "proceso"
         self.save()
-        self.notificar_mantenimiento()
+        
 
     def finalizar_mantenimiento(self):
-        self.estado = 'completado'
+        self.estado = "completado"
         self.save()
-        self.notificar_mantenimiento(finalizado=True)
-
-    def notificar_mantenimiento(self, finalizado=False):
-        # Centraliza la lógica de notificación aquí
-        from .views import send_maintenance_notification  # Importación local para evitar el import circular
-        send_maintenance_notification(
-            self.descripcion,
-            self.fecha_inicio,
-            self.fecha_fin,
-            finalizado=finalizado
-        )
-
+        
 
 
 

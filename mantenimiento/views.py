@@ -18,7 +18,6 @@ from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.views import View
 import datetime
-from .notifications import send_maintenance_notification
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.db.models import Count, Q
@@ -28,6 +27,11 @@ from django.http import Http404
 from django.views.generic import ListView
 from django.db.models import OuterRef, Subquery
 from django.core.paginator import Paginator
+from django.contrib.auth import authenticate, login
+from django.utils import timezone
+from .models import Mantenimiento, Comunidad
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 
 # Define el FilterSet para el modelo de mantenciones
@@ -457,25 +461,32 @@ class MantenimientoDashboardView(TemplateView):
         return context
     
 def send_maintenance_notification(descripcion, fecha_inicio, fecha_fin, finalizado=False):
-    """Envía una notificación a los usuarios sobre el mantenimiento."""
+    """Envía una notificación a todos los usuarios conectados."""
     channel_layer = get_channel_layer()
-    notification_message = (
-        f"El mantenimiento '{descripcion}' comenzará el {fecha_inicio} y finalizará el {fecha_fin}."
-    )
+    msg = f"El mantenimiento '{descripcion}' comenzará el {fecha_inicio.date()} y finalizará el {fecha_fin.date()}."
     if finalizado:
-        notification_message += " El mantenimiento ha finalizado."
-
-    # Enviar la notificación a todos los usuarios conectados al canal de WebSocket
+        msg += " El mantenimiento ha finalizado."
     async_to_sync(channel_layer.group_send)(
-        "notifications",  # Nombre del grupo
+        "notifications",
         {
-            "type": "send_notification",  # Llamar al método 'send_notification' del consumer
-            "message": notification_message,
+            "type": "send_notification",
+            "message": msg,
         }
     )
 
+def iniciar_sesion(request):
+    error = None
+    if request.method == 'POST':
+        username = request.POST.get('Usuario')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            return redirect('seguimientodocumentos:comunidades')
+        else:
+            error = "Usuario o contraseña incorrectos."
 
-
+    return render(request, 'iniciar_sesion.html', {'error': error})
 
 
 

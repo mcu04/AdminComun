@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'biblioteca',
     'widget_tweaks',
     'accounts', 
-    'channels',
+    #'channels',
     'comunicacion',
     'django_filters',
     'import_export',
@@ -110,19 +110,15 @@ WSGI_APPLICATION = 'Documentacion.wsgi.application'
 ASGI_APPLICATION = 'comunicacion_condominio.asgi.application'
 ASGI_APPLICATION = 'Documentacion.asgi.application'
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',  # Para producción, se recomienda Redis
-    },
-}
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],  # Redis local
-        },
-    },
-}
+
+#CHANNEL_LAYERS = {
+    #   'default': {
+    #      'BACKEND': 'channels_redis.core.RedisChannelLayer',
+    #     'CONFIG': {
+    #        "hosts": [('127.0.0.1', 6379)],  # Redis local
+    #   },
+    #},
+#}
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
