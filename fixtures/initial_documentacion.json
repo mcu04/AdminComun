@@ -1,0 +1,1962 @@
+[
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 1,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Reglamentos",
+      "titulo_documento": "Ley Copropiedad 21.442",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 2,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Reglamentos",
+      "titulo_documento": "Reglamento Ley 21.442 y modificaciones",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 3,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Reglamentos",
+      "titulo_documento": "Reglamento Copropiedad Edificio o Condominio",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 4,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Reglamentos",
+      "titulo_documento": "Reglamento Interno de Convivencia",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 5,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Inmobiliaria",
+      "titulo_documento": "Actas de Entrega Bienes Comunes",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 6,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Inmobiliaria",
+      "titulo_documento": "Actas Entrega Infraestructura e Instalaciones",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 7,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Inmobiliaria",
+      "titulo_documento": "Certificado Garantias Vigentes",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 8,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Inmobiliaria",
+      "titulo_documento": "Certificado Recepción Final",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 9,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Inmobiliaria",
+      "titulo_documento": "Porcentaje Prorrateo Unidades",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 10,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Comunidad",
+      "titulo_documento": "Representante Legal",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 11,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Comunidad",
+      "titulo_documento": "Nomina Actualizada Copropietario o Arrendatarios",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 12,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Comunidad",
+      "titulo_documento": "Acta Nombramiento Administrador",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 13,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Comunidad",
+      "titulo_documento": "Poliza Seguro Incendio",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 14,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Comunidad",
+      "titulo_documento": "Certificado Inspeccion Instalaciones de Gas Sello Verde",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 15,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Comunidad",
+      "titulo_documento": "Archivo claves y contraseñas",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 16,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Libros",
+      "titulo_documento": "Escritura Pública Asamblea Ordinaria y Extraordinaria",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 17,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Libros",
+      "titulo_documento": "Libro Acta Asamblea Ordinaria y Extraordinaria",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 18,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Libros",
+      "titulo_documento": "Libro Actas Comité",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 19,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Libros",
+      "titulo_documento": "Libro de Novedades, Sugerencias y Reclamos",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 20,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Planos",
+      "titulo_documento": "Terreno Superficie General",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 21,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Planos",
+      "titulo_documento": "Tipos de Departamentos o Casas (Unidades)",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 22,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Planos",
+      "titulo_documento": "Sistema Electrico",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 23,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Planos",
+      "titulo_documento": "Red Agua Potable",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 24,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Planos",
+      "titulo_documento": "Red de Gas",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 25,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Planos",
+      "titulo_documento": "Red Agua Regadio",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 26,
+    "fields": {
+      "tipo": "Legal",
+      "categoria": "Planos",
+      "titulo_documento": "Sistema Red Alcantarillado",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 27,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Recepción Documentos",
+      "titulo_documento": "Recepción Documentos Vigentes",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 28,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Recepción Documentos",
+      "titulo_documento": "Clasificar Documentos Vigentes",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 29,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Recepción Documentos",
+      "titulo_documento": "Archivar Digitalmente Documentos",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 30,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Recepción Documentos",
+      "titulo_documento": "Archivar Fisicamente Documentos",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 31,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Administrador",
+      "titulo_documento": "Contrato Administrador",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 32,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Administrador",
+      "titulo_documento": "Informe Mensual reporta al Comite",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 33,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Administrador",
+      "titulo_documento": "Dossier Bienvenida Residentes",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 34,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Comunicación",
+      "titulo_documento": "Correo Institucional",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 35,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Comunicación",
+      "titulo_documento": "Correo Comité y Administrador",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 36,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Comunicación",
+      "titulo_documento": "Whatsaap Administración Informa a la Comunidad",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 37,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Comunicación",
+      "titulo_documento": "Whatsapp Comité y Administración",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 38,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Contactos",
+      "titulo_documento": "Datos Contactos Comité",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 39,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Contactos",
+      "titulo_documento": "Contacto Telefonia Conserjería",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 40,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Contactos",
+      "titulo_documento": "Datos Contactos Personal",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 41,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Resolución Conflictos",
+      "titulo_documento": "Citación Avenimiento Municipal",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 42,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Resolución Conflictos",
+      "titulo_documento": "Comparendo Juzgado Policia Local",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 43,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Resolución Conflictos",
+      "titulo_documento": "Comparendo Dirección del Trabajo",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 44,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Resolución Conflictos",
+      "titulo_documento": "Citación Tribunales Justicia Civil",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 45,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Resolución Conflictos",
+      "titulo_documento": "Juicios Pendientes o Vigentes",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 46,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Proveedores",
+      "titulo_documento": "Listado General de Proveedores",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 47,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Proveedores",
+      "titulo_documento": "Listado Proveedores Articulos de Aseo",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 48,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Proveedores",
+      "titulo_documento": "Listado Proveedores Articulos de Oficina",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 49,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Proveedores",
+      "titulo_documento": "Listado Proveedores Articulos Electricos",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 50,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Bodega de Insumos",
+      "titulo_documento": "Registro Entrada Materiales",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 51,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Bodega de Insumos",
+      "titulo_documento": "Registro Salida Materiales",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 52,
+    "fields": {
+      "tipo": "Administración",
+      "categoria": "Bodega de Insumos",
+      "titulo_documento": "Informe de Inventario Productos",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 53,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Fondos",
+      "titulo_documento": "Fondo de Administración o Operación",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 54,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Fondos",
+      "titulo_documento": "Fondo de Reserva",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 55,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Fondos",
+      "titulo_documento": "Fondo de Indemnización",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 56,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Fondos",
+      "titulo_documento": "Fondo de Mantenimiento",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 57,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Banco",
+      "titulo_documento": "Cuenta Corriente",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 58,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Banco",
+      "titulo_documento": "Cartolas del Banco",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 59,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Banco",
+      "titulo_documento": "Autorización Apoderados",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 60,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Banco",
+      "titulo_documento": "Autorización de Poderes Administrador",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 61,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Banco",
+      "titulo_documento": "Depositos de Inversiones",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 62,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Banco",
+      "titulo_documento": "Datos Contacto Ejecutivo",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 63,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Gastos Comunes",
+      "titulo_documento": "Historial Gastos Comunes",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 64,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Gastos Comunes",
+      "titulo_documento": "Informe Situación Morosidad",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 65,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Gastos Comunes",
+      "titulo_documento": "Informe Convenios de Pago por Morosidad",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 66,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Gastos Comunes",
+      "titulo_documento": "Informe Multas por Pagar",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 67,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Gastos Comunes",
+      "titulo_documento": "Informe Prorrateo Gastos Calefacción Por Unidad",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 68,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Gastos Comunes",
+      "titulo_documento": "Software Control de Gestión",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 70,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Contable",
+      "titulo_documento": "Informe Estado Situación financiero",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 71,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Contable",
+      "titulo_documento": "Pago Proveedores por Transferencia",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 72,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Contable",
+      "titulo_documento": "Pago Servicios Basicos por PAC",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 73,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Contable",
+      "titulo_documento": "Comprobantes Ingresos y Egresos",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 74,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Contable",
+      "titulo_documento": "Informe Conciliación Bancaria",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 75,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Contable",
+      "titulo_documento": "Informe Cuentas por Cobrar",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 76,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Contable",
+      "titulo_documento": "Informe Cuentas por Pagar",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 77,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Contable",
+      "titulo_documento": "Talonarios de Cheques",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 78,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Contable",
+      "titulo_documento": "Pago Cotizaciones Previsionales Previred",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 79,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Contable",
+      "titulo_documento": "Informe Remuneraciones por Pagar",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 80,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Contable",
+      "titulo_documento": "Declaraciones Juradas SII",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 81,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Contable",
+      "titulo_documento": "Informe Caja Chica",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 82,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Documentos Personal",
+      "titulo_documento": "Fichas Ingreso Personal",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 83,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Documentos Personal",
+      "titulo_documento": "Contratos de Trabajo",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 84,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Documentos Personal",
+      "titulo_documento": "Anexos Contratos de Trabajo",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 85,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Documentos Personal",
+      "titulo_documento": "Control de Vacaciones",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 86,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Documentos Personal",
+      "titulo_documento": "Finiquito en DT",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 87,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Documentos Personal",
+      "titulo_documento": "Finiquitos registrados en Previred",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 88,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Administracion Personal",
+      "titulo_documento": "Descripcion de Cargos",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 89,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Administracion Personal",
+      "titulo_documento": "Programa de Turnos y Trabajo",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 90,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Administracion Personal",
+      "titulo_documento": "Libro de Remuneraciones LRE en DT",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 91,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Administracion Personal",
+      "titulo_documento": "Liquidacion de sueldos",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 92,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Administracion Personal",
+      "titulo_documento": "Procedimientos de Bonos Personal",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 93,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Administracion Personal",
+      "titulo_documento": "Autorizacion de Cargas familiares",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 94,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Administracion Personal",
+      "titulo_documento": "Procedimiento Prestamos Personal",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 95,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Administracion Personal",
+      "titulo_documento": "Informe Licencia Medica",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 96,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Administracion Personal",
+      "titulo_documento": "Ficha Personal de Reemplazo",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 97,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Administracion Personal",
+      "titulo_documento": "Caja Compensación",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 98,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Administracion Personal",
+      "titulo_documento": "Reloj Control Biometrico autorizado por DT",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 99,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Personal Seguridad",
+      "titulo_documento": "Informe Situación Curso OS10",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 100,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Personal Seguridad",
+      "titulo_documento": "Seguro de Vida",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 101,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Personal Seguridad",
+      "titulo_documento": "Credenciales otorgada Carabineros",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 102,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Personal Seguridad",
+      "titulo_documento": "Directiva de Funcionamiento",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 103,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Prevencion de Riesgos",
+      "titulo_documento": "Reglamento de Orden, Higiene y Seguridad",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 104,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Prevencion de Riesgos",
+      "titulo_documento": "Derecho a Saber Trabajadores",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 105,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Prevencion de Riesgos",
+      "titulo_documento": "Implementos de Trabajo y Seguridad",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 106,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Prevencion de Riesgos",
+      "titulo_documento": "Situacion Vestidores y Baños Personal",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 107,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Prevencion de Riesgos",
+      "titulo_documento": "Casino Personal",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 108,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Prevencion de Riesgos",
+      "titulo_documento": "Ropa de Trabajo",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 109,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Prevencion de Riesgos",
+      "titulo_documento": "Mutual de Seguridad",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 110,
+    "fields": {
+      "tipo": "Personal",
+      "categoria": "Prevencion de Riesgos",
+      "titulo_documento": "Botiquin Primeros Auxilios",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 111,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Programa Anual Mantenimiento",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 112,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Registro de Mantenciones",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 113,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Contratos de Mantenedores",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 114,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Listado de Mantenedores",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 115,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Programa Pintura Fachada y Otras Dependencias",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 116,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Ascensores",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 117,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Caldera",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 118,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Grupo Electrogeno",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 119,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Bombas Agua Potable",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 120,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Electricidad",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 121,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Red de Incendio",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 122,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Red de Agua Caliente",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 123,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Red de Agua Fria",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 124,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Red de Gas",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 125,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Climatizacion o Calefaccion",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 126,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Jardines",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 127,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Piscina",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 128,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Espacios Multiuso",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 129,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Mantenimiento Preventivo",
+      "titulo_documento": "Pavimentacion",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 130,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Aseo Espacios Comunes",
+      "titulo_documento": "Programa Aseo General",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 131,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Aseo Espacios Comunes",
+      "titulo_documento": "Descripcion de Tareas",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 132,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Aseo Espacios Comunes",
+      "titulo_documento": "Bodega Elementos de Trabajo",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 133,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Aseo Espacios Comunes",
+      "titulo_documento": "Proceso Recoleccion Basura",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 134,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Sumidero Aguas Lluvias",
+      "titulo_documento": "Instalaciones de Drenaje y Evacuacion",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 135,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Sumidero Aguas Lluvias",
+      "titulo_documento": "Plan de Limpieza Invierno",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 136,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Sumidero Aguas Lluvias",
+      "titulo_documento": "Limpieza Camaras Aguas Lluvias",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 137,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Sumidero Alcantarillado",
+      "titulo_documento": "Aseo Sanitario",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 138,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Sumidero Alcantarillado",
+      "titulo_documento": "Limpieza Camaras Alcantarillado",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 139,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Control de Plagas",
+      "titulo_documento": "Certificacion Control de Plagas",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 140,
+    "fields": {
+      "tipo": "Mantenimiento",
+      "categoria": "Control de Plagas",
+      "titulo_documento": "Contrato Mantenedor",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 141,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Camaras de Vigilancia CCTV",
+      "titulo_documento": "Camaras de Seguridad",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 142,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Camaras de Vigilancia CCTV",
+      "titulo_documento": "Plano Ubicación Camaras de Seguridad",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 143,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Camaras de Vigilancia CCTV",
+      "titulo_documento": "Registro Mantemiento y Limpieza Equipos",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 144,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Camaras de Vigilancia CCTV",
+      "titulo_documento": "Informe de Almacenamiento Grabaciones",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 145,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Alarmas de Seguridad",
+      "titulo_documento": "Certificado de instalación del Sistema de Alarmas",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 146,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Alarmas de Seguridad",
+      "titulo_documento": "Informe de Revisión de Sensores de Movimiento",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 147,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Alarmas de Seguridad",
+      "titulo_documento": "Registro de Pruebas de Alarmas",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 148,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Alarmas de Seguridad",
+      "titulo_documento": "Plano Ubicacion Alarmas Espacios Comunes",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 149,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Alarmas de Seguridad",
+      "titulo_documento": "Alarmas Conectadas Seguridad Publica",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 150,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Alarmas de Seguridad",
+      "titulo_documento": "Alarmas Conectadas Seguridad Privada",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 151,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Alarmas de Seguridad",
+      "titulo_documento": "Alarmas en Unidades",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 153,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Control Acceso Vehicular",
+      "titulo_documento": "Informe Autorizaciones Acceso Vehicular",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 154,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Control Acceso Vehicular",
+      "titulo_documento": "Informe de Entradas y Salidas Vehiculos",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 155,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Control Acceso Vehicular",
+      "titulo_documento": "Informe Control Vehicular Espacios Comunes",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 156,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Control Acceso Peatonal",
+      "titulo_documento": "Registro Dispositivo de Acceso",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 157,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Control Acceso Peatonal",
+      "titulo_documento": "Registro de Huellas, Tarjeta o Llavero de acceso",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 158,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Control Acceso Peatonal",
+      "titulo_documento": "Informe de incidencias y acceso autorizado o no",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 159,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Citofonia",
+      "titulo_documento": "Registro Instalación y Configuración en la Central",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 160,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Citofonia",
+      "titulo_documento": "Registro  Instalación y Configuración por Unidad",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 161,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Citofonia",
+      "titulo_documento": "Chequear Comunicacion Unidades con Central",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 162,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Iluminación Espacios Comunes",
+      "titulo_documento": "Control Funcionamiento Iluminacion",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 163,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Iluminación Espacios Comunes",
+      "titulo_documento": "Sistema de Iluminacion Segura Entrada Edificio",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 164,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Puertas y Cerraduras Electronicas",
+      "titulo_documento": "Registro  Instalacion y Configuración",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 152,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Control Acceso Vehicular",
+      "titulo_documento": "Registro Dispositivo de Control",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 165,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Puertas y Cerraduras Electronicas",
+      "titulo_documento": "Informe Mantenimiento Cerraduras y Mecanismos",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 166,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Botones de Pánico",
+      "titulo_documento": "Registro Ubicación Botones de Pánico",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 167,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Botones de Pánico",
+      "titulo_documento": "Informe de pruebas y Revision Botones de Pánico",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 168,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Patrullaje de Seguridad",
+      "titulo_documento": "Plan de Rondas Interna",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 169,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Patrullaje de Seguridad",
+      "titulo_documento": "Plan Revision Medidas Interna de Seguridad",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 170,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Patrullaje de Seguridad",
+      "titulo_documento": "Radio Telecomunicacion Personal Seguridad",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 171,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Monitoreo Remoto Seguridad",
+      "titulo_documento": "Conectados a Carabineros",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 172,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Monitoreo Remoto Seguridad",
+      "titulo_documento": "Conectados Paz Ciudadana",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 173,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Monitoreo Remoto Seguridad",
+      "titulo_documento": "Conectados Cuerpo Bomberos",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 174,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Monitoreo Remoto Seguridad",
+      "titulo_documento": "Contrato con Empresa Seguridad Externa",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 175,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Respaldo Energia Sistema Seguridad",
+      "titulo_documento": "Registro Mantenimiento Generador o UPS",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 176,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Respaldo Energia Sistema Seguridad",
+      "titulo_documento": "Informe de Pruebas de autonomia Generador/UPS",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 177,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Ascensores o Elevadores",
+      "titulo_documento": "Certificado Revisión de Camaras Ascensores",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 178,
+    "fields": {
+      "tipo": "Seguridad",
+      "categoria": "Ascensores o Elevadores",
+      "titulo_documento": "Informe Estado Comunicación Ascensor/Conserjeria",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 179,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Elementos Prevencion de Riesgos",
+      "titulo_documento": "Extintores",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 180,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Elementos Prevencion de Riesgos",
+      "titulo_documento": "Detectores de Humo",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 181,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Elementos Prevencion de Riesgos",
+      "titulo_documento": "Alarma de Incendio",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 182,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Elementos Prevencion de Riesgos",
+      "titulo_documento": "Red Inerte",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 183,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Elementos Prevencion de Riesgos",
+      "titulo_documento": "Red Seca",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 184,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Elementos Prevencion de Riesgos",
+      "titulo_documento": "Red Humeda",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 185,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Elementos Prevencion de Riesgos",
+      "titulo_documento": "Presurización",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 186,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Gestion de Emergencia",
+      "titulo_documento": "Plan de Emergencia y Evacuacion PES",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 187,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Gestion de Emergencia",
+      "titulo_documento": "Simulacro de Evacuacion",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 188,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Gestion de Emergencia",
+      "titulo_documento": "Encargados Evacuacion por sector",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 189,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Gestion de Emergencia",
+      "titulo_documento": "Señaletica",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 190,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Gestion de Emergencia",
+      "titulo_documento": "Capacitacion Personal",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 191,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Gestion de Emergencia",
+      "titulo_documento": "Asesoria Mutual de Seguridad",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 192,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Gestion de Emergencia",
+      "titulo_documento": "Protocolos de Prevencion de Riegos Ocupacionales",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 193,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Gestion de Emergencia",
+      "titulo_documento": "Equipos de Protección Personal (EPP)",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 194,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Escalera de Emergencia",
+      "titulo_documento": "Informe Estado Iluminacion",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 195,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Escalera de Emergencia",
+      "titulo_documento": "Revestimiento antideslizante Peldaños Escalera",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 196,
+    "fields": {
+      "tipo": "Prevencion de Riesgos",
+      "categoria": "Escalera de Emergencia",
+      "titulo_documento": "PIntura",
+      "comunidad": null
+    }
+  },
+  {
+    "model": "seguimientodocumentos.documentacion",
+    "pk": 69,
+    "fields": {
+      "tipo": "Contabilidad",
+      "categoria": "Gastos Comunes",
+      "titulo_documento": "Carpeta Juicios por Morosidad",
+      "comunidad": null
+    }
+  }
+]

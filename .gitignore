@@ -3,3 +3,4 @@ venv_new
 __pycache__
 
 /media/archivos/*
+.vscode/settings.json
