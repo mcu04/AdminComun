@@ -7,12 +7,13 @@ from django.contrib.auth.decorators import login_required
 from Aplicaciones.seguimientodocumentos.models import Comunidad
 from .forms import EnviarCorreoIndividualForm, EnviarCorreoMasivoForm, CorreoAdjuntoForm, ArchivoForm, DestinatarioForm
 from .models import Archivo, Destinatario, CorreoAdjunto
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.http import JsonResponse
 import json
+from Aplicaciones.seguimientodocumentos.context_processors import comunidad_context_processor
 
 
 def index(request):
@@ -51,9 +52,13 @@ def contacto(request):
 
 @login_required
 def enviar_correo_individual(request, comunidad_id):
-    # Obtén el objeto comunidad
-    comunidad = get_object_or_404(Comunidad, pk=comunidad_id)
+    # 1) Recuperamos comunidad y validamos
+    proc_ctx = comunidad_context_processor(request)
+    comunidad = proc_ctx.get('comunidad')
+    if not comunidad or comunidad.id != comunidad_id:
+        raise Http404("No tienes acceso a esta comunidad.")
     
+    # 2) Tu lógica tal cual, pero usando siempre `comunidad`
     if request.method == "POST":
         form = EnviarCorreoIndividualForm(request.POST, request.FILES, request=request)
         if form.is_valid():
@@ -90,15 +95,26 @@ def enviar_correo_individual(request, comunidad_id):
                 return JsonResponse({"success": False, "errors": form.errors}, status=400)
             messages.error(request, "Error en el formulario. Verifique los campos.")
         
-        return render(request, "comunicacion/enviar_correo_individual.html", {"form": form, "comunidad": comunidad, "comunidad_id": comunidad.id})
+        return render(request, "comunicacion/enviar_correo_individual.html", 
+                    {"form": form, 
+                    "comunidad": comunidad, })
     else:
         form = EnviarCorreoIndividualForm(request=request)
-    return render(request, "comunicacion/enviar_correo_individual.html", {"form": form, "comunidad": comunidad,"comunidad_id": comunidad.id})
+        
+    return render(request, "comunicacion/enviar_correo_individual.html", 
+                    {"form": form, 
+                    "comunidad": comunidad,
+                    "comunidad_id": comunidad.id,  })
 
 @login_required
 def enviar_correo_masivo(request, comunidad_id):
-    comunidad = get_object_or_404(Comunidad, pk=comunidad_id)
+    # 1) Recuperamos comunidad y validamos
+    proc_ctx = comunidad_context_processor(request)
+    comunidad = proc_ctx.get('comunidad')
+    if not comunidad or comunidad.id != comunidad_id:
+        raise Http404("No tienes acceso a esta comunidad.")
     
+    # 2) Tu lógica tal cual, pero usando siempre `comunidad`
     if request.method == "POST":
         form = EnviarCorreoMasivoForm(request.POST, request.FILES, request=request)
         if form.is_valid():
@@ -139,15 +155,15 @@ def enviar_correo_masivo(request, comunidad_id):
     return render(request, "comunicacion/enviar_correo_masivo.html", {"form": form, "comunidad": comunidad, "comunidad_id": comunidad.id})
 
 def gestionar_destinatarios(request, comunidad_id):
-    """
-    Añade y lista destinatarios para la comunidad indicada.
-    """
-    # 1) Recuperar la comunidad o lanzar 404
-    comunidad = get_object_or_404(Comunidad, pk=comunidad_id)
+    # 1) Obtener y validar la comunidad actual
+    proc_ctx = comunidad_context_processor(request)
+    comunidad = proc_ctx.get('comunidad')
+    if not comunidad or comunidad.id != comunidad_id:
+        raise Http404("No tienes acceso a esta comunidad.")
 
-    # 2) Procesar formulario
+    # 2) Procesar el formulario (POST) o inicializarlo vacío (GET)
+    form = DestinatarioForm(request.POST or None)
     if request.method == 'POST':
-        form = DestinatarioForm(request.POST)
         if form.is_valid():
             destinatario = form.save(commit=False)
             destinatario.comunidad = comunidad
@@ -158,9 +174,7 @@ def gestionar_destinatarios(request, comunidad_id):
             return redirect('comunicacion:gestionar_destinatarios', comunidad_id=comunidad.id)
         else:
             messages.error(request, "❌ Error al agregar destinatario. Verifica los campos.")
-    else:
-        form = DestinatarioForm()
-
+    
     # 3) Obtener todos los destinatarios de esta comunidad
     destinatarios = (
         Destinatario.objects
