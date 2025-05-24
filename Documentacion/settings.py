@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from django.contrib.messages import constants as messages
-
+from django.urls import reverse_lazy
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -34,12 +34,9 @@ DEBUG = 'RENDER' not in os.environ
 if DEBUG:
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 else:
-    ALLOWED_HOSTS = ['documentacion-biblioteca.onrender.com']
+    ALLOWED_HOSTS = ['documentacion-biblioteca.onrender.com',
+                    os.environ.get('RENDER_EXTERNAL_HOSTNAME', ''), ]
     
-
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
@@ -63,6 +60,7 @@ INSTALLED_APPS = [
     'django_filters',
     'import_export',
     'mantenimiento.apps.MantenimientoConfig',
+    'django_extensions',
 ]
 
     
@@ -76,7 +74,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # sirve estáticos en producción
+    
+    # Tu middleware personalizado debe estar aquí:
+    'middleware.terms_acceptance.TermsAcceptanceMiddleware',
 ]
 
 # Configuración del sistema de autenticación
@@ -107,7 +108,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Documentacion.wsgi.application'
-ASGI_APPLICATION = 'comunicacion_condominio.asgi.application'
 ASGI_APPLICATION = 'Documentacion.asgi.application'
 
 
@@ -181,43 +181,45 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Se define siempre
+STATICFILES_DIRS = [BASE_DIR / 'static', ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Se define siempre
+
+# Media files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = str(BASE_DIR/ 'media')
 
+# WhiteNoise for serving static in production
 if not DEBUG:
-    # Configuraciones adicionales para producción
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    
+# Sessions
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 1209600  # 2 semanas
 
+# Authentication
 
-
-LOGIN_URL = '/seguimientodocumentos/iniciar-sesion/'
-LOGIN_REDIRECT_URL = '/seguimiento/comunidades/'
-LOGOUT_REDIRECT_URL = '/'
-
+LOGIN_URL            = reverse_lazy('autenticacion:iniciar_sesion')
+LOGIN_REDIRECT_URL   = reverse_lazy('seguimientodocumentos:comunidades')
+LOGOUT_REDIRECT_URL  = reverse_lazy('autenticacion:iniciar_sesion')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Permite sesiones persistentes
-SESSION_COOKIE_AGE = 1209600  # 2 semanas (en segundos)
-
 # Configuración para enviar correos (Gmail como ejemplo)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'contacto@manon.cl'  # Tu dirección de correo
+#EMAIL_HOST_USER = 'contacto@manon.cl'  # Tu dirección de correo
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'contacto@manon.cl')
 EMAIL_HOST_PASSWORD = 'rnyyxwtwwrghtwhg'   # Tu contraseña o App Password
-DEFAULT_FROM_EMAIL = 'contacto@manon.cl'
-
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+#DEFAULT_FROM_EMAIL = 'contacto@manon.cl'
 PASSWORD_RESET_TIMEOUT_DAYS = 1  # Número de días antes de que el enlace expire
 
+# Django messages tags
 MESSAGE_TAGS = {
     messages.DEBUG: 'debug',
     messages.INFO: 'info',
@@ -225,6 +227,24 @@ MESSAGE_TAGS = {
     messages.WARNING: 'warning',
     messages.ERROR: 'error',
 }
-    
+
+# Sites
+SITE_ID = 1
+
+# Uncomment to enable channels
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': { 'hosts': [('127.0.0.1', 6379)], },
+#     },
+# }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Documentacion.settings")  
 
+# Allow embedding PDFs via iframe/embed desde el mismo dominio
+X_FRAME_OPTIONS = 'SAMEORIGIN'

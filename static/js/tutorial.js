@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
           // ─── Validaciones de ruta ─────────────────────────────────────
         if ((btnId === 'tour-general-btn' || btnId === 'tour-login-btn')
-            && !/iniciar-?sesion/i.test(path)) {
+            && !path.includes('iniciar-sesion')) {
             return alert("⚠️ Este tour sólo funciona en la página de Login.");
         }
         if (btnId === 'tour-comunidades-lista-btn'
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function tourGeneral() {
     /*console.log('🚀 Iniciando Tour General'); */
-    if (!window.location.pathname.includes('/seguimiento/iniciar-sesion')) {
+    if (!window.location.pathname.includes('/auth/iniciar-sesion')) {
         return alert("⚠️ El Tour General sólo funciona en la página de Iniciar Sesión.");
     }
     introJs().setOptions({
@@ -76,7 +76,7 @@ function tourGeneral() {
             intro: `
                 🔰 <strong>Bienvenido a AdminComunidad</strong><br>
                 Una plataforma pensada para facilitar la gestión de la administracion de edificios y condominios. 
-                Controla seguimiento de documentación y archivos importantes, comunicaciones a tiempo real y mantenciones programadas, con tus comunidades de forma centralizada.
+                Controla seguimiento de documentación y archivos importantes, comunicaciones en tiempo real y mantenciones programadas, con tus comunidades de forma centralizada.
             `,
             tooltipClass: 'customIntro'
         },
@@ -84,7 +84,7 @@ function tourGeneral() {
             element: '#nav-login',
             intro: `
                 🔐 <strong>Iniciar Sesión</strong><br>
-                Accede con tu usuario y contraseña para entrar al sistema.
+                Accede con tu usuario y contraseña para entrar al sistema, previamente debes leer y aceptar los terminos y condiciones.
             `,
             position: 'bottom'
         },
@@ -121,8 +121,8 @@ function tourGeneral() {
     }
 
     function tourIniciarSesion() {
-        // Asegúrate de ejecutarlo sólo en la ruta de login:
-        if (!window.location.pathname.includes('/seguimiento/iniciar-sesion')) {
+        const path = window.location.pathname;
+        if (!path.includes('iniciar-sesion')) {
             return alert("⚠️ Este tour sólo funciona en la página de Iniciar Sesión.");
         }
     

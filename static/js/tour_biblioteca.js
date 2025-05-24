@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.stopPropagation();
 
       // Asegurarnos de estar en la vista de la Biblioteca
-        if (!/\/biblioteca\/archivos\/\d+\/?$/.test(window.location.pathname)) {
+        if (!/\/biblioteca\/biblioteca\/\d+\/archivos\/?$/.test(window.location.pathname)) {
         return alert('⚠️ Ve primero a la Biblioteca de Archivos para este tour.');
     }
 

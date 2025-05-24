@@ -32,6 +32,7 @@ from django.utils import timezone
 from .models import Mantenimiento, Comunidad
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from Aplicaciones.seguimientodocumentos.context_processors import comunidad_context_processor
 
 
 # Define el FilterSet para el modelo de mantenciones
@@ -416,12 +417,11 @@ class MantenimientoDashboardView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # Intentamos obtener una comunidad asociada al usuario
-        comunidad = (self.request.user.comunidades_seguimiento.first() or
-                    self.request.user.comunidades_administradas.first())
+        proc_ctx = comunidad_context_processor(self.request)
+        comunidad = proc_ctx.get('comunidad')
         
         if not comunidad:
-            raise Http404("No se encontró comunidad para el usuario autenticado.")
+            raise Http404("Selecciona primero una comunidad.")
         context['comunidad'] = comunidad
         
         # Filtrado general para la comunidad actual

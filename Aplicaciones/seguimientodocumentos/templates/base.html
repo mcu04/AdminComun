@@ -75,7 +75,7 @@
             {% if user.is_authenticated and request.resolver_match.url_name != "iniciar_sesion" and comunidad %}
                 <a class="navbar-brand" href="{% url 'seguimientodocumentos:comunidades' %}">Regresar a Comunidades</a>
             {% else %}
-                <a class="navbar-brand" href="{% url 'seguimientodocumentos:iniciar_sesion' %}">Iniciar Sesion</a>
+                <a class="navbar-brand" href="{% url 'autenticacion:iniciar_sesion' %}">Iniciar Sesion</a>
             {% endif %}
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -170,7 +170,7 @@
 
                     <!-- Cerrar Sesión -->
                     <li class="nav-item">
-                        <a id="nav-logout-btn" class="nav-link" href="{% url 'seguimientodocumentos:cerrar_sesion' %}">Cerrar Sesión</a>
+                        <a id="nav-logout-btn" class="nav-link" href="{% url 'autenticacion:cerrar_sesion' %}">Cerrar Sesión</a>
                     </li>
 
                     <!-- Si el usuario NO está autenticado -->
@@ -178,7 +178,7 @@
                     {% else %}
                         <!-- Opciones para usuarios no autenticados -->
                         <li class="nav-item">
-                            <a id="nav-login" class="nav-link" href="{% url 'seguimientodocumentos:iniciar_sesion' %}">Iniciar Sesión</a>
+                            <a id="nav-login" class="nav-link" href="{% url 'autenticacion:iniciar_sesion' %}">Iniciar Sesión</a>
                         </li>
                     
                     <li class="nav-item">
@@ -232,7 +232,7 @@
             <li><a id="tour-ver-seguimiento-btn"           class="dropdown-item" href="#">📋 Tour Ver Seguimiento Actualizado</a></li>
             <li><a id="tour-ver-seguimiento-pendiente-btn" class="dropdown-item" href="#">📋 Tour Ver Seguimiento Pendiente</a></li>
             <li><a id="tour-crear-seguimiento-btn"         class="dropdown-item" href="#">➕ Tour Crear Seguimiento</a></li>
-            <li><a id="tour-exportar-pdf-btn"              class="dropdown-item" href="#">📄 Tour Exportar PDF</a></li>
+            <li><a id="tour-exportar-pdf-btn"              class="dropdown-item" href="#">📄 Tour Exportar PDF 2</a></li>
             <li><a id="tour-dashboard-mantenimiento-btn"   class="dropdown-item" href="#">🗓️ Tour Dashboard Mantenimiento</a></li>
             <li><a id="tour-mantencion-preventiva-btn"     class="dropdown-item" href="#">⚙️ Tour Mantención Preventiva Instalaciones</a></li>
             <li><a id="tour-kanban-btn"                    class="dropdown-item" href="#">📊 Tour Kanban</a></li>

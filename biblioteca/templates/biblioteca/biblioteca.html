@@ -1,67 +1,70 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-        
-    <h1 class="mb-4">Biblioteca de Archivos</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Biblioteca de Archivos</h1>
 
     <!-- Botón para subir un archivo -->
-    <div class="text-end mt-4" style="padding-bottom:10px">
         <a href="{% url 'biblioteca:subir_archivo' comunidad_id=comunidad.id%}" 
         class="btn btn-primary" title="Subir Archivo">
         <i class="bi bi-file-earmark-arrow-up"></i>
         </a>
     </div>
         <!-- Tabla para listar archivos -->
-        <table class="table table-bordered">
-            <thead>
+        <table class="table table-striped table-bordered">
+            <thead class="table-light text-center">
                 <tr>
-                    <th scope="col" class="text-center">Tipo</th>
-                    <th scope="col" class="text-center">Categoría</th>
-                    <th scope="col" class="text-center">Título</th>
-                    <th scope="col" class="text-center">Documento</th>
-                    <th scope="col" class="text-center">Acciones</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Categoría</th>
+                    <th scope="col">Título</th>
+                    <th scope="col">Documento</th>
+                    <th scope="col"">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 {% for archivo in archivos %}
                     <tr>
-                        <td>{{ archivo.tipo|default:"Sin Tipo" }}</td>
-                        <td>{{ archivo.categoria|default:"Sin Categoría" }}</td>
-                        <td>{{ archivo.titulo_documento|default:"Sin Título" }}</td>
+                        <td class="text-center">{{ archivo.tipo|default:"—" }}</td>
+                        <td class="text-center">{{ archivo.categoria|default:"—" }}</td>
+                        <td>{{ archivo.titulo_documento|default:"—" }}</td>
                         <td class="text-center">
-                            <div class="d-flex justify-content-center align-items-center">
                                 {% if archivo.documento %}
-                                    {% if archivo.tipo in 'pdf,jpg,jpeg,png' %}
-                                    <!-- Previsualización -->
-                                    <a class="list-group-item" href="{{ archivo.documento.url }}" 
-                                    target="_blank" 
-                                    title="Ver">
-                                    <i class="bi bi-eye"></i>
-                                    </a>
-                                {% else %}
-                                    <!-- Solo opción de descarga -->
-                                    <a class="list-group-item" href="{{ archivo.documento.url }}" download title="Descargar">
+                                {# Un único icono de descarga para cualquier tipo de archivo #}
+                                                                    
+                                    <a href="{{ archivo.documento.url }}" 
+                                    class="btn btn-sm btn-outline-primary"
+                                    download
+                                    title="Descargar {{ archivo.documento.name }}">
                                     <i class="bi bi-download"></i>
                                     </a>
-                                {% endif %}
-                            {% else %}
+                                
+                        {% else %}
                                 <!-- Mensaje para archivos no asociados -->
                                 <span class="text-muted">No disponible</span>
-                            {% endif %}
-                        </div>
+                        {% endif %}
+                        
                     </td>
                     <td class="text-center">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <!-- Botón para eliminar -->
-                            <form action="{% url 'biblioteca:eliminar_archivo' archivo.id %}" method="POST"
-                            style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este archivo?');"
-                            title="Eliminar">
-                            <i class="bi bi-trash-fill"></i>
-                            </button>
-                        </form>
-                    </div>
+                        
+                    <!-- Botón para eliminar -->
+                    <form
+                        action="{% url 'biblioteca:eliminar_archivo' archivo_id=archivo.id %}"
+                        method="post"
+                        style="display:inline;"
+                        onsubmit="return confirm('¿Eliminar &quot;{{ archivo.titulo_documento }}&quot;?');"
+                        >
+                        <!-- Enviar el ID de la comunidad -->
+                        <input type="hidden" name="comunidad_id" value="{{ comunidad.id }}">
+                        {% csrf_token %}
+                        <button
+                            type="submit"
+                            class="btn btn-danger btn-sm"
+                            title="Eliminar {{ archivo.titulo_documento }}"
+                        >
+                        <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </form>
                 </td>
             </tr>
             <!-- Mensaje para listas vacías -->

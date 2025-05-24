@@ -20,8 +20,8 @@ urlpatterns = [
     path('pendiente/<int:comunidad_id>/', views.seguimiento_pendientes, name='seguimiento_pendientes'),
     path("<int:seguimiento_id>/", views.detallesseguimiento, name="detalle_seguimiento"),
     path('seguimiento/eliminar/<int:seguimiento_id>/', views.eliminar_seguimiento, name='eliminar_seguimiento'),
-    path("cerrar-sesion/", views.cerrar_sesion, name="cerrar_sesion"),  # Cambia espacios por guiones medios o bajos
-    path('iniciar-sesion/',views.iniciar_sesion, name='iniciar_sesion'),
+    #path("cerrar-sesion/", views.cerrar_sesion, name="cerrar_sesion"),  # Cambia espacios por guiones medios o bajos
+    #path('iniciar-sesion/',views.iniciar_sesion, name='iniciar_sesion'),
     path('seguimiento/exportar/excel/<str:tipo_seguimiento>/<int:comunidad_id>/', views.exportar_excel, name='exportar_excel'),
     path('seguimiento/exportar/excel/actualizado/', views.exportar_excel, name='exportar_excel'),
     path('seguimiento/exportar/excel/pendiente/', views.exportar_excel, name='exportar_excel'),
@@ -58,7 +58,7 @@ urlpatterns = [
     path('comunidades/actualizar/<int:pk>/', views.actualizar_comunidad, name='actualizar_comunidad'),
     path('comunidades/eliminar/<int:pk>/', views.eliminar_comunidad, name='eliminar_comunidad'),
     path('ayuda/', views.ayuda, name='ayuda'),
-
+    
 ]
 
     

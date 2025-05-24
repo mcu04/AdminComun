@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, FileResponse, HttpResponseForbidden
+from django.http import HttpResponse, FileResponse, HttpResponseForbidden,Http404
 from biblioteca.models import Documento
 import requests
 from .models import Documento, Archivo # Asegúrate de tener un modelo Archivo definido
@@ -10,22 +10,32 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from django.db import models
+from Aplicaciones.seguimientodocumentos.context_processors import comunidad_context_processor
 
 
 # Create your views here.
 
-@login_required
-def biblioteca_lista(request):
-    comunidad_id = request.sesion['comunidad_id']
-    documentos = Documento.objects.all()
-    return render(request, 'biblioteca/lista.html', {'documentos': documentos, 'comunidad_id': comunidad_id})
+
 @login_required
 def biblioteca_detalle(request, pk):
-    documento = get_object_or_404(Documento, pk=pk)
+    proc_ctx = comunidad_context_processor(request)
+    comunidad = proc_ctx.get('comunidad')
+    if not comunidad:
+        raise Http404("Selecciona primero una comunidad válida.")
+    
+    # Obtén el documento y asegúrate de que pertenece a la comunidad
+    documento = get_object_or_404(Documento, pk=pk, comunidad=comunidad)
     return render(request, 'biblioteca/detalle.html', {'documento': documento})
 
 def descargar_manual(request, documento_id):
-    documento = get_object_or_404(Documento, id=documento_id)
+    # 1) Validar comunidad actual
+    proc = comunidad_context_processor(request)
+    comunidad = proc.get('comunidad')
+    if not comunidad:
+        raise Http404("Selecciona primero una comunidad.")
+    
+    # 2) Recuperar el Documento asegurándote que pertenece a esa comunidad
+    documento = get_object_or_404(Documento, id=documento_id, comunidad=comunidad)
     respuesta = requests.get(documento.url_origen)
     if respuesta.status_code == 200:
         ruta_archivo = f'media/biblioteca/{documento.titulo}.pdf'
@@ -41,74 +51,26 @@ def descargar_manual(request, documento_id):
         return HttpResponse("Error al descargar el archivo.", status=400)
     
     
-def lista_documentos(request):
-    documentos = Documento.objects.all()
-    return render(request, 'biblioteca/lista_documentos.html', {'documentos': documentos})
-
-@login_required
-def biblioteca_view(request):
-    comunidad_id = request.session['comunidad_id']
-    
-    if not comunidad_id:
-        return HttpResponse("Comunidad ID no está presente en la sesión.", status=400)
-    
-    comunidad = get_object_or_404(Comunidad, id=comunidad_id)
-    
-    # Recupera los archivos ordenados por el campo "tipo"
-    archivos = Archivo.objects.filter(comunidad=comunidad)  # Filtra por la comunidad actual
-    return render(request, 'biblioteca/biblioteca.html', {'archivos': archivos, 'comunidad_id': comunidad_id})
-
 @login_required
 def biblioteca_archivos(request, comunidad_id=None):
-    """
-    Vista para mostrar los archivos de una comunidad específica.
-    Si no se proporciona `comunidad_id`, se utiliza la primera comunidad asociada al usuario.
-    """
-    # Obtener la comunidad actual según el ID proporcionado o la primera comunidad asociada al usuario
-    if comunidad_id:
-        comunidad_actual = get_object_or_404(Comunidad, pk=comunidad_id)
-    else:
-        comunidad_actual = request.user.comunidades_administradas.first()
-        if not comunidad_actual:
-            # Mensaje de error si no hay comunidades asociadas
-            messages.error(request, "No tienes una comunidad asociada.")
-            return redirect("seguimientodocumentos:comunidades")  # Cambiar a la vista apropiada
+    # 1) Obtener comunidad desde el context processor
+    proc_ctx = comunidad_context_processor(request)
+    comunidad = proc_ctx.get('comunidad')
+    if not comunidad:
+        raise Http404("Selecciona primero una comunidad válida.")
+    
+    # 2) Si pasaron un comunidad_id en la URL, confírmalo
+    if comunidad_id is not None and comunidad.id != int(comunidad_id):
+        raise Http404("No tienes acceso a esta comunidad.")
+    
+    # 3) Filtrar los archivos de esta comunidad y excluir sin documento
+    archivos = Archivo.objects.filter(comunidad=comunidad).exclude(documento="")
 
-    # Verificar que el usuario pertenece a la comunidad actual
-    if not request.user.comunidades_administradas.filter(pk=comunidad_actual.pk).exists():
-        messages.error(request, "No tienes acceso a esta comunidad.")
-        return redirect("seguimientodocumentos:comunidades")  # Cambiar a la vista apropiada
-
-    # Filtrar los archivos de la comunidad actual y excluir los registros sin archivo asociado
-    archivos = Archivo.objects.filter(comunidad=comunidad_actual).exclude(documento="")
-
-    # Preparar el contexto para la plantilla
-    context = {
+    # 4) Renderizar plantilla con resultados
+    return render(request, 'biblioteca/biblioteca.html', {
         'archivos': archivos,
-        'comunidad': comunidad_actual,
-        'comunidad_id': comunidad_actual.id,  # Garantizar que comunidad_id esté definido
-    }
-
-    return render(request, 'biblioteca/biblioteca.html', context)
-
-
-@login_required
-def detalle_archivo(request, id):
-    archivo = get_object_or_404(Documento, id=id)
-    return render(request, 'detalle_archivo.html', {'archivo': archivo})
-
-def descargar_archivo_externo(request, url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        filename = url.split("/")[-1]
-        file_content = response.content
-
-        response = HttpResponse(file_content, content_type='application/octet-stream')
-        response['Content-Disposition'] = f'attachment; filename="{filename}"'
-        return response
-    else:
-        return HttpResponse("Error al descargar el archivo", status=404)
-
+        'comunidad': comunidad,
+    })
 
 @login_required
 def subir_archivo(request, comunidad_id):
@@ -137,21 +99,26 @@ def subir_archivo(request, comunidad_id):
         'comunidad': comunidad,
     })
     
-    # Vista para descargar un archivo
-def descargar_archivo(request, id):
-    # Buscar el archivo por su id
-    archivo = get_object_or_404(Archivo, id=id)
+@login_required    
+def descargar_archivo(request, archivo_id):
+    """
+    Descarga un archivo que el usuario subió a la biblioteca de su comunidad.
+    """
+    # 1) Obtener comunidad desde el context processor
+    ctx = comunidad_context_processor(request)
+    comunidad = ctx.get('comunidad')
+    if not comunidad:
+        raise Http404("Selecciona primero una comunidad válida.")
+    
+    # 2) Recuperar el Archivo, verificando comunidad
+    archivo = get_object_or_404(Archivo, id=archivo_id, comunidad=comunidad)
 
-    # Devolver el archivo como una respuesta para la descarga
-    response = FileResponse(archivo.documento, as_attachment=True)
-    return response 
-    # Vista para descargar un archivo
-def descargar_archivo(request, id):
-    # Buscar el archivo por su id
-    archivo = get_object_or_404(Archivo, id=id)
-
-    # Devolver el archivo como una respuesta para la descarga
-    response = FileResponse(archivo.documento, as_attachment=True)
+    # 3) Devolver el fichero como descarga
+    #    suponiendo que 'documento' es el FileField de tu modelo Archivo
+    response = FileResponse(archivo.documento.open('rb'),
+                            as_attachment=True,
+                            filename=archivo.documento.name.split('/')[-1])
+    
     return response
 
 def home(request):

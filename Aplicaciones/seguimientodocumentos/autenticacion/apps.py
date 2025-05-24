@@ -3,3 +3,6 @@ from django.apps import AppConfig
 class AutenticacionConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'Aplicaciones.seguimientodocumentos.autenticacion'  # Ruta completa
+    
+    def ready(self):
+        import Aplicaciones.seguimientodocumentos.autenticacion.signals

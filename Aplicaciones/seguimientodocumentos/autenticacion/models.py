@@ -3,6 +3,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
+from django.contrib.auth.models import User 
 
 
 def default_expiry():
@@ -20,3 +21,7 @@ class PasswordResetToken(models.Model):
 
     def __str__(self):
         return f"Token para {self.user}"
+    
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    accepted_terms = models.BooleanField(default=False)            

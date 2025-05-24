@@ -17,7 +17,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.sessions.models import Session
 from django.contrib import messages
 from django.utils import timezone
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.http import url_has_allowed_host_and_scheme, urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.utils.timezone import now
 from django.urls import reverse, reverse_lazy
@@ -424,70 +424,6 @@ def exportar_excel(request, tipo_seguimiento, comunidad_id=None):
     except Exception as e:
         return HttpResponse(f"Error al exportar: {str(e)}", status=500)
 
-def iniciar_sesion(request):
-    """
-    Vista de inicio de sesión:
-    - Si el usuario ya está autenticado, redirige a la lista de comunidades.
-    - En POST, autentica al usuario y redirige usando el parámetro 'next' (si es válido)
-        o, de lo contrario, redirige a la página de comunidades.
-    """
-    # Si el usuario ya está autenticado, redirige directamente a comunidades
-    if request.user.is_authenticated:
-        return redirect("seguimientodocumentos:comunidades")
-    
-    error_msg = None
-    
-    # Obtener el parámetro 'next' de GET (opcional)
-    next_url = request.GET.get("next", "")
-    
-    # Si next_url contiene "iniciar-sesion", ignóralo para evitar bucles
-    if "iniciar-sesion" in next_url:
-        next_url = ""
-
-    if request.method == "POST":
-        username = request.POST.get("Usuario")
-        password = request.POST.get("password")
-        # Opcional: manejar "remember me" si el formulario lo incluye
-        remember_me = request.POST.get("remember")
-        
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            # Configurar la expiración de la sesión si se selecciona "remember me"
-            if remember_me:
-                request.session.set_expiry(1209600)  # 2 semanas
-            else:
-                request.session.set_expiry(0)  # Se cierra la sesión al cerrar el navegador
-                
-                # Priorizar 'next' desde POST sobre GET
-            next_url = request.POST.get("next") or next_url
-            
-            # Evitar redirigir al login
-            if next_url and "iniciar-sesion" not in next_url:
-                return redirect(next_url)
-            return redirect("seguimientodocumentos:comunidades")
-        else:
-            error_msg = "Usuario o contraseña incorrecta."
-            
-            # Renderiza la página de inicio de sesión con cualquier mensaje de error
-    return render(request, "iniciar_sesion.html", {"error": error_msg})
-
-@login_required
-def cerrar_sesion(request):
-    # Limpiar la sesión completamente, eliminando todos los datos y mensajes previos
-    request.session.flush()
-    
-    # Cierra la sesión del usuario
-    logout(request)
-    
-    # Obtiene el parámetro 'next' si está presente, o usa '/' por defecto
-    next_url = request.GET.get('next', '/')
-    
-    # Prepara la redirección a la página de inicio de sesión
-    query_string = urlencode({'next': next_url.strip()})
-    
-    # Redirige a la página de inicio de sesión con el parámetro 'next'
-    return redirect(f"{reverse('seguimientodocumentos:iniciar_sesion')}?{query_string}")
                 
 def importar_excel(request):
     if request.method == 'POST' and request.FILES.get('archivo_excel'):
@@ -773,26 +709,27 @@ def registrar_comunidad(request):
         form = ComunidadForm()
     return render(request, 'registrar_comunidad.html', {'form': form})
 
+@login_required
 def detalles_comunidad(request, comunidad_id):
-    comunidad = get_object_or_404(Comunidad, id=comunidad_id)
+    """Muestra los detalles de una comunidad determinada."""
+    comunidad = get_object_or_404(Comunidad, pk=comunidad_id)
     return render(request, 'detalles_comunidad.html', {'comunidad': comunidad})
 
 @login_required
 def listar_comunidades(request):
-    # Ahora request.user será un usuario autenticado, por lo que se puede filtrar sin error
-    comunidades = Comunidad.objects.filter(administrador=request.user)
-    # No se asigna comunidad si el usuario no ha seleccionado todavía.
-    # comunidad_actual = None  # Opcional: no la necesitas si no pasas nada.
-    
-    return render(request, "listar_comunidades.html", {
-        'comunidades': comunidades,
-        # "comunidad": None,  # <= si quieres forzar a None
-    })
+    """Lista las comunidades del usuario tras comprobar T&C."""
+    # Validación de aceptación de términos
+    profile = getattr(request.user, 'profile', None)
+    if not profile or not profile.accepted_terms:
+        tc_url = reverse('autenticacion:terminos_condiciones')
+        return redirect(f"{tc_url}?next={request.path}")
 
-from django.shortcuts import get_object_or_404
+    comunidades = Comunidad.objects.filter(administrador=request.user)
+    return render(request, 'listar_comunidades.html', {'comunidades': comunidades})
 
 @login_required
 def actualizar_comunidad(request, pk):
+    """Actualiza una comunidad si el usuario es administrador."""
     comunidad = get_object_or_404(Comunidad, pk=pk, administrador=request.user)
     if request.method == 'POST':
         form = ComunidadForm(request.POST, instance=comunidad)
@@ -807,6 +744,7 @@ def actualizar_comunidad(request, pk):
 
 @login_required
 def eliminar_comunidad(request, pk):
+    """Elimina una comunidad tras confirmación."""
     comunidad = get_object_or_404(Comunidad, pk=pk, administrador=request.user)
     if request.method == 'POST':
         comunidad.delete()
@@ -815,17 +753,18 @@ def eliminar_comunidad(request, pk):
 
 @login_required
 def seleccionar_comunidad(request, comunidad_id):
-    """
-    Guarda en la sesión la comunidad seleccionada por el usuario
-    """
-    comunidad = get_object_or_404(Comunidad, id=comunidad_id)
+    """Guarda la comunidad seleccionada en sesión y redirige al dashboard."""
+    
+    comunidad = get_object_or_404(Comunidad, id=comunidad_id,
+        administrador=request.user)
 
     # Guardamos la comunidad en la sesión
     request.session['comunidad_id'] = comunidad.id
     request.session['comunidad_nombre'] = comunidad.nombre
 
     # Redirigir a la página de seguimiento o donde corresponda
-    return redirect('ruta_donde_redirigir')  # Modificar con la URL correcta
+    return redirect('seguimientodocumentos:dashboard')  # o donde quieras aterrizar
+
 
 def ayuda(request):
     return render(request, 'ayuda.html')

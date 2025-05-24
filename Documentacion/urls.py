@@ -16,36 +16,43 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from Aplicaciones.seguimientodocumentos import views
 from django.conf import settings
 from django.conf.urls.static import static
+from Aplicaciones.seguimientodocumentos.autenticacion import views as auth_views
 from Aplicaciones.seguimientodocumentos.views import listar_comunidades
-from Aplicaciones.seguimientodocumentos import views as seguimiento_views
-from mantenimiento import views as mantenimiento_views
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("seguimiento/", include("Aplicaciones.seguimientodocumentos.urls")),  # Incluye las rutas de seguimiento
-    path('seguimiento/iniciar-sesion/', include('Aplicaciones.seguimientodocumentos.autenticacion.urls')),  # Ruta de login
-    path('biblioteca/', include('biblioteca.urls')),   # Incluir URLs de la biblioteca
-    path('', seguimiento_views.iniciar_sesion, name='iniciar_sesion'),
-    path('accounts/', include('accounts.urls')),  # Asegúrate de que tu aplicación maneja autenticación
-    path('seguimiento/', include('django.contrib.auth.urls')),
-    path('comunicacion/', include('comunicacion.urls')),
-    
-    path('seguimiento/comunidades/', listar_comunidades, name='comunidades'),
-    
-    
-    path('mantenimiento/', include('mantenimiento.urls', namespace='mantenimiento')),
-    
+
+    # Rutas de autenticación PERSONALIZADAS bajo /seguimiento/auth/
+    path("auth/",include(("Aplicaciones.seguimientodocumentos.autenticacion.urls", "autenticacion"),
+            namespace="autenticacion",),
+    ),
+    # Rutas “puras” de seguimiento (listas, CRUD, etc.)
+    path("seguimiento/", include(("Aplicaciones.seguimientodocumentos.urls", "seguimientodocumentos")),
+    ),
+
+    # Biblioteca
+    path("biblioteca/", include("biblioteca.urls")),
+
+    # Comunicación
+    path("comunicacion/", include("comunicacion.urls")),
+
+    # Mantenimiento
+    path(
+        "mantenimiento/",
+        include(("mantenimiento.urls", "mantenimiento"), namespace="mantenimiento"),
+    ),
+
+    # **Root**: lo redirigimos directamente a comunidades
+    path('', RedirectView.as_view(pattern_name='seguimientodocumentos:comunidades', permanent=False)),
+
+    # Auth genérica de Django (si la necesitas para password_change, etc.)
+    path("accounts/", include("django.contrib.auth.urls")),
 ]
 
+# Sirve estáticos en DEBUG
 if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-
-
-
-
-

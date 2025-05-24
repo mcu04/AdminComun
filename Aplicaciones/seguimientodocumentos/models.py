@@ -163,7 +163,6 @@ class DocumentacionForm(forms.ModelForm):
         if user:
             self.fields['comunidad'].queryset = Comunidad.objects.filter(administrador=user)
             
-            
 
         
         
