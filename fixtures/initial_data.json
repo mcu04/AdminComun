@@ -1,0 +1,25 @@
+[
+  {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "Administradores_seguimiento"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$3rlw5kyUZ2cs8eiFBjRTPm$Q+Pytcwx/tok7uASIyqlV2twskSW5Q8XDwe4/ozhaOU=",
+      "last_login": "2024-12-17T17:50:41.790751-03:00",
+      "is_superuser": true,
+      "username": "Manon3",
+      "first_name": "Mario",
+      "last_name": "Carreño Urbina",
+      "email": "marionelson@manon.cl",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-11-13T20:46:39-03:00"
+    }
+  }
+]

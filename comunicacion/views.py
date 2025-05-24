@@ -314,22 +314,3 @@ def obtener_destinatarios(request):
 
     return JsonResponse({"destinatarios": {d["id"]: f"{d['nombre']} ({d['correo']})" for d in destinatarios}})
 
-
-# Verifica que el usuario en cuestión (por ejemplo, "Manon3") sea el administrador de algunas comunidades
-from django.contrib.auth.models import User
-from Aplicaciones.seguimientodocumentos.models import Comunidad
-user = User.objects.get(username='Manon3')
-comunidades_admin = Comunidad.objects.filter(administrador=user)
-#print(comunidades_admin)
-
-from django.contrib.auth.models import User
-from Aplicaciones.seguimientodocumentos.models import Comunidad
-from comunicacion.models import Destinatario
-
-user = User.objects.get(username='Manon3')
-# Verifica comunidades (tanto por ser miembro como administrador)
-comunidades = Comunidad.objects.filter(usuarios=user) | Comunidad.objects.filter(administrador=user)
-#print(comunidades.distinct())
-# Verifica destinatarios asociados a esas comunidades:
-destinatarios = Destinatario.objects.filter(comunidad__in=comunidades.distinct())
-#print(destinatarios)

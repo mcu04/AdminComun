@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('fecha_subida', models.DateTimeField()),
             ],
             options={
-                'db_table': 'biblioteca_archivo',
+                'db_table': 'biblioteca_biblioteca_archivo',
             },
         ),
         migrations.CreateModel(
@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
                 ('url_origen', models.CharField(blank=True, max_length=200, null=True)),
             ],
             options={
-                'db_table': 'biblioteca_documento',
+                'db_table': 'biblioteca_biblioteca_documento',
             },
         ),
         migrations.CreateModel(

@@ -28,12 +28,4 @@ class Migration(migrations.Migration):
             name='user',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Usuario asociado'),
         ),
-        migrations.AlterModelTable(
-            name='bibliotecaarchivo',
-            table='biblioteca_biblioteca_archivo',
-        ),
-        migrations.AlterModelTable(
-            name='bibliotecadocumento',
-            table='biblioteca_biblioteca_documento',
-        ),
     ]
