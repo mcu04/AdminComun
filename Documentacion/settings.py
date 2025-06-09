@@ -93,7 +93,9 @@ ROOT_URLCONF = 'Documentacion.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Directorio global de plantillas
+        'DIRS': [os.path.join(BASE_DIR, 'templates')
+        ],  # Directorio global de plantillas
+        
         'APP_DIRS': True,    # Esto activa el loader de directorios de aplicaciones
         'OPTIONS': {
             'context_processors': [

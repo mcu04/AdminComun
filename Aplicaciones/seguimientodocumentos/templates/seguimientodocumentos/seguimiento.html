@@ -9,9 +9,12 @@
     <form method="GET" action="" class="mb-4 d-flex justify-content-between align-items-center flex-wrap">
         {% csrf_token %}
         <div class="form-group d-flex gap-2  mb-2 ">
+
             <input type="text" name="q" id="input-buscar-seguimiento" class="form-control" placeholder="Buscar por título" value="{{ query }}" />
+
             <button type="submit" id="btn-buscar-seguimiento" class="btn btn-primary" title="Buscar">
                 <i class="fa-solid fa-magnifying-glass"></i> </button>
+
             <a href="?" id="btn-reset-seguimiento" class="btn btn-secondary" title="Restablecer">
                 <i class="fa-solid fa-rotate-left"></i> </a>
         </div>
@@ -31,9 +34,7 @@
             title="Exportar Seguimiento Actualizado a PDF">
             <i class="fa-solid fa-file-pdf"></i></a>
 
-            <!-- Botón Imprimir 
-            <button class="btn btn-secondary" title="Imprimir" onclick="window.print();">
-                <i class="fa-solid fa-print"></i></button>  -->
+            
         </div>
     </form>
 
@@ -114,57 +115,3 @@
 
 
 
-<!--
-<div class="pagination">
-    <span class="step-links">
-        {% if seguimientos_page.has_previous %}
-            <a href="?page=1{% if query %}&q={{ query }}{% endif %}">&laquo; Inicio</a>
-            <a href="?page={{ seguimientos_page.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">Anterior</a>
-        {% endif %}
-
-        <span class="current">
-            Página {{ seguimientos_page.number }} de {{ seguimientos_page.paginator.num_pages }}
-        </span>
-
-        {% if seguimientos_page.has_next %}
-            <a href="?page={{ seguimientos_page.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Siguiente</a>
-            <a href="?page={{ seguimientos_page.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}">Final &raquo;</a>
-        {% endif %}
-    </span>
-</div>
--->
-
-<!--
-<ul class="pagination pagination-sm">
-                {% if seguimientos.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ seguimientos.previous_page_number }}&q={{ query }}">« Anterior</a>
-                </li>
-                {% endif %}
-                {% for page_num in seguimientos.paginator.page_range %}
-                <li class="page-item {% if seguimientos.number == page_num %}active{% endif %}">
-                    <a class="page-link" href="?page={{ page_num }}&q={{ query }}">{{ page_num }}</a>
-                </li>
-                {% endfor %}
-                {% if seguimientos.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ seguimientos.next_page_number }}&q={{ query }}">Siguiente »</a>
-                </li>
-                {% endif %}
-            </ul>
-
-    <script>
-    $(document).ready(function () {
-        $('#seguimientoTabla').DataTable({
-            language: {
-                url: "{% static 'js/datatables_spanish.json' %}",
-            },
-            responsive: true,
-            pageLength: 10,
-            paging: true,
-            ordering: true,
-            info: true,
-        });
-    });
-</script>
--->

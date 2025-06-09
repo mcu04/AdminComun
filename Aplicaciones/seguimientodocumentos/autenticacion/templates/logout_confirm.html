@@ -1,0 +1,17 @@
+{# logout_confirm.html #}
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2>¿Seguro que quieres cerrar sesión?</h2>
+    <p>Al confirmar, saldrás de tu cuenta actual.</p>
+
+    <form method="post" class="mt-4">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}">
+    <button type="submit" class="btn btn-danger">Sí, cerrar sesión</button>
+    <a href="{% url 'seguimientodocumentos:comunidades' %}" class="btn btn-secondary ms-2">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

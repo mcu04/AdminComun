@@ -40,8 +40,9 @@
                         <!-- Aceptar Términos -->
                         <div class="form-check mb-3">
                             {{ form.accept_terms|add_class:"form-check-input"|attr:"id:accept-terms" }}
-                            <label class="form-check-label" for="accept-terms">
-                                He leído y acepto los <a href="{% static 'docs/terminos_condiciones.pdf' %}" target="_blank">Términos y Condiciones</a>
+                            <label class="form-check-label text-info" for="accept-terms">
+                                He leído y acepto los <a href="{% static 'docs/terminos_condiciones.pdf' %}" target="_blank" class="text-info"
+                                >Términos y Condiciones</a>
                             </label>
                             {% if form.accept_terms.errors %}
                             <div class="text-danger small">{{ form.accept_terms.errors.0 }}</div>
@@ -54,24 +55,39 @@
                 <!-- Botón Iniciar Sesión -->
                 <button
                     type="submit"
+                    id="btn-iniciar-sesion"
                     class="btn btn-primary d-flex align-items-center gap-2"
                 >
                     <i class="bi bi-person-fill"></i>
                     <span>Iniciar Sesión</span>
             </button>
         </form>
-
+        {# —————————— ENLACE “¿Olvidaste tu contraseña?” —————————— #}
         <p class="mt-3">
             <a
                 href="{% url 'seguimientodocumentos:password_reset' %}"
-                class="text-decoration-none"
-            >
-                ¿Olvidaste tu contraseña?
+                class="text-info text-decoration-none">
+                    ¿Olvidaste tu contraseña?
                 </a>
                 </p>
+                    {# —————————— ENLACE “Tour General” DISCRETO —————————— #}
+                    {# Después: enlace pequeño tipo “link” #}
+                    <div class="mt-3">
+                    <small>
+                    <a href="#" id="tour-general-btn" class="text-info btn btn-link p-0">
+                    🧭 Tour General
+                    </a>
+                    </small>
+                    </div>
             </div>
         </div>
     </div>
 </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    {# Incluimos el archivo con la lógica de “tour_general” #}
+    <script src="{% static 'js/tour_general.js' %}"></script>
 {% endblock %}

@@ -75,7 +75,7 @@
             {% if user.is_authenticated and request.resolver_match.url_name != "iniciar_sesion" and comunidad %}
                 <a class="navbar-brand" href="{% url 'seguimientodocumentos:comunidades' %}">Regresar a Comunidades</a>
             {% else %}
-                <a class="navbar-brand" href="{% url 'autenticacion:iniciar_sesion' %}">Iniciar Sesion</a>
+                <a class="navbar-brand" href="{% url 'autenticacion:iniciar_sesion' %}">AdminComunidad</a>
             {% endif %}
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -196,7 +196,7 @@
                             style="gap: .5rem;" >
                             <i class="bi bi-circle-half fs-5"></i>
                             <span>Tema</span>
-                            </button>
+                        </button>
             
                         <!-- Menú desplegable con las dos opciones -->
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="boton-modo">
@@ -205,52 +205,30 @@
                                 <i class="bi bi-sun me-2"></i>
                                 Modo Claro
                             </button>
-                        </li>
-                        <li>
+                            </li>
+                            <li>
                             <button class="dropdown-item d-flex align-items-center" id="modo-oscuro" type="button">
                             <i class="bi bi-moon me-2"></i>
                             Modo Oscuro
                             </button>
-                        </li>
+                            </li>
+                            <!-- AQUÍ agregas un tercer <li> sólo para el Tour Tema -->
+                            <li>
+                            <a id="tour-modo-oscuro-btn" class="dropdown-item" href="#">
+                            🌙 Tour Tema
+                            </a>
+                            </li>
                         </ul>
                     </li>
 
-                <!-- … Tour justo después de tu dropdown de Tema … -->
-        <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="tutorialesDropdown" role="button"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                Tutoriales
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end tutorial-dropdown-menu"
-                aria-labelledby="tutorialesDropdown">
-
-            <li><a id="tour-general-btn"                   class="dropdown-item" href="#">🔰 Tour General</a></li>
-            <li><a id="tour-login-btn"                     class="dropdown-item" href="#">🔐 Tour Iniciar Sesión</a></li>
-            <li><a id="tour-recuperar-contrasena-btn"      class="dropdown-item" href="#">🔑 Tour Recuperar Contraseña</a></li>
-            <li><a id="tour-comunidades-lista-btn"         class="dropdown-item" href="#">🏘️ Tour Comunidades</a></li>
-            <li><a id="tour-comunidades-registrar-btn"     class="dropdown-item" href="#">📋 Tour Registrar Comunidad</a></li>
-            <li><a id="tour-ver-seguimiento-btn"           class="dropdown-item" href="#">📋 Tour Ver Seguimiento Actualizado</a></li>
-            <li><a id="tour-ver-seguimiento-pendiente-btn" class="dropdown-item" href="#">📋 Tour Ver Seguimiento Pendiente</a></li>
-            <li><a id="tour-crear-seguimiento-btn"         class="dropdown-item" href="#">➕ Tour Crear Seguimiento</a></li>
-            <li><a id="tour-exportar-pdf-btn"              class="dropdown-item" href="#">📄 Tour Exportar PDF 2</a></li>
-            <li><a id="tour-dashboard-mantenimiento-btn"   class="dropdown-item" href="#">🗓️ Tour Dashboard Mantenimiento</a></li>
-            <li><a id="tour-mantencion-preventiva-btn"     class="dropdown-item" href="#">⚙️ Tour Mantención Preventiva Instalaciones</a></li>
-            <li><a id="tour-kanban-btn"                    class="dropdown-item" href="#">📊 Tour Kanban</a></li>
-            <li><a id="tour-calender-btn"                  class="dropdown-item" href="#">🗓️ Tour Calendario Mantenciones</a></li>
-            <li><a id="tour-informe-btn"                   class="dropdown-item" href="#">📝 Tour Informe Mantenciones</a></li>
-            <li><a id="tour-crear-mantencion-btn"          class="dropdown-item" href="#">✍️ Tour Crear Nueva Mantención</a></li>
-            <li><a id="tour-gestionar-destinatarios-btn"   class="dropdown-item" href="#">➕ Tour Gestionar Destinatarios</a></li>
-            <li><a id="tour-correo-individual-btn"         class="dropdown-item" href="#">📧 Tour Correo Individual</a></li>
-            <li><a id="tour-correo-masivo-btn"             class="dropdown-item" href="#">📧 Tour Correo Masivo</a></li>
-            <li><a id="tour-biblioteca-btn"                class="dropdown-item" href="#">📤 Tour Biblioteca</a></li>
-            <li><a id="tour-subir-archivo-btn"             class="dropdown-item" href="#">📤 Tour Subir Archivo</a></li>
-            <li><a id="tour-modulo-contacto-btn"           class="dropdown-item" href="#">✉️ Tour Contacto</a></li>
-            <li><a id="tour-cerrar-sesion-btn"             class="dropdown-item" href="#">🔓 Tour Cerrar Sesión</a></li>
-            <li><a id="tour-modo-oscuro-btn"               class="dropdown-item" href="#">🌙 Tour Modo Oscuro/Claro</a></li>
+                    <!-- Botón único para lanzar el tour de la página actual -->
+                    <li class="nav-item">
+                        <button id="btn-tutorial" class="btn btn-outline-light nav-link">
+                        📖 Tutorial
+                        </button>
+                    </li>
             </ul>
-        </li>
-    </ul>
-    </div>
+        </div>
     </div>
 </nav>
 
@@ -295,24 +273,8 @@
 
         <!--Tutorial-->
         <script src="{% static 'js/tutorial.js' %}"></script>
-        <script src="{% static 'js/tour_recuperar_contrasena.js' %}"></script>
-        <script src="{% static 'js/tour_seguimiento_actualizado.js' %}"></script>
-        <script src="{% static 'js/tour_seguimiento_pendiente.js' %}"></script>
-        <script src="{% static 'js/tour_dashboard_mantenimiento.js' %}"></script>
-        <script src="{% static 'js/tour_mantencion_preventiva.js' %}"></script>
-        <script src="{% static 'js/tour_kanban.js' %}"></script>
-        <script src="{% static 'js/tour_calender.js' %}"></script>
-        <script src="{% static 'js/tour_informe.js' %}"></script>
-        <script src="{% static 'js/tour_crear_mantencion.js' %}"></script>
-        <script src="{% static 'js/tour_gestionar_destinatarios.js' %}"></script>
-        <script src="{% static 'js/tour_correo_individual.js' %}"></script>
-        <script src="{% static 'js/tour_correo_masivo.js' %}"></script>
-        <script src="{% static 'js/tour_biblioteca.js' %}"></script>
-        <script src="{% static 'js/tour_subir_archivo.js' %}"></script>
-        <script src="{% static 'js/tour_contacto.js' %}"></script>
-        <script src="{% static 'js/tour_cerrar_sesion.js' %}"></script>
         <script src="{% static 'js/tour_tema.js' %}"></script>
-        
+
 
         <!-- Script para Modo Oscuro / Claro -->
         <script>
@@ -338,8 +300,9 @@
         
             
             });
-        </script>  
-
+        </script>
+        
+        
 </body>
 </html>
 

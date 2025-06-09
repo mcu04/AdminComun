@@ -130,21 +130,25 @@ def terminos_condiciones(request):
 
 @login_required
 def cerrar_sesion(request):
-    # Limpiar la sesión completamente, eliminando todos los datos y mensajes previos
-    request.session.flush()
-    
-    # Cierra la sesión del usuario
-    logout(request)
-    
-    # Obtiene el parámetro 'next' si está presente, o usa '/' por defecto
-    next_url = request.GET.get('next', '/')
-    
-    # Prepara la redirección a la página de inicio de sesión
-    query_string = urlencode({'next': next_url.strip()})
-    
-    # Redirige a la página de inicio de sesión con el parámetro 'next'
-    return redirect(f"{reverse('autenticacion:iniciar_sesion')}?{query_string}")
+    """
+    Si el método es POST, cierra la sesión y redirige a login (o a 'next').
+    Si es GET, muestra un template con el botón de confirmación.
+    """
+    if request.method == "POST":
+        # 1) Si vienen datos por POST, ejecutamos el logout:
+        logout(request)
 
+        # 2) Reconstruimos la URL de redirección (igual que hacías antes):
+        next_url = request.POST.get("next", "/")
+        # (podrías usar request.GET, pero como el form POSTea, lo más sencillo es reenviar next en hidden field)
+        query_string = urlencode({"next": next_url.strip()})
+        return redirect(f"{reverse('autenticacion:iniciar_sesion')}?{query_string}")
+
+    else:
+        # Si es GET, sólo renderizamos el template de confirmación.
+        # Le pasaremos en el contexto el parámetro 'next' tal cual venga en GET:
+        next_url = request.GET.get("next", "/")
+        return render(request, "logout_confirm.html", {"next": next_url})
 
 
 

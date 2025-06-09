@@ -90,7 +90,11 @@ def subir_archivo(request, comunidad_id):
             archivo.save()
             # 4) Redirige de vuelta al listado de archivos de esta comunidad
             return redirect('biblioteca:biblioteca_archivos', comunidad_id=comunidad.id)
+        # Si no es válido, va a volver a caer en el bloque 'else' de abajo para
+        # renderizar con errores y, al mismo tiempo, `__init__` llenará categorías
+        # según request.POST['tipo'].
     else:
+        # Si es GET sin datos, instancia vacío:
         form = ArchivoForm()
 
     # 5) Renderiza la plantilla pasando el form y la comunidad

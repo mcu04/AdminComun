@@ -25,8 +25,12 @@
             <tbody>
                 {% for archivo in archivos %}
                     <tr>
-                        <td class="text-center">{{ archivo.tipo|default:"—" }}</td>
-                        <td class="text-center">{{ archivo.categoria|default:"—" }}</td>
+                        <td class="text-center">
+                        {{ archivo.tipo }}  {# mostrará el nombre del TipoDocumento #}
+                        </td>
+                        <td class="text-center">
+                        {{ archivo.categoria }}  {# mostrará el nombre de la CategoriaDocumento #}
+                        </td>
                         <td>{{ archivo.titulo_documento|default:"—" }}</td>
                         <td class="text-center">
                                 {% if archivo.documento %}

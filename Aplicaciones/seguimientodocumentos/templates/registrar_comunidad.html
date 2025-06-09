@@ -19,10 +19,6 @@
 
     {{ error_message }}
 
-    <!--<p>
-        <label for="{{ form.nombre.id_for_label }}">Nombre de la Comunidad:</label>
-        {{ form.nombre }}
-    </p> -->
     <p>
         <label for="input-nombre-comunidad">Nombre de la Comunidad:</label>
         <input
@@ -36,13 +32,37 @@
         {{ form.nombre.errors }}
     </p>
     <p>
-        <label for="{{ form.direccion.id_for_label }}">Dirección:</label>
-        {{ form.direccion }}
+        
+        <label for="input-direccion-comunidad">Dirección:</label>
+        <input
+            type="text"
+            name="direccion"
+            id="input-direccion-comunidad"
+            class="form-control"
+            value="{{ form.direccion.value|default_if_none:'' }}"
+            required
+        />
+        {{ form.direccion.errors }}
     </p>
-    <p>
-        <label for="{{ form.descripcion.id_for_label }}">Descripcion:</label>
-        {{ form.descripcion }}
-    </p>
+    
+<div class="mb-3">
+    <label for="input-descripcion-comunidad" class="form-label" >
+    Descripción:
+    </label>
+    <textarea
+    name="descripcion"
+    id="input-descripcion-comunidad"
+    class="form-control"
+    rows="4"
+    placeholder="Escribe aquí una descripción más detallada de la nueva comunidad..."
+    required
+    >{{ form.descripcion.value|default_if_none:'' }}</textarea>
+    {% if form.descripcion.errors %}
+    <div class="text-danger small">
+        {{ form.descripcion.errors.0 }}
+    </div>
+    {% endif %}
+</div>
 
     <button id="btn-guardar-comunidad"
         type="submit" 
@@ -53,7 +73,8 @@
 
     
 
-    <a href="{% url 'seguimientodocumentos:comunidades' %}"
+    <a id="btn-volver-comunidad"
+    href="{% url 'seguimientodocumentos:comunidades' %}"
     style="margin-left: 10px" 
     class="btn btn-sm btn-secondary"
     title="Volver al Listado Comunidades">
