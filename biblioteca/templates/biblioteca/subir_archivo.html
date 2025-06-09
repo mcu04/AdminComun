@@ -14,12 +14,12 @@
                 <div class="mb-3">
                     <label for="{{ form.tipo.id_for_label }}" class="form-label">Tipo:</label>
                     {{ form.tipo }}
-                    <small class="form-text text-muted">{{ form.tipo.help_text|safe }}</small>
+                    {% if form.tipo.help_text %}<small class="form-text text-muted">{{ form.tipo.help_text|safe }}</small>{% endif %}
                 </div>
                 <div class="mb-3">
                     <label for="{{ form.categoria.id_for_label }}" class="form-label">Categoría:</label>
                     {{ form.categoria }}
-                    <small class="form-text text-muted">{{ form.categoria.help_text|safe }}</small>
+                    {% if form.categoria.help_text %}<small class="form-text text-muted">{{ form.categoria.help_text|safe }}</small>{% endif %}
                 </div>
                 <div class="mb-3">
                     <label for="{{ form.titulo_documento.id_for_label }}" class="form-label">Título del Documento:</label>
@@ -43,6 +43,19 @@
                     <i class="bi bi-arrow-left-circle"></i>
                     </a>
                 </form>
+                <script>
+                // Si no quieres un endpoint AJAX, simplemente,
+                // al cambiar 'tipo', forzamos un submit para recargar categorías:
+                document.addEventListener('DOMContentLoaded', function() {
+                    const tipoSelect = document.getElementById("id_tipo");
+                    if (tipoSelect) {
+                    tipoSelect.addEventListener("change", function() {
+                // forzamos un envío “parcial” para que el __init__ recargue form.categoria.queryset
+                document.getElementById("form-subir-archivo").submit();
+            });
+        }
+    });
+</script>
             </div>
         </div>
     </div>
